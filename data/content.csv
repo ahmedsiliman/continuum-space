@@ -1,0 +1,56 @@
+project_id,block_order,position,type,data
+bim-crd_01,1,hero,BIM_Viewer,/projects/models/Bellevie-V03A.ifc
+bim-crd_01,2,details,Text,Detailed clash detection workflow for cross-laminated timber structural joints.
+bim-crd_01,3,details,Image,/images/clash_report.jpg
+bim-crd_02,1,hero,BIM_Viewer,/models/mep_v1.ifc
+bim-crd_02,2,details,Text,MEP system coordination within modular floor assemblies.
+bim-crd_03,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_03,2,details,Text,Placeholder details for Coordination Model 03.
+bim-crd_04,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_04,2,details,Text,Placeholder details for Coordination Model 04.
+bim-crd_05,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_05,2,details,Text,Placeholder details for Coordination Model 05.
+bim-crd_06,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_06,2,details,Text,Placeholder details for Coordination Model 06.
+bim-ats_01,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-ats_01,2,details,Text,Documentation for the Batch Exporter Script automation.
+bim-sfd_01,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-sfd_01,2,details,Text,Core framework architecture for custom Revit C# Add-ins.
+bim-dta_01,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-dta_01,2,details,Text,Data extraction methodologies for Lifecycle LCA analysis.
+acd-arc_01,1,left,Text,The Micro to Macro seminar project focusing on sustainable timber construction.
+acd-arc_01,2,right,Image,/images/micro_to_macro_render.jpg
+acd-arc_02,1,left,Text,Adaptive reuse strategy for the Legré-Mante industrial site in Marseille.
+acd-arc_02,2,right,Image,/images/factory_reuse_plan.jpg
+acd-arc_03,1,left,Text,Placeholder narrative for Architecture Concept 03.
+acd-arc_03,2,right,Image,/images/placeholder_right.jpg
+acd-urd_01,1,left,Text,Berlin Masterplan exploring urban flow and infrastructural integration.
+acd-urd_01,2,right,Image,/images/berlin_masterplan.jpg
+acd-urd_02,1,left,Text,Placeholder narrative for Urban Design Concept 02.
+acd-urd_02,2,right,Image,/images/placeholder_right.jpg
+acd-urd_03,1,left,Text,Placeholder narrative for Urban Design Concept 03.
+acd-urd_03,2,right,Image,/images/placeholder_right.jpg
+art-ink_01,1,center,Image,/images/void_canvas.jpg
+art-ink_01,2,center,Text,Black ink on 40x40 canvas. Expanding on the concept of negative space.
+art-ink_02,1,center,Image,/images/placeholder_center.jpg
+art-ink_02,2,center,Text,Explorations in high-contrast ink techniques.
+art-ink_03,1,center,Image,/images/placeholder_center.jpg
+art-ink_03,2,center,Text,Abstract structural linework on raw paper.
+art-dgt_01,1,center,Image,/images/network_viz.jpg
+art-dgt_01,2,center,Text,Interactive D3.js force-graph representing multidisciplinary knowledge.
+art-dgt_02,1,center,Image,/images/placeholder_center.jpg
+art-dgt_02,2,center,Text,Digital rendering and spatial computation studies.
+art-dgt_03,1,center,Image,/images/placeholder_center.jpg
+art-dgt_03,2,center,Text,Algorithmic pattern generation using pixel shaders.
+cmp-sfd_01,1,left,Text,Custom C# framework for automating Revit data extraction.
+cmp-sfd_01,2,right,Image,/images/csharp_snippet.jpg
+cmp-sfd_02,1,left,Text,Placeholder documentation for Software Module 02.
+cmp-sfd_02,2,right,Image,/images/placeholder_right.jpg
+cmp-sfd_03,1,left,Text,Placeholder documentation for Software Module 03.
+cmp-sfd_03,2,right,Image,/images/placeholder_right.jpg
+cmp-dsn_01,1,left,Text,Computational logic diagrams and node-based visual scripting.
+cmp-dsn_01,2,right,Image,/images/grasshopper_script.jpg
+cmp-dsn_02,1,left,Text,Placeholder narrative for Generative Script 02.
+cmp-dsn_02,2,right,Image,/images/placeholder_right.jpg
+cmp-dsn_03,1,left,Text,Placeholder narrative for Generative Script 03.
+cmp-dsn_03,2,right,Image,/images/placeholder_right.jpg
