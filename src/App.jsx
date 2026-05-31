@@ -1,122 +1,130 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from 'react';
+import MainScene from './universe/MainScene';
+import IfcLayover from './universe/IfcLayover';
+import ModuleTransition from './components/ModuleTransition';
+import TelemetryHUD from './components/TelemetryHUD';
+import { fetchDatabase } from './utils/DataLoader';
 
-function App() {
-  const [count, setCount] = useState(0)
+function buildChildrenMap(nodes = []) {
+  return nodes.reduce((map, node) => {
+    const parentId = node.parent_id;
+    if (!parentId) {
+      return map;
+    }
+
+    if (!map[parentId]) {
+      map[parentId] = [];
+    }
+
+    map[parentId].push(node.id);
+    return map;
+  }, {});
+}
+
+function collectDescendants(rootId, childrenMap) {
+  const descendants = [];
+  const stack = [...(childrenMap[rootId] || [])];
+
+  while (stack.length > 0) {
+    const currentId = stack.pop();
+    descendants.push(currentId);
+
+    const children = childrenMap[currentId] || [];
+    for (const childId of children) {
+      stack.push(childId);
+    }
+  }
+
+  return descendants;
+}
+
+export default function App() {
+  const [database, setDatabase] = useState(null);
+  const [activeProject, setActiveProject] = useState(null);
+  const [dropCoords, setDropCoords] = useState({ x: 0, y: 0 });
+  const [expandedNodes, setExpandedNodes] = useState([]);
+
+  useEffect(() => {
+    fetchDatabase()
+      .then((data) => setDatabase(data))
+      .catch((error) => console.error('Error loading database:', error));
+  }, []);
+
+  // Triggered when a node is dragged outside the boundary
+  const handleSelectProject = (project, x = 0, y = 0) => {
+    setActiveProject(project);
+    setDropCoords({ x, y });
+  };
+
+  const handleNodeInteract = (clickedNode) => {
+    if (!clickedNode) {
+      return;
+    }
+
+    if (clickedNode.type === 'Project') {
+      const fullProject = (database.projects || []).find((p) => p.id === clickedNode.id) || clickedNode;
+      handleSelectProject(fullProject);
+      return;
+    }
+
+    if (!database?.nodes || !['Root', 'Category', 'SubCategory'].includes(clickedNode.type)) {
+      return;
+    }
+
+    const childrenMap = buildChildrenMap(database.nodes);
+
+    setExpandedNodes((prevExpanded) => {
+      if (!prevExpanded.includes(clickedNode.id)) {
+        return [...prevExpanded, clickedNode.id];
+      }
+
+      const descendants = collectDescendants(clickedNode.id, childrenMap);
+      const toRemove = new Set([clickedNode.id, ...descendants]);
+      return prevExpanded.filter((id) => !toRemove.has(id));
+    });
+  };
+
+  const closeViewer = () => {
+    setActiveProject(null);
+  };
+
+  if (!database) {
+    return (
+      <div style={{ color: 'white', backgroundColor: '#000', height: '100vh', padding: '2rem' }}>
+        Loading Continuum Space...
+      </div>
+    );
+  }
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+      <MainScene
+        database={database}
+        site={database.site}
+        onSelectProject={handleSelectProject}
+        onNodeInteract={handleNodeInteract}
+        expandedNodes={expandedNodes}
+        isPaused={activeProject !== null}
+      />
+
+      <TelemetryHUD
+        database={database}
+        expandedNodes={expandedNodes}
+        onNodeInteract={handleNodeInteract}
+      />
+
+      {activeProject && (
+        <ModuleTransition
+          key={activeProject.id}
+          originX={dropCoords.x}
+          originY={dropCoords.y}
+          onClose={closeViewer}
         >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+          <IfcLayover 
+            project={activeProject}
+          />
+        </ModuleTransition>
+      )}
     </>
-  )
+  );
 }
-
-export default App

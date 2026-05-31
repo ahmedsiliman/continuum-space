@@ -1,0 +1,62 @@
+/* ─── Universe Title ─────────────────────────────────────────────────────────
+   Site name + tagline embedded in the universe scene.
+   Edit base visual properties here (font, size, color, position).
+   The explosion effect is handled imperatively in UniverseTitle.jsx via canvas.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Self-hosted Stormax font ─────────────────────────────────────────────── */
+
+@font-face {
+  font-family: 'Stormax';
+  src: url('/stormax-font/StormaxDemo-2vqyl.otf') format('opentype');
+  font-weight: normal;
+  font-style:  normal;
+  font-display: swap;
+}
+
+/* ── Container ── */
+
+.universe-title {
+  position: absolute;
+  bottom: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  text-align: center;
+}
+
+/* ── Site name ── */
+
+.universe-title-name {
+  font-family: 'Stormax', 'Share Tech Mono', 'Consolas', monospace;
+  font-size: clamp(.7rem, 1.5vw, 1.3rem);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: #d4d4d4;
+  line-height: 1;
+  margin: 0;
+}
+
+/* ── Divider ── */
+
+.universe-title-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(214, 214, 214, 0.35);
+  transform-origin: left center;
+}
+
+/* ── Tagline ── */
+
+.universe-title-tagline {
+  font-family: 'Consolas', monospace;
+  font-size: clamp(0.5rem, 0.8vw, 0.8rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #cdcdcd;
+  margin: 0;
+}

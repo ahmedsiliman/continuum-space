@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IFC BIM Dashboard</title>
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --panel: #ffffff;
+      --text: #18181b;
+      --border: #e4e4e7;
+      --accent: #000000;
+      --sidebar-width: 340px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr var(--sidebar-width);
+      height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    #viewer-container {
+      position: relative;
+      min-width: 0;
+    }
+
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: monospace;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--accent);
+      padding: 10px 16px;
+      z-index: 10;
+      max-width: 80%;
+      text-align: center;
+    }
+
+    #sidebar {
+      border-left: 1px solid var(--border);
+      background: var(--panel);
+      box-shadow: -4px 0 15px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 20px;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .panel-size {
+      margin-top: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .panel-size-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #52525b;
+    }
+
+    #panel-size-slider {
+      width: 100%;
+      accent-color: #000;
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 14px 20px 18px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #3f3f46;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .actions button {
+      border: 1px solid var(--accent);
+      background: #fff;
+      color: var(--text);
+      padding: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .actions button:hover {
+      background: #f5f5f5;
+    }
+
+    .actions button.full {
+      grid-column: 1 / -1;
+    }
+
+    .axis-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .axis-actions button {
+      border: 1px solid var(--accent);
+      background: #fff;
+      color: var(--text);
+      padding: 8px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .axis-actions button:hover {
+      background: #f5f5f5;
+    }
+
+    .state-pill {
+      font-family: monospace;
+      font-size: 0.78rem;
+      border: 1px solid #d4d4d8;
+      padding: 4px 8px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .category-list {
+      max-height: 60vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      padding: 8px;
+      background: #fafafa;
+    }
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 0.86rem;
+    }
+
+    .category-item input {
+      accent-color: #000;
+      cursor: pointer;
+    }
+
+    .empty {
+      color: #71717a;
+      font-style: italic;
+      font-size: 0.84rem;
+    }
+
+    .dropdown {
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .dropdown-toggle {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dropdown-toggle:hover {
+      background: #f8f8f8;
+    }
+
+    .dropdown-panel {
+      padding: 8px;
+      display: block;
+    }
+
+    .dropdown-panel.collapsed {
+      display: none;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 2px 8px;
+      border: 1px solid #18181b;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+
+    .style-btn.active-style {
+      background: #1a1a1a !important;
+      color: #fff !important;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+      }
+
+      #sidebar {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.03);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="viewer-container">
+    <div id="loading">Initializing That Open viewer...</div>
+  </div>
+
+  <aside id="sidebar">
+    <div class="header">
+      <h2>Model Control</h2>
+      <div class="panel-size">
+        <div class="panel-size-row">
+          <span>Panel Width</span>
+          <span id="panel-size-value">340px</span>
+        </div>
+        <input id="panel-size-slider" type="range" min="300" max="560" step="10" value="340">
+      </div>
+    </div>
+    <div class="content">
+      <div>This viewer uses That Open Components (Fragments pipeline).</div>
+      <div class="badge">IFC -&gt; Fragments at runtime</div>
+
+      <section>
+        <h3 class="section-title">Visual Style</h3>
+        <div class="actions">
+          <button id="btn-style-solid" class="style-btn active-style" type="button">Solid</button>
+          <button id="btn-style-clay" class="style-btn" type="button">Clay</button>
+          <button id="btn-style-hidden-line" class="style-btn full" type="button">Hidden Line</button>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="section-title">Section Tool</h3>
+        <div id="section-state" class="state-pill">Axis: - | Flip: Normal</div>
+        <div class="actions">
+          <button id="btn-flip-section" class="full" type="button">Toggle Flip</button>
+        </div>
+        <div class="axis-actions">
+          <button id="btn-x-section" type="button">X Section</button>
+          <button id="btn-y-section" type="button">Y Section</button>
+          <button id="btn-z-section" type="button">Z Section</button>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="section-title">Filters</h3>
+        <div class="actions" style="margin-bottom:8px;">
+          <button id="btn-show-all" class="full" type="button">Reset Visibility</button>
+        </div>
+        <div class="dropdown">
+          <button id="btn-toggle-categories" class="dropdown-toggle" type="button">
+            <span>Categories</span>
+            <span id="categories-arrow">▼</span>
+          </button>
+          <div id="categories-panel" class="dropdown-panel collapsed">
+            <div id="category-list" class="category-list">
+              <div class="empty">Categories will appear after the IFC is loaded.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown" style="margin-top:10px;">
+          <button id="btn-toggle-levels" class="dropdown-toggle" type="button">
+            <span>Level Filter (Next Stage)</span>
+            <span id="levels-arrow">▼</span>
+          </button>
+          <div id="levels-panel" class="dropdown-panel collapsed">
+            <div class="empty">Storey filtering will be added in the next stage.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <script type="module" src="./main.bundle.js"></script>
+</body>
+</html>

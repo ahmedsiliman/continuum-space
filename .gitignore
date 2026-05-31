@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Large binary assets — too big for GitHub (host externally or use Git LFS)
+public/projects/models/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

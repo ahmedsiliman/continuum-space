@@ -1,0 +1,33 @@
+{
+  "site": {
+    "name": "CONTINUUM SPACE",
+    "tagline": "Everything is connected....at a distance",
+    "description": "Dive into multidisciplinary works\nacross Architecture, Computation, and Art.",
+    "contact": {
+      "email": "info@continuumspace.com"
+    }
+  },
+  "projects": [
+    {
+      "id": "bim-01",
+      "title": "Urban Topology",
+      "category": "Architecture",
+      "layout": "bim_dashboard",
+      "content": [
+        { "region": "viewer_hero", "type": "IFC_Iframe", "data": { "src": "/ifc-dashboard/IFC_Dashboard.html", "modelUrl": "/models/model_berlin_v3.ifc", "title": "Urban Topology IFC" } },
+        { "region": "left_sidebar", "type": "Text", "data": "This project explores urban flow and structural loads." },
+        { "region": "details", "type": "Text", "data": "The BIM dashboard remains interactive in the hero section while this stream can hold research notes, project narrative, and references.\n\nAll content is still mapped from database.json and rendered by block type rules." }
+      ]
+    },
+    {
+      "id": "art-02",
+      "title": "The Void Canvas",
+      "category": "Ink Art",
+      "layout": "center",
+      "content": [
+        { "region": "main", "type": "Image", "data": "ink_01.jpg" },
+        { "region": "main", "type": "Text", "data": "Black ink on 40x40 canvas. Expanding on the concept of negative space." }
+      ]
+    }
+  ]
+}
