@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Supabase config — no secrets here, just the project URL -->
+  <meta name="supabase-url" content="https://ssltbftsssafozraksno.supabase.co">
+  <meta name="supabase-function-url" content="https://ssltbftsssafozraksno.supabase.co/functions/v1/get-model-url">
   <title>IFC BIM Dashboard</title>
   <style>
     :root {
@@ -273,6 +276,8 @@
     <div class="content">
       <div>This viewer uses That Open Components (Fragments pipeline).</div>
       <div class="badge">IFC -&gt; Fragments at runtime</div>
+      <!-- Admin-only: shown via ?admin=true in URL -->
+      <button id="btn-export-frag" type="button" class="full" style="display:none;margin-top:10px;">Export .frag</button>
 
       <section>
         <h3 class="section-title">Visual Style</h3>

@@ -14,15 +14,17 @@ sub_art-ink,cat_art,Ink,SubCategory,,,
 sub_art-dgt,cat_art,Digital,SubCategory,,,
 sub_cmp-sfd,cat_cmp,Software Development,SubCategory,,,
 sub_cmp-dsn,cat_cmp,Design,SubCategory,,,
-bim-crd_01,sub_bim-crd,Belle Vie,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/timber_clash.ifc
-bim-crd_02,sub_bim-crd,MEP Routing Analysis,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/mep_v1.ifc
-bim-crd_03,sub_bim-crd,Coordination Model 03,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/placeholder.ifc
-bim-crd_04,sub_bim-crd,Coordination Model 04,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/placeholder.ifc
-bim-crd_05,sub_bim-crd,Coordination Model 05,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/placeholder.ifc
-bim-crd_06,sub_bim-crd,Coordination Model 06,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/placeholder.ifc
-bim-ats_01,sub_bim-ats,Batch Exporter Script,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/placeholder.ifc
-bim-sfd_01,sub_bim-sfd,Revit C# Plugin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/placeholder.ifc
-bim-dta_01,sub_bim-dta,Lifecycle LCA Extraction,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/models/placeholder.ifc
+bim-crd_01,sub_bim-crd,NewGiza Westrige,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/NewGiza_H04-RB11.ifc
+bim-crd_02,sub_bim-crd,Sodic Spectrum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Sodic_BLK25_C.ifc
+bim-crd_03,sub_bim-crd,ZED West towers,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/ZEDWest_E01.ifc
+bim-crd_04,sub_bim-crd,Belle Vie Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Bellevie-V03A.ifc
+bim-crd_05,sub_bim-crd,Southern Dunes Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Dunes_R04-A07D.ifc
+bim-crd_06,sub_bim-crd,Aquellum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
+bim-crd_07,sub_bim-crd,REWE Portz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc
+bim-crd_08,sub_bim-crd,Hittin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
+bim-ats_01,sub_bim-ats,Batch Exporter Script,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
+bim-sfd_01,sub_bim-sfd,Revit C# Plugin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
+bim-dta_01,sub_bim-dta,Lifecycle LCA Extraction,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
 acd-arc_01,sub_acd-arc,Micro to Macro Timber,Project,split,,,
 acd-arc_02,sub_acd-arc,Factory Adaptive Reuse,Project,split,,,
 acd-arc_03,sub_acd-arc,Architecture Concept 03,Project,split,,,

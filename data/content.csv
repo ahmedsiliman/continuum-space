@@ -1,22 +1,27 @@
 project_id,block_order,position,type,data
-bim-crd_01,1,hero,BIM_Viewer,/projects/models/Bellevie-V03A.ifc
+bim-crd_01,1,hero,BIM_Viewer,/projects/models/NewGiza_H04-RB11.ifc
 bim-crd_01,2,details,Text,Detailed clash detection workflow for cross-laminated timber structural joints.
-bim-crd_01,3,details,Image,/images/clash_report.jpg
-bim-crd_02,1,hero,BIM_Viewer,/models/mep_v1.ifc
+bim-crd_01,3,details,Image,/projects/images/NEWGIZA_Cover.jpg
+bim-crd_01,4,details,Image,/projects/images/NEWGIZA_Cover.jpg
+bim-crd_02,1,hero,BIM_Viewer,/projects/models/Sodic_BLK25_C.ifc
 bim-crd_02,2,details,Text,MEP system coordination within modular floor assemblies.
-bim-crd_03,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_03,1,hero,BIM_Viewer,/projects/models/ZEDWest_E01.ifc
 bim-crd_03,2,details,Text,Placeholder details for Coordination Model 03.
-bim-crd_04,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_04,1,hero,BIM_Viewer,/projects/models/Bellevie-V03A.ifc
 bim-crd_04,2,details,Text,Placeholder details for Coordination Model 04.
-bim-crd_05,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_05,1,hero,BIM_Viewer,/projects/models/Dunes_R04-A07D.ifc
 bim-crd_05,2,details,Text,Placeholder details for Coordination Model 05.
-bim-crd_06,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_06,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
 bim-crd_06,2,details,Text,Placeholder details for Coordination Model 06.
-bim-ats_01,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-crd_07,1,hero,BIM_Viewer,/projects/models/REWE-IT-PORZ.ifc
+bim-crd_07,2,details,Text,Placeholder details for Coordination Model 07.
+bim-crd_08,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
+bim-crd_08,2,details,Text,Placeholder details for Coordination Model 08.
+bim-ats_01,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
 bim-ats_01,2,details,Text,Documentation for the Batch Exporter Script automation.
-bim-sfd_01,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-sfd_01,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
 bim-sfd_01,2,details,Text,Core framework architecture for custom Revit C# Add-ins.
-bim-dta_01,1,hero,BIM_Viewer,/projects/models/modelsplaceholder.ifc
+bim-dta_01,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
 bim-dta_01,2,details,Text,Data extraction methodologies for Lifecycle LCA analysis.
 acd-arc_01,1,left,Text,The Micro to Macro seminar project focusing on sustainable timber construction.
 acd-arc_01,2,right,Image,/images/micro_to_macro_render.jpg
