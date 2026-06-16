@@ -14,6 +14,13 @@ function buildIframeSrc(data) {
     iframeUrl.searchParams.set('modelUrl', absoluteModelUrl);
   }
 
+  // Forward previewToken from the main page URL into the iframe so the
+  // viewer can call the Supabase Edge Function with the same token.
+  const previewToken = new URLSearchParams(window.location.search).get('previewToken');
+  if (previewToken) {
+    iframeUrl.searchParams.set('previewToken', previewToken);
+  }
+
   const params = config.params && typeof config.params === 'object' ? config.params : {};
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
