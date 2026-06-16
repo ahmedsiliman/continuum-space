@@ -1,0 +1,174 @@
+.project-details-panel {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 320px;
+  max-height: calc(100vh - 48px);
+  background: rgba(10, 10, 12, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  z-index: 85;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.panel-content-wrapper {
+  animation: panelFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.project-details-panel.collapsed {
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  background: rgba(10, 10, 12, 0.45);
+  right: 24px;
+}
+
+/* ── Toggle Handle Asset ─────────────────────────────────────────────────── */
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  left: -14px;
+  width: 28px;
+  height: 28px;
+  background: rgba(10, 10, 12, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  font-size: 10px;
+  transition: all 200ms ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.toggle-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* ── Scrollbars & Typography Content ─────────────────────────────────────── */
+.panel-content {
+  padding: 24px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.panel-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.panel-title {
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 12px;
+}
+
+/* ── Graphical Preview Elements ────────────────────────────────────────── */
+.panel-image-container {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.panel-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.85;
+  transition: opacity 250ms ease;
+}
+
+.panel-image-container:hover .panel-image {
+  opacity: 1;
+}
+
+.panel-description {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.panel-address {
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.address-icon {
+  font-size: 14px;
+  filter: grayscale(1) brightness(1.5);
+  opacity: 0.6;
+}
+
+.address-text {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+}
+
+.no-data {
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 10px;
+  text-align: center;
+  margin: 24px 0;
+}
+
+/* ── State Variations ───────────────────────────────────────────────────── */
+.project-details-panel.collapsed .toggle-button {
+  left: 8px;
+  top: 8px;
+}
+
+.project-details-panel.collapsed .panel-content {
+  display: none;
+}

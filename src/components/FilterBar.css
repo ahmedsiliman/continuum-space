@@ -1,0 +1,149 @@
+/* ── Filter Bar: floats in the gap between TelemetryHUD (280px left) and ProjectDetailsPanel (320px right) ── */
+.filter-bar-container {
+  position: fixed;
+  top: 24px;
+  /* left panel: 24px offset + 280px width + 16px gap */
+  left: calc(24px + 280px + 16px);
+  /* right panel: 24px offset + 320px width + 16px gap */
+  right: calc(24px + 320px + 16px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* ── Main row: search | filter | about-me ── */
+.filter-bar-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+/* ── Shared glass button base ── */
+.about-me-btn,
+.filter-toggle-btn {
+  background: rgba(10, 10, 12, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 10px 20px;
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.about-me-btn:hover,
+.filter-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-toggle-btn.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: rgba(0, 229, 255, 0.4);
+  color: #00e5ff;
+}
+
+/* ── Search: grows to fill available space ── */
+.search-container {
+  background: rgba(10, 10, 12, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  /* fills middle space */
+  flex: 1;
+  min-width: 0;
+  transition: all 0.2s ease;
+}
+
+.search-container:focus-within {
+  border-color: rgba(0, 229, 255, 0.4);
+  background: rgba(10, 10, 12, 0.6);
+}
+
+.search-icon {
+  font-size: 12px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  width: 100%;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Filter pills drop-down row ── */
+.filter-bar-sub {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(10, 10, 12, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  pointer-events: auto;
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.filter-pill {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 6px 14px;
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.filter-pill.active {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: rgba(0, 229, 255, 0.3);
+  color: #00e5ff;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+}

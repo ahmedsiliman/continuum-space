@@ -1,0 +1,17 @@
+node_id,title,description,image_url,address
+root,CONTINUUM SPACE,The central hub of the Continuum Space universe. Explore various domains from BIM to Art.,,,
+cat_bim,BIM,Building Information Modeling and Coordination. Exploring the intersection of architecture and data.,/projects/BIM_CRD/Newgiza/NEWGIZA_Cover.jpg,
+cat_acd,Academic,Academic research and projects in architecture and urban design.,,
+cat_art,Art,Creative expressions through digital and traditional media.,/projects/Art/Blackheart/BLCK HRT-01.jpg,
+cat_cmp,Computation,Computational design and software development for the built environment.,/projects/CMP/Dynamo_lintel/lintel-threshold script.png,
+sub_bim-crd,BIM Coordination,Specialized workflows for clash detection and model coordination.,/projects/BIM_CRD/Aquellum/aquellum-cover.png,
+bim-crd_01,NewGiza Westrige,Comprehensive BIM coordination for high-end residential developments.,/projects/images/NEWGIZA_Cover.jpg,"New Giza, Giza, Egypt"
+bim-crd_02,Sodic Spectrum,MEP coordination and structural alignment for commercial hubs.,,"New Cairo, Cairo Egypt"
+bim-crd_03,ZED West towers,High-rise residential coordination and technical documentation.,/projects/BIM_CRD/Zedwest/Zedwest_01.jpg,"Sheikh Zayed City, Giza, Egypt"
+bim-crd_04,Belle Vie Villas,Landscape and architectural coordination for luxury villas.,,"New Zayed, Giza, Egypt"
+bim-crd_05,The Dunes,Advanced coordination for coastal developments.,,"Tabuk, Saudi Arabia"
+bim-crd_06,Aquellum,Mixed-use development coordination.,,"Tabuk, Saudi Arabia"
+bim-crd_07,REWE PORZ,Urban scale BIM coordination and planning.,,"Cologne, Germany"
+bim-crd_08,HITTIN,Smart city infrastructure and building coordination.,,"Riyadh, Saudi Arabia"
+sub_art-ink,Ink,Traditional ink drawings and sketches.,/projects/Art/Blackheart/BLCK HRT03.jpg,
+sub_cmp-sfd,Software Development,Building tools and plugins for architectural workflows.,/projects/CMP/Railing/Artboard 12.png,
