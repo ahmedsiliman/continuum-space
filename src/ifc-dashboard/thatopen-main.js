@@ -249,6 +249,98 @@ const preferredCategoryGroups = [
   { label: 'Mechanical Equipment', patterns: [/MECHANICAL/, /EQUIPMENT/, /FLOW/, /TERMINAL/, /BOILER/, /CHILLER/, /PUMP/, /FAN/] }
 ];
 
+// ─── IndexedDB fragment cache ─────────────────────────────────────────────────
+// Stores serialised .frag binaries keyed by the model filename stem
+// (e.g. "Bellevie-V03A") so the key stays stable across signed-URL changes.
+const FRAG_DB_NAME    = 'fragcache';
+const FRAG_STORE_NAME = 'models';
+const FRAG_DB_VERSION = 3; // Bumped version to fix 'requested version is less than existing' errors
+
+function openFragDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(FRAG_DB_NAME, FRAG_DB_VERSION);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(FRAG_STORE_NAME)) {
+        db.createObjectStore(FRAG_STORE_NAME);
+      }
+    };
+    req.onsuccess = (e) => resolve(e.target.result);
+    req.onerror   = () => reject(req.error);
+  });
+}
+
+async function getFragCache(key) {
+  try {
+    const db = await openFragDB();
+    return await new Promise((resolve) => {
+      const tx  = db.transaction(FRAG_STORE_NAME, 'readonly');
+      const req = tx.objectStore(FRAG_STORE_NAME).get(key);
+      req.onsuccess = () => resolve(req.result ?? null);
+      req.onerror   = () => resolve(null);
+    });
+  } catch {
+    return null;
+  }
+}
+
+async function setFragCache(key, buffer) {
+  try {
+    const db = await openFragDB();
+    await new Promise((resolve, reject) => {
+      const tx  = db.transaction(FRAG_STORE_NAME, 'readwrite');
+      const req = tx.objectStore(FRAG_STORE_NAME).put(buffer, key);
+      req.onsuccess = () => resolve();
+      req.onerror   = () => reject(req.error);
+    });
+  } catch (err) {
+    console.warn('[fragcache] write failed:', err);
+  }
+}
+
+/** Derive the filename stem used as a cache key from any model URL. */
+function cacheKeyFromUrl(url) {
+  const pathname = new URL(url, window.location.origin).pathname;
+  const base = pathname.split('/').pop() ?? '';
+  return base.replace(/\.(ifc|frag)$/i, '');
+}
+
+/** Replace the .ifc extension in a URL with .frag (preserves query string). */
+function toFragUrl(url) {
+  const u = new URL(url, window.location.origin);
+  u.pathname = u.pathname.replace(/\.ifc$/i, '.frag');
+  return u.toString();
+}
+
+// ─── Supabase signed URL resolution ─────────────────────────────────────────
+// Calls the Edge Function with the previewToken to get a 30-day signed URL
+// for the requested .frag file from the private Supabase bucket.
+async function resolveSupabaseUrl(previewToken, filename) {
+  const fnUrl = document.querySelector('meta[name="supabase-function-url"]')?.content;
+  if (!fnUrl) {
+    throw new Error('supabase-function-url meta tag missing in IFC_Dashboard.html');
+  }
+
+  const res = await withTimeout(
+    fetch(fnUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ previewToken, filename })
+    }),
+    10000,
+    'Preview authentication timed out (10s).'
+  );
+
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(body.error || `Preview authentication failed (${res.status})`);
+  }
+
+  return body.signedUrl;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function setLoading(message, isError = false) {
   loadingEl.textContent = message;
   loadingEl.style.color = isError ? '#b00020' : '#18181b';
@@ -494,8 +586,7 @@ async function main() {
     const ifcLoader = components.get(OBC.IfcLoader);
     const classifier = components.get(OBC.Classifier);
     const hider = components.get(OBC.Hider);
-    const clipper = components.get(OBC.Clipper);
-    const sectionState = {
+    const clipper = components.get(OBC.Clipper);    const sectionState = {
       id: null,
       axis: null,
       normal: null,
@@ -566,41 +657,152 @@ async function main() {
       sidebarEl.scrollTop = 0;
     });
 
-    await ifcLoader.setup({
-      autoSetWasm: false,
-      wasm: {
-        path: './vendor/',
-        absolute: false
+    const modelUrl     = resolveModelUrl();
+    const cacheKey     = cacheKeyFromUrl(modelUrl);
+    const modelPath    = new URL(modelUrl, window.location.origin).pathname;
+    const isExplicitFrag = modelPath.toLowerCase().endsWith('.frag');
+    const previewToken = new URLSearchParams(window.location.search).get('previewToken');
+
+    // ── Load strategy (fastest first) ────────────────────────────────────────
+    //
+    //  1. IndexedDB cache hit      → fragments.core.load()  (always first)
+    //  2. previewToken present     → Supabase Edge Fn → signed URL → .frag
+    //  3. Explicit .frag URL       → fetch .frag   (dev/admin local)
+    //  4. .ifc URL + .frag sibling → fetch sibling (dev/admin local)
+    //  5. .ifc URL, no sibling     → WASM fallback (dev/admin local)
+    //
+    // ifcLoader.setup() (WASM init) is deferred to branch 5 only.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    let loadedViaFastPath = false;
+
+    // 1 ── IndexedDB cache check (no network, no auth — always fastest)
+    setLoading('Checking local cache...');
+    const cached = await getFragCache(cacheKey);
+
+    if (cached) {
+      setLoading('Loading from cache...');
+      await fragments.core.load(cached, { modelId: cacheKey });
+      loadedViaFastPath = true;
+
+    } else if (previewToken) {
+      // 2 ── Supabase preview: validate token → get signed URL → stream .frag
+      setLoading('Authenticating preview access...');
+      const filename  = `${cacheKey}.frag`;
+      const signedUrl = await resolveSupabaseUrl(previewToken, filename);
+
+      setLoading('Fetching model from secure storage...');
+      const res = await withTimeout(
+        fetch(signedUrl),
+        60000,
+        'Model download timed out (60s).'
+      );
+      if (!res.ok) throw new Error(`Supabase storage error (${res.status}).`);
+      const buffer = await res.arrayBuffer();
+
+      setLoading('Loading Fragments model...');
+      const bufferToCache = buffer.slice(0);
+      await fragments.core.load(buffer, { modelId: cacheKey });
+      setFragCache(cacheKey, bufferToCache);
+      loadedViaFastPath = true;
+
+    } else if (isExplicitFrag) {
+      // 3 ── URL already points at a .frag file (dev/admin local)
+      setLoading('Fetching fragment file...');
+      const res = await withTimeout(
+        fetch(modelUrl),
+        10000,
+        'Could not fetch .frag file (10s timeout).'
+      );
+      if (!res.ok) throw new Error(`.frag file not found (${res.status}).`);
+      const buffer = await res.arrayBuffer();
+      setLoading('Loading Fragments model...');
+      const bufferToCache = buffer.slice(0);
+      await fragments.core.load(buffer, { modelId: cacheKey });
+      // Cache for next visit
+      setFragCache(cacheKey, bufferToCache);
+      loadedViaFastPath = true;
+
+    } else {
+      // 4 ── .ifc URL: try the .frag sibling first (HEAD request)
+      const fragUrl  = toFragUrl(modelUrl);
+      setLoading('Checking IFC file...');
+
+      let fragAvailable = false;
+      try {
+        const head = await withTimeout(fetch(fragUrl, { method: 'HEAD' }), 5000, '');
+        const contentType = head.headers.get('content-type') || '';
+        // Explicitly reject the HTML SPA fallback
+        fragAvailable = head.ok && !contentType.includes('text/html');
+      } catch {
+        fragAvailable = false;
       }
-    });
 
-    const modelUrl = resolveModelUrl();
+      if (fragAvailable) {
+        // 4a ── .frag sibling found: fast path
+        setLoading('Fetching pre-converted fragment...');
+        const res = await withTimeout(
+          fetch(fragUrl),
+          30000,
+          'Could not fetch .frag file (30s timeout).'
+        );
+        if (!res.ok) throw new Error(`.frag fetch failed (${res.status}).`);
+        const buffer = await res.arrayBuffer();
+        setLoading('Loading Fragments model...');
+        const bufferToCache = buffer.slice(0);
+        await fragments.core.load(buffer, { modelId: cacheKey });
+        setFragCache(cacheKey, bufferToCache);
+        loadedViaFastPath = true;
 
-    setLoading('Checking IFC file...');
-    const fileResponse = await withTimeout(
-      fetch(modelUrl, { cache: 'no-store' }),
-      10000,
-      'Could not access IFC file (10s timeout).'
-    );
-    if (!fileResponse.ok) {
-      throw new Error(`IFC file not found (${fileResponse.status} ${fileResponse.statusText}).`);
-    }
-
-    setLoading('Converting IFC to Fragments (That Open)...');
-    const data = new Uint8Array(await fileResponse.arrayBuffer());
-
-    await withTimeout(
-      ifcLoader.load(data, false, 'berlin-model', {
-        processData: {
-          progressCallback: (progress) => {
-            const pct = Math.round((progress * 100 + Number.EPSILON) * 10) / 10;
-            setLoading(`Converting IFC... ${pct}%`);
+      } else {
+        // 5 ── WASM fallback: parse raw .ifc
+        // Defer WASM initialisation to here — skipped entirely on fast paths
+        await ifcLoader.setup({
+          autoSetWasm: false,
+          wasm: {
+            path: new URL('./vendor/', window.location.href).pathname,
+            absolute: true
           }
+        });
+
+        const ifcRes = await withTimeout(
+          fetch(modelUrl),
+          10000,
+          'Could not access IFC file (10s timeout).'
+        );
+        if (!ifcRes.ok) {
+          throw new Error(`IFC file not found (${ifcRes.status} ${ifcRes.statusText}).`);
         }
-      }),
-      180000,
-      'IFC conversion timed out after 180 seconds.'
-    );
+
+        // Guard against Vite returning index.html for missing IFC files
+        const contentType = ifcRes.headers.get('content-type') || '';
+        if (contentType.includes('text/html')) {
+          throw new Error(`Expected an IFC file, but received HTML. The file is missing.`);
+        }
+
+        setLoading('Converting IFC to Fragments (That Open)...');
+        const data = new Uint8Array(await ifcRes.arrayBuffer());
+
+        await withTimeout(
+          ifcLoader.load(data, false, cacheKey, {
+            processData: {
+              progressCallback: (progress) => {
+                const pct = Math.round((progress * 100 + Number.EPSILON) * 10) / 10;
+                setLoading(`Converting IFC... ${pct}%`);
+              }
+            }
+          }),
+          180000,
+          'IFC conversion timed out after 180 seconds.'
+        );
+
+        // Cache the converted result in IndexedDB for next time (non-blocking)
+        const model = [...fragments.list.values()].at(-1);
+        if (model) {
+          model.getBuffer().then(buf => setFragCache(cacheKey, buf)).catch(() => {});
+        }
+      }
+    }
 
     setLoading('Classifying categories...');
     await classifier.byCategory({ classificationName: 'Categories' });
@@ -616,6 +818,37 @@ async function main() {
     buildCategoryUI(hider);
     wireStyleControls(world);
 
+    // ── Admin export button (visible only when ?admin=true) ──────────────────
+    const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+    const btnExport = document.getElementById('btn-export-frag');
+    if (isAdmin && btnExport) {
+      btnExport.style.display = '';
+      btnExport.addEventListener('click', async () => {
+        btnExport.disabled = true;
+        btnExport.textContent = 'Exporting...';
+        try {
+          const model = [...fragments.list.values()].at(-1);
+          if (!model) throw new Error('No model loaded.');
+          const buffer  = await model.getBuffer();
+          const blob    = new Blob([buffer], { type: 'application/octet-stream' });
+          const objUrl  = URL.createObjectURL(blob);
+          const a       = document.createElement('a');
+          a.href        = objUrl;
+          a.download    = `${cacheKey}.frag`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(objUrl);
+          btnExport.textContent = 'Exported ✓';
+        } catch (err) {
+          console.error('Export failed:', err);
+          btnExport.textContent = 'Export failed';
+        } finally {
+          btnExport.disabled = false;
+        }
+      });
+    }
+
     const elapsed = ((performance.now() - start) / 1000).toFixed(1);
     setLoading(`That Open model loaded in ${elapsed}s`);
     setTimeout(() => {
@@ -623,7 +856,8 @@ async function main() {
     }, 1000);
   } catch (error) {
     console.error('That Open load failed:', error);
-    setLoading(`Load failed: ${error.message}`, true);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    setLoading(`Load failed: ${errorMessage}`, true);
   }
 }
 

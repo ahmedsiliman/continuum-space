@@ -3,304 +3,337 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="supabase-url" content="https://ssltbftsssafozraksno.supabase.co">
+  <meta name="supabase-function-url" content="https://ssltbftsssafozraksno.supabase.co/functions/v1/get-model-url">
   <title>IFC BIM Dashboard</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
     :root {
-      --bg: #f4f4f5;
-      --panel: #ffffff;
-      --text: #18181b;
-      --border: #e4e4e7;
-      --accent: #000000;
-      --sidebar-width: 340px;
+      --glass-bg:   rgba(10, 10, 12, 0.55);
+      --glass-bdr:  rgba(255, 255, 255, 0.08);
+      --glass-shd:  0 8px 32px 0 rgba(0,0,0,0.37), inset 0 1px 1px rgba(255,255,255,0.1);
+      --line-sub:   rgba(255, 255, 255, 0.05);
+      --line-deep:  rgba(255, 255, 255, 0.04);
+      --row-active: rgba(255, 255, 255, 0.06);
+      --row-hover:  rgba(255, 255, 255, 0.03);
+      --text-main:  rgba(255, 255, 255, 0.90);
+      --text-muted: rgba(255, 255, 255, 0.50);
+      --text-dark:  rgba(255, 255, 255, 0.25);
+      --mono:       'Share Tech Mono', 'Consolas', monospace;
+      --sidebar-w:  300px;
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      margin: 0;
       display: grid;
-      grid-template-columns: 1fr var(--sidebar-width);
+      grid-template-columns: var(--sidebar-w) 1fr;   /* sidebar LEFT */
       height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: transparent;
+      color: var(--text-main);
+      font-family: var(--mono);
       overflow: hidden;
     }
 
-    #viewer-container {
-      position: relative;
-      min-width: 0;
-    }
-
-    #loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: monospace;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid var(--accent);
-      padding: 10px 16px;
-      z-index: 10;
-      max-width: 80%;
-      text-align: center;
-    }
-
+    /* ── Sidebar ──────────────────────────────────────── */
     #sidebar {
-      border-left: 1px solid var(--border);
-      background: var(--panel);
-      box-shadow: -4px 0 15px rgba(0, 0, 0, 0.03);
+      border-right: 1px solid var(--glass-bdr);
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--glass-shd);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
+      z-index: 10;
     }
 
+    /* Fixed HUD header */
     .header {
-      padding: 20px;
-      border-bottom: 2px solid var(--accent);
+      flex-shrink: 0;
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid var(--line-sub);
     }
 
     .header h2 {
-      margin: 0;
-      font-size: 1.1rem;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 3px;
+      color: var(--text-dark);
+      margin-bottom: 20px;
     }
 
-    .panel-size {
-      margin-top: 10px;
-      display: grid;
-      gap: 4px;
+    /* Inner-scrolling content only */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 20px;
+    }
+    .content::-webkit-scrollbar { display: none; }
+
+    /* HUD section headers */
+    .section-title {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dark);
+      padding: 14px 20px 12px;
+      border-bottom: 1px solid var(--line-sub);
     }
 
+    /* Structural indent line */
+    .section-body {
+      position: relative;
+      padding: 8px 0;
+    }
+    .section-body::before {
+      content: '';
+      position: absolute;
+      left: 20px; top: 0; bottom: 0;
+      width: 1px;
+      background: var(--line-deep);
+    }
+
+    /* Panel width slider */
+    .panel-size { display: grid; gap: 6px; }
     .panel-size-row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: #52525b;
-    }
-
-    #panel-size-slider {
-      width: 100%;
-      accent-color: #000;
-      cursor: pointer;
-    }
-
-    .content {
-      padding: 14px 20px 18px;
-      font-size: 0.9rem;
-      line-height: 1.5;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .section-title {
-      margin: 0 0 8px;
-      font-size: 0.75rem;
+      font-size: 10px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      font-weight: 700;
-      color: #3f3f46;
+      color: var(--text-dark);
+    }
+    #panel-size-slider {
+      width: 100%;
+      accent-color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      background: transparent;
     }
 
+    /* Buttons */
     .actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 6px;
+      padding: 8px 20px 4px 36px;
     }
-
-    .actions button {
-      border: 1px solid var(--accent);
-      background: #fff;
-      color: var(--text);
-      padding: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .actions button:hover {
-      background: #f5f5f5;
-    }
-
-    .actions button.full {
-      grid-column: 1 / -1;
-    }
-
     .axis-actions {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 8px;
+      gap: 6px;
+      padding: 6px 20px 4px 36px;
     }
-
+    .actions button,
     .axis-actions button {
-      border: 1px solid var(--accent);
-      background: #fff;
-      color: var(--text);
-      padding: 8px;
-      font-size: 0.78rem;
-      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid var(--glass-bdr);
+      border-radius: 4px;
+      padding: 7px 4px;
+      cursor: pointer;
+      transition: background 150ms ease, color 150ms ease;
     }
-
+    .actions button:hover,
     .axis-actions button:hover {
-      background: #f5f5f5;
+      background: var(--row-hover);
+      color: var(--text-main);
     }
+    .actions button.full { grid-column: 1 / -1; }
 
+    /* State pill */
     .state-pill {
-      font-family: monospace;
-      font-size: 0.78rem;
-      border: 1px solid #d4d4d8;
-      padding: 4px 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-dark);
+      border: 1px solid var(--line-sub);
+      border-radius: 3px;
+      padding: 4px 10px;
       display: inline-block;
-      margin-bottom: 8px;
+      margin: 6px 20px 4px 36px;
     }
 
+    /* Category list */
     .category-list {
-      max-height: 60vh;
       overflow-y: auto;
-      border: 1px solid var(--border);
-      padding: 8px;
-      background: #fafafa;
+      scrollbar-width: none;
+      padding: 4px 20px 4px 36px;
     }
+    .category-list::-webkit-scrollbar { display: none; }
 
     .category-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 0;
-      font-size: 0.86rem;
+      padding: 5px 0;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 150ms ease;
+      cursor: default;
     }
-
+    .category-item:hover { color: var(--text-main); }
     .category-item input {
-      accent-color: #000;
+      accent-color: rgba(255,255,255,0.45);
       cursor: pointer;
     }
 
     .empty {
-      color: #71717a;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      color: var(--text-dark);
+      padding: 8px 20px 4px 36px;
+      text-transform: none;
       font-style: italic;
-      font-size: 0.84rem;
     }
 
-    .dropdown {
-      border: 1px solid var(--border);
-      background: #fff;
-    }
-
+    /* Dropdowns */
+    .dropdown { border-top: 1px solid var(--line-sub); }
     .dropdown-toggle {
       width: 100%;
       border: none;
-      border-bottom: 1px solid var(--border);
-      background: #fff;
-      color: var(--text);
+      background: none;
+      color: var(--text-muted);
       text-align: left;
-      padding: 10px 12px;
-      font-size: 0.84rem;
+      padding: 10px 20px 10px 36px;
+      font-family: var(--mono);
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1.5px;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: background 150ms ease, color 150ms ease;
     }
-
     .dropdown-toggle:hover {
-      background: #f8f8f8;
+      background: var(--row-hover);
+      color: var(--text-main);
     }
+    .dropdown-panel { display: block; padding: 4px 0 8px; }
+    .dropdown-panel.collapsed { display: none; }
 
-    .dropdown-panel {
-      padding: 8px;
-      display: block;
-    }
-
-    .dropdown-panel.collapsed {
-      display: none;
-    }
-
+    /* Badge */
     .badge {
       display: inline-block;
-      margin-top: 8px;
-      padding: 2px 8px;
-      border: 1px solid #18181b;
-      font-family: monospace;
-      font-size: 0.8rem;
+      margin: 6px 20px 2px 36px;
+      padding: 3px 8px;
+      border: 1px solid var(--glass-bdr);
+      border-radius: 3px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-dark);
     }
 
+    /* Active style button */
     .style-btn.active-style {
-      background: #1a1a1a !important;
-      color: #fff !important;
-      font-weight: 700;
+      background: var(--row-active) !important;
+      color: var(--text-main) !important;
+      border-color: var(--glass-bdr) !important;
     }
 
+    /* Loading overlay */
+    #loading {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: rgba(10,10,12,0.75);
+      border: 1px solid var(--glass-bdr);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 12px 20px;
+      z-index: 10;
+      max-width: 80%;
+      text-align: center;
+    }
+
+    /* Viewer */
+    #viewer-container {
+      position: relative;
+      min-width: 0;
+      background: transparent;
+    }
+
+    /* Responsive */
     @media (max-width: 900px) {
       body {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr auto;
+        grid-template-rows: auto 1fr;
       }
-
       #sidebar {
-        border-left: none;
-        border-top: 1px solid var(--border);
-        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.03);
+        border-right: none;
+        border-bottom: 1px solid var(--glass-bdr);
+        max-height: 42vh;
       }
     }
   </style>
 </head>
 <body>
-  <div id="viewer-container">
-    <div id="loading">Initializing That Open viewer...</div>
-  </div>
 
+  <!-- Sidebar LEFT -->
   <aside id="sidebar">
     <div class="header">
-      <h2>Model Control</h2>
+      <h2>// Control Center ;</h2>
       <div class="panel-size">
         <div class="panel-size-row">
           <span>Panel Width</span>
-          <span id="panel-size-value">340px</span>
+          <span id="panel-size-value">300px</span>
         </div>
-        <input id="panel-size-slider" type="range" min="300" max="560" step="10" value="340">
+        <input id="panel-size-slider" type="range" min="240" max="480" step="10" value="300">
       </div>
     </div>
+
+    <!-- Scrollable body -->
     <div class="content">
-      <div>This viewer uses That Open Components (Fragments pipeline).</div>
-      <div class="badge">IFC -&gt; Fragments at runtime</div>
 
-      <section>
-        <h3 class="section-title">Visual Style</h3>
+      <div class="section-title">Visual Style</div>
+      <div class="section-body">
         <div class="actions">
-          <button id="btn-style-solid" class="style-btn active-style" type="button">Solid</button>
-          <button id="btn-style-clay" class="style-btn" type="button">Clay</button>
-          <button id="btn-style-hidden-line" class="style-btn full" type="button">Hidden Line</button>
+          <button id="btn-style-solid"       class="style-btn active-style" type="button">Solid</button>
+          <button id="btn-style-clay"        class="style-btn"              type="button">Clay</button>
+          <button id="btn-style-hidden-line" class="style-btn full"         type="button">Hidden Line</button>
         </div>
-      </section>
+      </div>
 
-      <section>
-        <h3 class="section-title">Section Tool</h3>
+      <div class="section-title">Section Tool</div>
+      <div class="section-body">
         <div id="section-state" class="state-pill">Axis: - | Flip: Normal</div>
         <div class="actions">
           <button id="btn-flip-section" class="full" type="button">Toggle Flip</button>
         </div>
         <div class="axis-actions">
-          <button id="btn-x-section" type="button">X Section</button>
-          <button id="btn-y-section" type="button">Y Section</button>
-          <button id="btn-z-section" type="button">Z Section</button>
+          <button id="btn-x-section" type="button">X</button>
+          <button id="btn-y-section" type="button">Y</button>
+          <button id="btn-z-section" type="button">Z</button>
         </div>
-      </section>
+      </div>
 
-      <section>
-        <h3 class="section-title">Filters</h3>
-        <div class="actions" style="margin-bottom:8px;">
+      <div class="section-title">Filters</div>
+      <div class="section-body">
+        <div class="actions" style="margin-bottom: 4px;">
           <button id="btn-show-all" class="full" type="button">Reset Visibility</button>
         </div>
+
         <div class="dropdown">
           <button id="btn-toggle-categories" class="dropdown-toggle" type="button">
             <span>Categories</span>
@@ -308,23 +341,29 @@
           </button>
           <div id="categories-panel" class="dropdown-panel collapsed">
             <div id="category-list" class="category-list">
-              <div class="empty">Categories will appear after the IFC is loaded.</div>
+              <div class="empty">Categories appear after IFC loads.</div>
             </div>
           </div>
         </div>
 
-        <div class="dropdown" style="margin-top:10px;">
+        <div class="dropdown">
           <button id="btn-toggle-levels" class="dropdown-toggle" type="button">
-            <span>Level Filter (Next Stage)</span>
+            <span>Level Filter</span>
             <span id="levels-arrow">▼</span>
           </button>
           <div id="levels-panel" class="dropdown-panel collapsed">
-            <div class="empty">Storey filtering will be added in the next stage.</div>
+            <div class="empty">Storey filtering — next stage.</div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+
+    </div><!-- /.content -->
   </aside>
+
+  <!-- Viewer RIGHT -->
+  <div id="viewer-container">
+    <div id="loading">Initializing That Open viewer...</div>
+  </div>
 
   <script type="module" src="./main.bundle.js"></script>
 </body>

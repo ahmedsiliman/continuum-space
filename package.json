@@ -10,19 +10,25 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build && node -e \"const fs=require('fs');fs.rmSync('dist/projects/models',{recursive:true,force:true})\"",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "convert:models": "node scripts/convert-ifc-to-frag.mjs",
+    "upload:models": "node scripts/upload-frag-to-supabase.mjs",
+    "preview:models": "node scripts/manage-preview-links.mjs models",
+    "preview:create": "node scripts/manage-preview-links.mjs create",
+    "preview:links": "node scripts/manage-preview-links.mjs links",
+    "preview:sync": "node scripts/manage-preview-links.mjs sync",
+    "geocode:projects": "node scripts/geocode-projects.mjs",
+    "bundle:ifc": "esbuild src/ifc-dashboard/thatopen-main.js --bundle --minify --format=iife --outfile=public/ifc-dashboard/main.bundle.js"
   },
-
-
   "overrides": {
     "web-ifc": "$web-ifc"
   },
-
-
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
+    "@supabase/supabase-js": "^2.107.0",
     "@thatopen/components": "^3.4.6",
+    "@thatopen/fragments": "~3.4.0",
     "@thatopen/ui": "3.4.1",
     "d3-force": "^3.0.0",
     "gsap": "^3.15.0",
@@ -37,6 +43,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "esbuild": "^0.28.0",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",

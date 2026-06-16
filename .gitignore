@@ -8,12 +8,19 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+scripts
 dist
 dist-ssr
 *.local
 
 # Large binary assets — too big for GitHub (host externally or use Git LFS)
 public/projects/models/
+
+# Local environment — credentials, never commit
+.env
+.env.local
+scripts/.preview-token-registry.json
+supabase\.temp
 
 # Editor directories and files
 .vscode/*
