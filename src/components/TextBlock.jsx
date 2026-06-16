@@ -1,11 +1,12 @@
 export default function TextBlock({ data }) {
   return (
     <div style={{ 
-      padding: '10px 0', 
-      fontSize: '1.1rem', 
+      padding: '12px 0', 
+      fontSize: '13px', 
       lineHeight: '1.8', 
-      color: '#444',
-      fontFamily: 'serif' // Matches the elegant vibe of your screenshots
+      color: 'rgba(255, 255, 255, 0.7)',
+      fontFamily: "'Share Tech Mono', 'Consolas', monospace",
+      letterSpacing: '1px'
     }}>
       {/* If data contains newlines, map them to <br> tags */}
       {data.split('\n').map((line, i) => (

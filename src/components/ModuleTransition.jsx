@@ -1,37 +1,52 @@
 // src/components/ModuleTransition.jsx
 import React, { useEffect, useState } from 'react';
 
-export default function ModuleTransition({ children, originX, originY, onClose }) {
+export default function ModuleTransition({ children, originX, originY, onClose, isAboutMe }) {
   const [phase, setPhase] = useState('entering');
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Initial state: the exact glowing white node from the universe
-  const [buttonStyle, setButtonStyle] = useState({
-    transform: `translate(${originX}px, ${originY}px) translate(-50%, -50%)`,
-    width: '44px',
-    height: '44px',
-    background: '#ffffff',
+  // Flight target styles (white glass theme)
+  const idleStyle = {
+    transform: 'translate(calc(100vw - 50px), 30px) translate(-50%, -50%)',
+    width: '42px',
+    height: '42px',
+    background: isHovered ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.08)',
     borderRadius: '50%',
+    color: '#ffffff',
+    border: isHovered ? '1.5px solid rgba(255, 255, 255, 0.6)' : '1px solid rgba(255, 255, 255, 0.2)',
+    boxShadow: isHovered 
+      ? '0 0 20px rgba(255, 255, 255, 0.25), inset 0 0 10px rgba(255, 255, 255, 0.1)' 
+      : '0 0 10px rgba(255, 255, 255, 0.05), inset 0 0 5px rgba(255, 255, 255, 0.02)',
+    backdropFilter: 'blur(14px)',
+    WebkitBackdropFilter: 'blur(14px)',
+  };
+
+  const initialStyle = {
+    transform: `translate(${originX}px, ${originY}px) translate(-50%, -50%)`,
+    width: isAboutMe ? '120px' : '44px',
+    height: isAboutMe ? '40px' : '44px',
+    background: isAboutMe ? 'rgba(10, 10, 12, 0.45)' : '#ffffff',
+    borderRadius: isAboutMe ? '12px' : '50%',
     color: 'transparent',
-    border: '1px solid transparent',
-    boxShadow: '0 0 30px rgba(255,255,255,1), 0 0 60px #00E5FF, inset 0 0 10px #0088FF',
-  });
+    border: isAboutMe ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
+    boxShadow: isAboutMe 
+      ? '0 8px 32px 0 rgba(0, 0, 0, 0.25)' 
+      : '0 0 30px rgba(255,255,255,1), 0 0 60px rgba(255,255,255,0.2)',
+  };
+
+  const [buttonStyle, setButtonStyle] = useState(initialStyle);
 
   useEffect(() => {
-    // Start button flight after 50ms (initial white-node state needs one frame to render)
-    const buttonTimer = setTimeout(() => {
-      setButtonStyle({
-        transform: 'translate(calc(100vw - 40px), 40px) translate(-50%, -50%)',
-        width: '44px',
-        height: '44px',
-        background: '#02040a',
-        borderRadius: '50%',
-        color: '#00E5FF',
-        border: '1px solid rgba(0, 229, 255, 0.4)',
-        boxShadow: '0 0 20px rgba(0, 229, 255, 0.3), inset 0 0 15px rgba(0,0,0,1)',
-      });
-    }, 50);
+    if (phase === 'idle') {
+      setButtonStyle(idleStyle);
+    }
+  }, [isHovered, phase]);
 
-    // Let bubble-expand animation run its full 900ms before going idle
+  useEffect(() => {
+    const buttonTimer = setTimeout(() => {
+      setButtonStyle(idleStyle);
+    }, isAboutMe ? 10 : 50);
+
     const phaseTimer = setTimeout(() => {
       setPhase('idle');
     }, 950);
@@ -40,21 +55,11 @@ export default function ModuleTransition({ children, originX, originY, onClose }
       clearTimeout(buttonTimer);
       clearTimeout(phaseTimer);
     };
-  }, [originX, originY]);
+  }, [originX, originY, isAboutMe]);
 
-  // Reverse flight: void halo → universe node → unmount
   const triggerClose = () => {
     setPhase('closing');
-    setButtonStyle({
-      transform: `translate(${originX}px, ${originY}px) translate(-50%, -50%)`,
-      width: '44px',
-      height: '44px',
-      background: '#ffffff',
-      borderRadius: '50%',
-      color: 'transparent',
-      border: '1px solid transparent',
-      boxShadow: '0 0 30px rgba(255,255,255,1), 0 0 60px #00E5FF, inset 0 0 10px #0088FF',
-    });
+    setButtonStyle(initialStyle);
 
     setTimeout(() => {
       onClose();
@@ -63,7 +68,6 @@ export default function ModuleTransition({ children, originX, originY, onClose }
 
   return (
     <>
-      {/* Layer 1: Expanding / collapsing background bubble */}
       <div
         className={
           phase === 'entering' ? 'bubble-transition-dynamic' :
@@ -76,7 +80,9 @@ export default function ModuleTransition({ children, originX, originY, onClose }
           width: '100vw',
           height: '100vh',
           zIndex: 100,
-          backgroundColor: '#02040a',
+          backgroundColor: '#00000080', // 50% transparent black
+          backdropFilter: 'blur(2px)',  // Blurs content behind this overlay
+          WebkitBackdropFilter: 'blur(2px)', // Required for Safari support
           overflow: 'hidden',
           pointerEvents: phase === 'idle' ? 'auto' : 'none',
           '--origin-x': `${originX}px`,
@@ -86,9 +92,10 @@ export default function ModuleTransition({ children, originX, originY, onClose }
         {children}
       </div>
 
-      {/* Layer 2: Morphing flight button */}
       <button
         onClick={triggerClose}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{
           position: 'fixed',
           top: 0,
@@ -99,7 +106,7 @@ export default function ModuleTransition({ children, originX, originY, onClose }
           alignItems: 'center',
           cursor: phase === 'idle' ? 'pointer' : 'default',
           pointerEvents: phase === 'idle' ? 'auto' : 'none',
-          transition: 'all 1s cubic-bezier(0.25, 1, 0.5, 1)',
+          transition: 'all 1s cubic-bezier(0.25, 1, 0.5, 1), background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease',
           ...buttonStyle,
         }}
       >
@@ -109,9 +116,10 @@ export default function ModuleTransition({ children, originX, originY, onClose }
             transition: 'opacity 0.3s ease-in-out',
             fontSize: '18px',
             fontWeight: '300',
-            fontFamily: 'sans-serif',
+            fontFamily: "'Share Tech Mono', 'Consolas', monospace",
             lineHeight: '1',
-            marginTop: '2px',
+            color: '#ffffff',
+            textShadow: '0 0 10px rgba(255,255,255,0.8)'
           }}
         >
           ✕

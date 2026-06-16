@@ -1,45 +1,29 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 
-// ── Shared typography token — mirrors the hint text style in MainScene ────────
+// ── Typography Token ─────────────────────────────────────────────────────────
 const MONO = {
   fontFamily: "'Share Tech Mono', 'Consolas', monospace",
   textTransform: 'uppercase',
-  letterSpacing: '3px',
+  letterSpacing: '2px',
 };
 
-// ── Palette ───────────────────────────────────────────────────────────────────
-const CYAN       = '#00E5FF';
-const CYAN_DIM   = 'rgba(0, 229, 255, 0.6)';
-const CYAN_GHOST = 'rgba(0, 229, 255, 0.18)';
-const ROW_TEXT   = 'rgba(160, 238, 255, 0.7)';
-const SUB_TEXT   = 'rgba(160, 238, 255, 0.45)';
-const BG         = 'rgba(2, 4, 10, 0.92)';
+// ── Modern Monochrome Glass Palette ──────────────────────────────────────────
+const TEXT_MAIN   = 'rgba(255, 255, 255, 0.9)';
+const TEXT_MUTED  = 'rgba(255, 255, 255, 0.5)';
+const TEXT_DARK   = 'rgba(255, 255, 255, 0.25)';
+const ROW_ACTIVE  = 'rgba(255, 255, 255, 0.06)';
+const ROW_HOVER   = 'rgba(255, 255, 255, 0.03)';
+const GLASS_BG    = 'rgba(10, 10, 12, 0.45)';
+const GLASS_BORDER= 'rgba(255, 255, 255, 0.08)';
 
-/**
- * TelemetryHUD
- *
- * Fixed bottom-left navigation panel styled like spacecraft telemetry readout.
- * Lists all Category nodes; shows their SubCategory children when expanded.
- * Clicking a row calls `onNodeInteract` with the real node object — the same
- * callback used by the force graph, so expand/collapse state is shared.
- *
- * Props
- *   database       — { nodes: [...] }  (same object passed to MainScene)
- *   expandedNodes  — string[]           (same state from App)
- *   onNodeInteract — (node) => void     (same handler from App)
- */
-export default function TelemetryHUD({ database, expandedNodes, onNodeInteract }) {
-  const [isOpen, setIsOpen] = useState(false);
-
+export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, onNodeFocus }) {
   const expandedSet = useMemo(() => new Set(expandedNodes || []), [expandedNodes]);
 
-  // All top-level Category nodes
   const categories = useMemo(() => {
     if (!database?.nodes?.length) return [];
     return database.nodes.filter((n) => n.type === 'Category');
   }, [database]);
 
-  // SubCategory nodes grouped by parent id
   const subsByParent = useMemo(() => {
     if (!database?.nodes?.length) return {};
     return database.nodes
@@ -50,7 +34,6 @@ export default function TelemetryHUD({ database, expandedNodes, onNodeInteract }
       }, {});
   }, [database]);
 
-  // Project nodes grouped by parent id (SubCategory)
   const projectsByParent = useMemo(() => {
     if (!database?.nodes?.length) return {};
     return database.nodes
@@ -66,208 +49,193 @@ export default function TelemetryHUD({ database, expandedNodes, onNodeInteract }
       style={{
         position: 'fixed',
         left: 24,
-        bottom: 24,
+        top: 24,
         zIndex: 90,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        gap: '8px',
+        maxHeight: 'calc(100vh - 48px)',
+        width: '280px',
       }}
     >
-      {/* ── Panel — slides in above the trigger ──────────────────────────── */}
       <div
         style={{
-          overflow: 'hidden',
-          maxHeight: isOpen ? '640px' : '0px',
-          opacity: isOpen ? 1 : 0,
-          transition: 'max-height 380ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease',
-          pointerEvents: isOpen ? 'auto' : 'none',
+          width: '100%',
+          overflowY: 'auto',
+          backgroundColor: GLASS_BG,
+          border: `1px solid ${GLASS_BORDER}`,
+          borderRadius: '12px',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)', // Safari support
+          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255,255,255,0.1)',
+          paddingBottom: '12px',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
         }}
+        className="custom-hud-container"
       >
+        {/* Scoped CSS Inject for interactive styling cleaner than standard inline listeners */}
+        <style>
+          {`
+            .custom-hud-container::-webkit-scrollbar {
+              display: none;
+            }
+            .hud-row {
+              transition: background 150ms ease, color 150ms ease;
+            }
+            .hud-row:hover {
+              background: ${ROW_HOVER} !important;
+              color: #ffffff !important;
+            }
+          `}
+        </style>
+        
+        {/* Header */}
         <div
           style={{
-            backgroundColor: BG,
-            border: `1px solid ${CYAN_GHOST}`,
-            borderLeft: `2px solid rgba(0, 229, 255, 0.35)`,
-            backdropFilter: 'blur(8px)',
-            minWidth: '240px',
-            paddingTop: '4px',
-            paddingBottom: '8px',
+            ...MONO,
+            color: TEXT_DARK,
+            fontSize: '10px',
+            letterSpacing: '3px',
+            padding: '16px 20px 12px 20px',
+            borderBottom: `1px solid rgba(255, 255, 255, 0.05)`,
+            marginBottom: '6px',
           }}
         >
-          {/* Header */}
-          <div
-            style={{
-              ...MONO,
-              color: 'rgba(0, 229, 255, 0.38)',
-              fontSize: '9px',
-              letterSpacing: '4px',
-              padding: '8px 16px 10px',
-              borderBottom: `1px solid rgba(0, 229, 255, 0.1)`,
-              marginBottom: '4px',
-            }}
-          >
-            NAVIGATION MATRIX
-          </div>
+          CONTINUUM INDEX
+        </div>
 
-          {/* Category rows */}
-          {categories.map((cat) => {
-            const isExpanded = expandedSet.has(cat.id);
-            const subs = subsByParent[cat.id] || [];
+        {/* Category rows */}
+        {categories.map((cat) => {
+          const isExpanded = expandedSet.has(cat.id);
+          const subs = subsByParent[cat.id] || [];
 
-            return (
-              <div key={cat.id}>
-                {/* ── Category row ────────────────────────────────────── */}
-                <button
-                  onClick={() => onNodeInteract?.(cat)}
-                  onMouseEnter={(e) => {
-                    if (!isExpanded) e.currentTarget.style.color = '#a0eeff';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isExpanded) e.currentTarget.style.color = ROW_TEXT;
-                  }}
+          return (
+            <div key={cat.id}>
+              {/* Category row */}
+              <button
+                className="hud-row"
+                onClick={() => onNodeInteract?.(cat)}
+                onMouseEnter={() => onNodeFocus?.(cat)}
+                onMouseLeave={() => onNodeFocus?.(null)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  background: isExpanded ? ROW_ACTIVE : 'none',
+                  border: 'none',
+                  color: isExpanded ? TEXT_MAIN : TEXT_MUTED,
+                  cursor: 'pointer',
+                  padding: '12px 20px',
+                  textAlign: 'left',
+                  ...MONO,
+                  fontSize: '11px',
+                  fontWeight: isExpanded ? '600' : '400',
+                }}
+              >
+                <span>{cat.title}</span>
+                <span
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    background: isExpanded ? 'rgba(0, 229, 255, 0.04)' : 'none',
-                    border: 'none',
-                    borderLeft: isExpanded ? `2px solid ${CYAN}` : '2px solid transparent',
-                    color: isExpanded ? CYAN : ROW_TEXT,
-                    cursor: 'pointer',
-                    padding: '8px 16px 8px 14px',
-                    textAlign: 'left',
-                    transition: 'color 200ms, border-color 200ms, background 200ms',
-                    ...MONO,
-                    fontSize: '11px',
+                    color: isExpanded ? TEXT_MAIN : TEXT_DARK,
+                    fontSize: '8px',
+                    transform: isExpanded ? 'rotate(90deg)' : 'none',
+                    transition: 'transform 150ms ease',
                   }}
                 >
-                  <span>[ {cat.title} ]</span>
-                  <span
-                    style={{
-                      color: isExpanded ? 'rgba(0,229,255,0.55)' : 'rgba(160,238,255,0.22)',
-                      marginLeft: '12px',
-                      letterSpacing: '2px',
-                      fontSize: '9px',
-                    }}
-                  >
-                    {isExpanded ? '── ▴' : '──'}
-                  </span>
-                </button>
+                  {isExpanded ? '■' : '□'}
+                </span>
+              </button>
 
-                {/* ── SubCategory rows (shown when parent expanded) ─── */}
-                {isExpanded &&
-                  subs.map((sub) => {
-                    const subExpanded = expandedSet.has(sub.id);
-                    const projects = projectsByParent[sub.id] || [];
-                    return (
-                      <div key={sub.id}>
-                        <button
-                          onClick={() => onNodeInteract?.(sub)}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = 'rgba(160,238,255,0.85)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = subExpanded
-                              ? 'rgba(0,229,255,0.85)'
-                              : SUB_TEXT;
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            width: '100%',
-                            background: subExpanded ? 'rgba(0,229,255,0.05)' : 'none',
-                            border: 'none',
-                            borderLeft: subExpanded
-                              ? '2px solid rgba(0,229,255,0.5)'
-                              : '2px solid transparent',
-                            color: subExpanded ? 'rgba(0,229,255,0.85)' : SUB_TEXT,
-                            cursor: 'pointer',
-                            padding: '5px 16px 5px 30px',
-                            textAlign: 'left',
-                            transition: 'color 150ms, background 150ms',
-                            ...MONO,
-                            fontSize: '9px',
-                            letterSpacing: '2.5px',
-                          }}
-                        >
-                          <span>· {sub.title}</span>
-                          {projects.length > 0 && (
-                            <span style={{ color: 'rgba(160,238,255,0.2)', fontSize: '8px', marginLeft: '8px' }}>
-                              {subExpanded ? '▾' : '▸'}
-                            </span>
-                          )}
-                        </button>
+              {/* SubCategory rows */}
+              {isExpanded &&
+                subs.map((sub) => {
+                  const subExpanded = expandedSet.has(sub.id);
+                  const projects = projectsByParent[sub.id] || [];
+                  return (
+                    <div key={sub.id} style={{ position: 'relative' }}>
+                      {/* Sub-level structural indicator line */}
+                      <div style={{
+                        position: 'absolute',
+                        left: '24px',
+                        top: 0,
+                        bottom: 0,
+                        width: '1px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                      }}/>
 
-                        {/* ── Project rows (shown when SubCategory expanded) ── */}
-                        {subExpanded &&
-                          projects.map((proj) => (
+                      <button
+                        className="hud-row"
+                        onClick={() => onNodeInteract?.(sub)}
+                        onMouseEnter={() => onNodeFocus?.(sub)}
+                        onMouseLeave={() => onNodeFocus?.(null)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                          background: subExpanded ? ROW_ACTIVE : 'none',
+                          border: 'none',
+                          color: subExpanded ? TEXT_MAIN : TEXT_MUTED,
+                          cursor: 'pointer',
+                          padding: '8px 20px 8px 36px',
+                          textAlign: 'left',
+                          ...MONO,
+                          fontSize: '10px',
+                        }}
+                      >
+                        <span>{sub.title}</span>
+                        {projects.length > 0 && (
+                          <span style={{ color: subExpanded ? TEXT_MUTED : TEXT_DARK, fontSize: '7px' }}>
+                            {subExpanded ? '●' : '○'}
+                          </span>
+                        )}
+                      </button>
+
+                      {/* Project rows */}
+                      {subExpanded &&
+                        projects.map((proj) => (
+                          <div key={proj.id} style={{ position: 'relative' }}>
+                            {/* Nested structural indicator line */}
+                            <div style={{
+                              position: 'absolute',
+                              left: '42px',
+                              top: 0,
+                              bottom: 0,
+                              width: '1px',
+                              backgroundColor: 'rgba(255, 255, 255, 0.04)'
+                            }}/>
+
                             <button
-                              key={proj.id}
+                              className="hud-row"
                               onClick={() => onNodeInteract?.(proj)}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.color = '#ffffff';
-                                e.currentTarget.style.background = 'rgba(0,229,255,0.07)';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.color = 'rgba(255,255,255,0.5)';
-                                e.currentTarget.style.background = 'none';
-                              }}
+                              onMouseEnter={() => onNodeFocus?.(proj)}
+                              onMouseLeave={() => onNodeFocus?.(null)}
                               style={{
                                 display: 'block',
                                 width: '100%',
                                 background: 'none',
                                 border: 'none',
-                                borderLeft: '2px solid transparent',
-                                color: 'rgba(255,255,255,0.5)',
+                                color: TEXT_DARK,
                                 cursor: 'pointer',
-                                padding: '4px 16px 4px 48px',
+                                padding: '6px 20px 6px 54px',
                                 textAlign: 'left',
-                                transition: 'color 120ms, background 120ms',
                                 ...MONO,
-                                fontSize: '8px',
-                                letterSpacing: '2px',
+                                fontSize: '9px',
+                                letterSpacing: '1px',
                               }}
                             >
-                              ▷ {proj.title}
+                              {proj.title}
                             </button>
-                          ))}
-                      </div>
-                    );
-                  })}
-              </div>
-            );
-          })}
-        </div>
+                          </div>
+                        ))}
+                    </div>
+                  );
+                })}
+            </div>
+          );
+        })}
       </div>
-
-      {/* ── Trigger button ────────────────────────────────────────────────── */}
-      <button
-        onClick={() => setIsOpen((prev) => !prev)}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = 'rgba(0,229,255,0.65)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = 'rgba(0,229,255,0.35)';
-        }}
-        style={{
-          background: BG,
-          border: '1px solid rgba(0,229,255,0.35)',
-          color: isOpen ? CYAN : CYAN_DIM,
-          ...MONO,
-          fontSize: '11px',
-          letterSpacing: '4px',
-          padding: '7px 16px',
-          cursor: 'pointer',
-          backdropFilter: 'blur(6px)',
-          transition: 'color 200ms, border-color 200ms, box-shadow 200ms',
-          boxShadow: isOpen ? '0 0 18px rgba(0,229,255,0.12)' : 'none',
-        }}
-      >
-        [ {isOpen ? 'CLOSE' : 'NAV'} ]
-      </button>
     </div>
   );
 }

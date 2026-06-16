@@ -5,10 +5,10 @@ import { useEffect, useRef } from 'react';
 // Radii are at scale=1 (design baseline: ~1000px min viewport dimension).
 // Inside the effect they are multiplied by the `scale` prop from MainScene.
 const BASE_RINGS = [
-  { radius: 145, sigmaIn: 10,  sigmaOut: 10,  count:  1000, brightRatio: 0.14 }, // inner arc
-  { radius: 230, sigmaIn: 28,  sigmaOut: 20,  count: 7600, brightRatio: 0.08 }, // main ring
-  { radius: 340, sigmaIn: 20,  sigmaOut: 100, count: 6800, brightRatio: 0.15 }, // outer halo
-  { radius: 440, sigmaIn: 22,  sigmaOut: 900, count: 6000, brightRatio: 0.03 }, // far scatter
+  { radius: 145, sigmaIn: 10,  sigmaOut: 10,  count:  500, brightRatio: 0.14 }, // inner arc
+  { radius: 230, sigmaIn: 28,  sigmaOut: 20,  count: 6600, brightRatio: 0.08 }, // main ring
+  { radius: 340, sigmaIn: 20,  sigmaOut: 100, count: 5800, brightRatio: 0.15 }, // outer halo
+  { radius: 440, sigmaIn: 22,  sigmaOut: 900, count: 5000, brightRatio: 0.03 }, // far scatter
 ];
 const NUM_PARTICLES  = BASE_RINGS.reduce((s, ring) => s + ring.count, 0);
 const NODE_RADIUS    = 50;   // px radius of node repulsion influence
@@ -40,12 +40,21 @@ const fragmentShaderSource = `
   precision mediump float;
   varying float v_alpha;
   varying float v_glow;
+  uniform float u_glowHue;
+
+  vec3 hueToRgb(float h) {
+    float r = abs(h * 6.0 - 3.0) - 1.0;
+    float g = 2.0 - abs(h * 6.0 - 2.0);
+    float b = 2.0 - abs(h * 6.0 - 4.0);
+    return clamp(vec3(r, g, b), 0.0, 1.0);
+  }
+
   void main() {
     vec2 c = gl_PointCoord - 0.5;
     float d = length(c) * 2.0;
     float a = (1.0 - smoothstep(0.0, 1.0, d)) * v_alpha * (1.0 + v_glow * 3.5);
-    vec3 baseColor = vec3(0.88, 0.93, 1.0);
-    vec3 glowColor = vec3(0.0, 0.9, 1.0);
+    vec3 baseColor = vec3(0.9, 0.95, 1.0);
+    vec3 glowColor = hueToRgb(u_glowHue / 360.0);
     vec3 color = mix(baseColor, glowColor, v_glow);
     gl_FragColor = vec4(color, a);
   }
@@ -101,6 +110,7 @@ export default function MagneticField({ nodesRef, isPaused, dragStateRef, draggi
 
     const locRes      = gl.getUniformLocation(prog, 'u_resolution');
     const locDrag     = gl.getUniformLocation(prog, 'u_dragProgress');
+    const locHue      = gl.getUniformLocation(prog, 'u_glowHue');
     const locPos      = gl.getAttribLocation(prog,  'a_position');
     const locAlpha    = gl.getAttribLocation(prog,  'a_alpha');
     const locSize     = gl.getAttribLocation(prog,  'a_size');
@@ -237,6 +247,10 @@ export default function MagneticField({ nodesRef, isPaused, dragStateRef, draggi
       // Upload drag progress uniform (0 when idle, 0.2→1.0 while dragging)
       const dragProgress = dragStateRef?.current?.progress ?? 0;
       gl.uniform1f(locDrag, dragProgress);
+
+      const draggedNode = draggingNodeRef?.current;
+      const glowHue = draggedNode?.hue ?? 192;
+      gl.uniform1f(locHue, glowHue);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
       gl.bufferData(gl.ARRAY_BUFFER, posData, gl.DYNAMIC_DRAW);
