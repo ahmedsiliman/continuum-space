@@ -1,0 +1,30 @@
+{
+  "New Giza, Giza, Egypt": {
+    "lat": 30.0012992,
+    "lng": 31.0685265
+  },
+  "New Cairo, Cairo Egypt": {
+    "lat": 30.0277688,
+    "lng": 31.4756825
+  },
+  "Sheikh Zayed City, Giza, Egypt": {
+    "lat": 30.048347,
+    "lng": 30.9832235
+  },
+  "New Zayed, Giza, Egypt": {
+    "lat": 30.0702533,
+    "lng": 30.8799211
+  },
+  "Tabuk, Saudi Arabia": {
+    "lat": 28.3251866,
+    "lng": 37.6328648
+  },
+  "Cologne, Germany": {
+    "lat": 50.938361,
+    "lng": 6.959974
+  },
+  "Riyadh, Saudi Arabia": {
+    "lat": 24.638916,
+    "lng": 46.7160104
+  }
+}

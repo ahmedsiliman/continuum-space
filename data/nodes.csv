@@ -1,45 +1,45 @@
-id,parent_id,title,type,layout,externalApp,modelData
-root,,CONTINUUM SPACE,Root,,,
-cat_bim,root,BIM,Category,,,
-cat_acd,root,Academic,Category,,,
-cat_art,root,Art,Category,,,
-cat_cmp,root,Computation,Category,,,
-sub_bim-crd,cat_bim,BIM Coordination,SubCategory,,,
-sub_bim-ats,cat_bim,BIM Automation Scripts,SubCategory,,,
-sub_bim-sfd,cat_bim,BIM Software Development,SubCategory,,,
-sub_bim-dta,cat_bim,BIM Data Analysis,SubCategory,,,
-sub_acd-arc,cat_acd,Academic Architecture,SubCategory,,,
-sub_acd-urd,cat_acd,Academic Urban Design,SubCategory,,,
-sub_art-ink,cat_art,Ink,SubCategory,,,
-sub_art-dgt,cat_art,Digital,SubCategory,,,
-sub_cmp-sfd,cat_cmp,Software Development,SubCategory,,,
-sub_cmp-dsn,cat_cmp,Design,SubCategory,,,
-bim-crd_01,sub_bim-crd,NewGiza Westrige,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/NewGiza_H04-RB11.ifc
-bim-crd_02,sub_bim-crd,Sodic Spectrum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Sodic_BLK25_C.ifc
-bim-crd_03,sub_bim-crd,ZED West towers,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/ZEDWest_E01.ifc
-bim-crd_04,sub_bim-crd,Belle Vie Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Bellevie-V03A.ifc
-bim-crd_05,sub_bim-crd,Southern Dunes Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Dunes_R04-A07D.ifc
-bim-crd_06,sub_bim-crd,Aquellum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
-bim-crd_07,sub_bim-crd,REWE Portz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc
-bim-crd_08,sub_bim-crd,Hittin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
-bim-ats_01,sub_bim-ats,Batch Exporter Script,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
-bim-sfd_01,sub_bim-sfd,Revit C# Plugin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
-bim-dta_01,sub_bim-dta,Lifecycle LCA Extraction,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc
-acd-arc_01,sub_acd-arc,Micro to Macro Timber,Project,split,,,
-acd-arc_02,sub_acd-arc,Factory Adaptive Reuse,Project,split,,,
-acd-arc_03,sub_acd-arc,Architecture Concept 03,Project,split,,,
-acd-urd_01,sub_acd-urd,Berlin Masterplan,Project,split,,,
-acd-urd_02,sub_acd-urd,Urban Design Concept 02,Project,split,,,
-acd-urd_03,sub_acd-urd,Urban Design Concept 03,Project,split,,,
-art-ink_01,sub_art-ink,The Void Canvas,Project,center,,,
-art-ink_02,sub_art-ink,Ink Study 02,Project,center,,,
-art-ink_03,sub_art-ink,Ink Study 03,Project,center,,,
-art-dgt_01,sub_art-dgt,Network Graph Viz,Project,center,,,
-art-dgt_02,sub_art-dgt,Digital Canvas 02,Project,center,,,
-art-dgt_03,sub_art-dgt,Digital Canvas 03,Project,center,,,
-cmp-sfd_01,sub_cmp-sfd,Data Parser Core,Project,split,,,
-cmp-sfd_02,sub_cmp-sfd,Software Module 02,Project,split,,,
-cmp-sfd_03,sub_cmp-sfd,Software Module 03,Project,split,,,
-cmp-dsn_01,sub_cmp-dsn,Computational Logic,Project,split,,,
-cmp-dsn_02,sub_cmp-dsn,Generative Script 02,Project,split,,,
-cmp-dsn_03,sub_cmp-dsn,Generative Script 03,Project,split,,,
+id,parent_id,title,type,layout,externalApp,modelData,filter
+root,,CONTINUUM SPACE,Root,,,,
+cat_bim,root,BIM,Category,,,,BIM
+cat_acd,root,Academic,Category,,,,Architecture
+cat_art,root,Art,Category,,,,Art
+cat_cmp,root,Computation,Category,,,,Computational
+sub_bim-crd,cat_bim,BIM Coordination,SubCategory,,,,BIM
+sub_bim-ats,cat_bim,BIM Automation Scripts,SubCategory,,,,BIM
+sub_bim-sfd,cat_bim,BIM Software Development,SubCategory,,,,BIM
+sub_bim-dta,cat_bim,BIM Data Analysis,SubCategory,,,,BIM
+sub_acd-arc,cat_acd,Academic Architecture,SubCategory,,,,Architecture
+sub_acd-urd,cat_acd,Academic Urban Design,SubCategory,,,,Urban
+sub_art-ink,cat_art,Ink,SubCategory,,,,Art
+sub_art-dgt,cat_art,Digital,SubCategory,,,,Art
+sub_cmp-sfd,cat_cmp,Software Development,SubCategory,,,,Computational
+sub_cmp-dsn,cat_cmp,Design,SubCategory,,,,Computational
+bim-crd_01,sub_bim-crd,NewGiza Westrige,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/NewGiza_H04-RB11.ifc,"featured, BIM"
+bim-crd_02,sub_bim-crd,Sodic Spectrum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Sodic_BLK25_C.ifc,BIM
+bim-crd_03,sub_bim-crd,ZED West towers,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/ZEDWest_E01.ifc,"featured, BIM"
+bim-crd_04,sub_bim-crd,Belle Vie Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Bellevie-V03A.ifc,BIM
+bim-crd_05,sub_bim-crd,Southern Dunes Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Dunes_R04-A07D.ifc,BIM
+bim-crd_06,sub_bim-crd,Aquellum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
+bim-crd_07,sub_bim-crd,REWE Portz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc,BIM
+bim-crd_08,sub_bim-crd,Hittin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
+bim-ats_01,sub_bim-ats,Batch Exporter Script,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,Computational
+bim-sfd_01,sub_bim-sfd,Revit C# Plugin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,Computational
+bim-dta_01,sub_bim-dta,Lifecycle LCA Extraction,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
+acd-arc_01,sub_acd-arc,Micro to Macro Timber,Project,split,,,Architecture
+acd-arc_02,sub_acd-arc,Factory Adaptive Reuse,Project,split,,,Architecture
+acd-arc_03,sub_acd-arc,Architecture Concept 03,Project,split,,,Architecture
+acd-urd_01,sub_acd-urd,Berlin Masterplan,Project,split,,,Urban
+acd-urd_02,sub_acd-urd,Urban Design Concept 02,Project,split,,,Urban
+acd-urd_03,sub_acd-urd,Urban Design Concept 03,Project,split,,,Urban
+art-ink_01,sub_art-ink,The Void Canvas,Project,center,,,Art
+art-ink_02,sub_art-ink,Ink Study 02,Project,center,,,Art
+art-ink_03,sub_art-ink,Ink Study 03,Project,center,,,Art
+art-dgt_01,sub_art-dgt,Network Graph Viz,Project,center,,,Art
+art-dgt_02,sub_art-dgt,Black Heart,Project,center,,,Art
+art-dgt_03,sub_art-dgt,Digital Canvas 03,Project,center,,,Art
+cmp-sfd_01,sub_cmp-sfd,Data Parser Core,Project,split,,,Computational
+cmp-sfd_02,sub_cmp-sfd,Software Module 02,Project,split,,,Computational
+cmp-sfd_03,sub_cmp-sfd,Software Module 03,Project,split,,,Computational
+cmp-dsn_01,sub_cmp-dsn,Computational Logic,Project,split,,,Computational
+cmp-dsn_02,sub_cmp-dsn,Generative Script 02,Project,split,,,Computational
+cmp-dsn_03,sub_cmp-dsn,Generative Script 03,Project,split,,,Computational
