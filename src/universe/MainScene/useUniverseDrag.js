@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 export function useUniverseDrag({
   simulationRef,
@@ -23,7 +23,7 @@ export function useUniverseDrag({
   const isRadialModeRef = useRef(isRadialMode);
   useEffect(() => { isRadialModeRef.current = isRadialMode; }, [isRadialMode]);
 
-  const onNodePointerDown = (e, node) => {
+  const onNodePointerDown = useCallback((e, node) => {
     e.stopPropagation();
     if (hintRef.current) hintRef.current.style.opacity = '0';
     if (titleRef.current) titleRef.current.explode?.();
@@ -51,7 +51,7 @@ export function useUniverseDrag({
     node.fy = node.y;
     document.body.style.cursor = 'grabbing';
     dragStateRef.current = { isDragging: true, progress: 0.2 };
-  };
+  }, [onNodeFocus, simulationRef, draggingNodeRef, nodeElementsRef, dragStateRef, hintRef, titleRef]);
 
   useEffect(() => {
     const handlePointerMove = (e) => {

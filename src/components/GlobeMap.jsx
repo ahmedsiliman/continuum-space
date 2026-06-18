@@ -3,13 +3,20 @@ import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Silence the THREE.Clock deprecation warning that appears in latest Three.js
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (args[0]?.includes?.('THREE.Clock: This module has been deprecated')) return;
+  originalWarn(...args);
+};
+
 // Easing function: ease-out cubic
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
 // Preload the globe texture to improve perceived performance
 useLoader.preload(
   THREE.TextureLoader,
-  'https://raw.githubusercontent.com/jeromeetienne/threex.planets/master/images/earthmap1k.jpg'
+  '/textures/earthmap1k.jpg'
 );
 
 const GlobeMesh = ({ location }) => {
@@ -27,7 +34,7 @@ const GlobeMesh = ({ location }) => {
 
   const texture = useLoader(
     THREE.TextureLoader,
-    'https://raw.githubusercontent.com/jeromeetienne/threex.planets/master/images/earthmap1k.jpg'
+    '/textures/earthmap1k.jpg'
   );
 
   // Pin position calculation — unchanged from original
@@ -145,9 +152,9 @@ const GlobeMap = ({ location }) => {
       className="globe-map-container"
       style={{
         width: '100%',
-        height: '250px',
+        height: '100%',
+        minHeight: '120px',
         position: 'relative',
-        marginTop: '20px',
         borderRadius: '12px',
         overflow: 'hidden',
         background: 'rgba(0,0,0,0.2)',

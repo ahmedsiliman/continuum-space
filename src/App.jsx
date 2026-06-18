@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import MainScene from './universe/MainScene/MainScene';
 import IfcLayover from './universe/IfcLayover';
 import ModuleTransition from './components/ModuleTransition';
@@ -51,6 +51,7 @@ export default function App() {
 
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isRadialMode, setIsRadialMode] = useState(true);
 
   const handleAboutMe = (x, y) => {
     if (!database?.aboutMeContent) return;
@@ -129,12 +130,12 @@ export default function App() {
   }, [expandedNodes, database]);
 
   // Triggered when a node is dragged outside the boundary
-  const handleSelectProject = (project, x = 0, y = 0) => {
+  const handleSelectProject = useCallback((project, x = 0, y = 0) => {
     setActiveProject(project);
     setDropCoords({ x, y });
-  };
+  }, []);
 
-  const handleNodeFocus = (node) => {
+  const handleNodeFocus = useCallback((node) => {
     if (!database?.details) return;
 
     if (!node) {
@@ -152,9 +153,9 @@ export default function App() {
       setFocusedNodeDetails(details);
       setIsPanelOpen(true);
     }
-  };
+  }, [database, expandedNodes.length]);
 
-  const handleNodeInteract = (clickedNode) => {
+  const handleNodeInteract = useCallback((clickedNode) => {
     if (!clickedNode) {
       return;
     }
@@ -198,7 +199,7 @@ export default function App() {
 
       return nextExpanded;
     });
-  };
+  }, [database, handleSelectProject]);
 
   const closeViewer = () => {
     setActiveProject(null);
@@ -220,6 +221,8 @@ export default function App() {
             onFilterChange={setActiveFilter}
             onSearchChange={setSearchQuery}
             onAboutMe={handleAboutMe}
+            isRadialMode={isRadialMode}
+            onRadialModeToggle={() => setIsRadialMode(!isRadialMode)}
           />
 
           <TelemetryHUD
@@ -227,6 +230,7 @@ export default function App() {
             expandedNodes={expandedNodes}
             onNodeInteract={handleNodeInteract}
             onNodeFocus={handleNodeFocus}
+            onAboutMe={handleAboutMe}
           />
 
           <ProjectDetailsPanel 
@@ -247,6 +251,8 @@ export default function App() {
         isPaused={activeProject !== null}
         activeFilter={activeFilter}
         searchQuery={searchQuery}
+        isRadialMode={isRadialMode}
+        setIsRadialMode={setIsRadialMode}
       />
 
       {activeProject && (

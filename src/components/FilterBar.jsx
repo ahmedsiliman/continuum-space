@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FilterBar.css';
 
-const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe }) => {
+const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe, isRadialMode, onRadialModeToggle }) => {
   const [isFilterExpanded, setIsFilterExpanded] = useState(false);
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [vw, setVw] = useState(typeof window !== 'undefined' ? window.innerWidth : 1280);
+
+  // Track viewport width so the bar can reserve space for the HUD + details panel
+  useEffect(() => {
+    const onResize = () => setVw(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // Reserve room: HUD + DetailsPanel on desktop, HUD only on tablet, HUD toggle on phone.
+  let reserved;
+  if (vw >= 1025)      reserved = 640;   // 280 HUD + 320 panel + 40 gap
+  else if (vw >= 769)  reserved = 280;   // 240 HUD + 16+ gap
+  else                 reserved = 100;   // 32 HUD-toggle + 16 gap
+  const availableWidth = `calc(100vw - ${reserved}px)`;
 
   const filters = ['All', 'Featured', 'BIM', 'Computational', 'Architecture', 'Urban', 'Art'];
 
@@ -20,8 +35,8 @@ const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe }) => {
   };
 
   return (
-    <div className="filter-bar-container">
-      {/* Left→Right order: Search | Filter | About Me */}
+    <div className="filter-bar-container" style={{ '--available-width': availableWidth }}>
+      {/* Left→Right order: Search | Filter | About Me | Radial Grid */}
       <div className="filter-bar-main">
         <div className="search-container">
           <span className="search-icon">🔍</span>
@@ -41,8 +56,8 @@ const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe }) => {
           FILTER {isFilterExpanded ? '−' : '+'}
         </button>
 
-        <button 
-          className="about-me-btn" 
+        <button
+          className="about-me-btn"
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
@@ -51,6 +66,15 @@ const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe }) => {
           }}
         >
           ABOUT ME
+        </button>
+
+        <button
+          className={`radial-toggle-btn-bar ${isRadialMode ? 'active' : ''}`}
+          onClick={onRadialModeToggle}
+          aria-label={isRadialMode ? 'Switch to dynamic layout' : 'Switch to radial layout'}
+          title={isRadialMode ? 'Dynamic layout' : 'Radial layout'}
+        >
+          {isRadialMode ? '◉' : '○'}
         </button>
       </div>
 

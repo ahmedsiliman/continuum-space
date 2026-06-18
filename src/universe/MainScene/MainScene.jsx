@@ -3,6 +3,7 @@ import spaceBg from '../../assets/space.jpg';
 import MagneticField from '../MagneticField';
 import UniverseTitle from '../UniverseTitle';
 import { useViewportScale } from '../../utils/useViewportScale';
+import './MainScene.css';
 
 // Sub-modules
 import { getDeterministicSeed, getCategoryHue } from './MainSceneUtils';
@@ -21,32 +22,35 @@ export default function MainScene({
   expandedNodes,
   isPaused,
   activeFilter,
-  searchQuery
+  searchQuery,
+  isRadialMode,
+  setIsRadialMode
 }) {
   const { scale } = useViewportScale();
-  const [isRadialMode, setIsRadialMode] = useState(false);
 
   // 1. Spatial Geometry - ORIGINALS
-  const ringRadius = {
+  const ringRadius = useMemo(() => ({
     Category:    Math.round(100 * scale),
     SubCategory: Math.round(250 * scale),
     Project:     Math.round(400 * scale),
-  };
-  const boundaryRadius = Math.round(520 * scale);
-  const coreRadius     = Math.round(100  * scale);
+  }), [scale]);
+
+  const boundaryRadius = useMemo(() => Math.round(520 * scale), [scale]);
+  const coreRadius     = useMemo(() => Math.round(100  * scale), [scale]);
   
-  const typeOrbitRadius = {
+  const typeOrbitRadius = useMemo(() => ({
     Root:        Math.round(50 * scale),
     Category:    ringRadius.Category,
     SubCategory: ringRadius.SubCategory,
     Project:     ringRadius.Project,
-  };
-  const typeNodeRadius = {
+  }), [scale, ringRadius]);
+
+  const typeNodeRadius = useMemo(() => ({
     Root:        Math.max(Math.round(34 * scale), 14),
     Category:    Math.max(Math.round(22 * scale),  9),
     SubCategory: Math.max(Math.round(15 * scale),  7),
     Project:     Math.max(Math.round(11 * scale),  6),
-  };
+  }), [scale]);
 
   const ringRadiusRef     = useRef(ringRadius);
   const boundaryRadiusRef = useRef(boundaryRadius);
@@ -199,7 +203,8 @@ export default function MainScene({
     boundaryPathRef,
     boundaryHltRef,
     isRadialMode,
-    radialLayoutMap
+    radialLayoutMap,
+    scale
   });
 // Background Color
 return (
@@ -225,61 +230,12 @@ return (
     }}>
       <MagneticField nodesRef={nodesRef} isPaused={isPaused} dragStateRef={dragStateRef} draggingNodeRef={draggingNodeRef} scale={scale} />
 
-      {/* Radial Layout Toggle Button */}
-      <div 
-        onClick={() => setIsRadialMode(!isRadialMode)}
-        style={{
-          position: 'absolute',
-          bottom: '30px',
-          right: '30px',
-          padding: '12px 20px',
-          background: isRadialMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(10, 10, 12, 0.45)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '12px',
-          color: isRadialMode ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.5)',
-          cursor: 'pointer',
-          fontFamily: "'Share Tech Mono', 'Consolas', monospace",
-          fontSize: '10px',
-          letterSpacing: '2px',
-          textTransform: 'uppercase',
-          transition: 'all 200ms ease',
-          zIndex: 100,
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)', // Safari support
-          boxShadow: isRadialMode 
-            ? '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255, 255, 255, 0.2)' 
-            : '0 8px 32px 0 rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-          e.currentTarget.style.color = '#ffffff';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = isRadialMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(10, 10, 12, 0.45)';
-          e.currentTarget.style.color = isRadialMode ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.5)';
-        }}
-      >
-        <span>Radial Grid</span>
-        <span 
-          style={{ 
-            fontSize: '8px',
-            color: isRadialMode ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.25)',
-            transition: 'color 200ms ease'
-          }}
-        >
-          {isRadialMode ? '■' : '□'}
-        </span>
+      <div ref={hintRef} style={{ position: 'absolute', top: '95%', left: '50%', transform: 'translate(-50%, -50%)', color: 'rgba(222, 222, 222, 0.6)', fontSize: `${11 * scale}px`, letterSpacing: '5.5px', textAlign: 'center', opacity: 1, transition: 'opacity 1s ease-out', pointerEvents: 'none' }}>
+        [ CLICK TO EXPAND / DRAG PROJECTS OUTWARD TO OPEN ]
       </div>
 
       <div ref={hintRef} style={{ position: 'absolute', top: '92%', left: '50%', transform: 'translate(-50%, -50%)', color: 'rgba(222, 222, 222, 0.6)', fontSize: `${11 * scale}px`, letterSpacing: '5.5px', textAlign: 'center', opacity: 1, transition: 'opacity 1s ease-out', pointerEvents: 'none' }}>
-        [ EVERYTHING IS CONNECTED AT A DISTANCE ]
-      </div>
-
-      <div ref={hintRef} style={{ position: 'absolute', top: '95%', left: '50%', transform: 'translate(-50%, -50%)', color: 'rgba(222, 222, 222, 0.6)', fontSize: `${11 * scale}px`, letterSpacing: '5.5px', textAlign: 'center', opacity: 1, transition: 'opacity 1s ease-out', pointerEvents: 'none' }}>
-        [DRAG PROJECTS OUTWARD TO OPEN ]
+        [EVERYTHING IS CONNECTED AT A DISTANCE]
       </div>
 
       <UniverseTitle ref={titleRef} site={site} />

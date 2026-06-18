@@ -1,17 +1,21 @@
-/* ── Filter Bar: floats in the gap between TelemetryHUD (280px left) and ProjectDetailsPanel (320px right) ── */
+/* ── Filter Bar: Centered at the top, responsive width ── */
 .filter-bar-container {
   position: fixed;
   top: 24px;
-  /* left panel: 24px offset + 280px width + 16px gap */
-  left: calc(24px + 280px + 16px);
-  /* right panel: 24px offset + 320px width + 16px gap */
-  right: calc(24px + 320px + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 780px; /* Target desktop width */
+  /* Clamp to whatever the JS-computed --available-width token allows,
+     falling back to a safe default for SSR / first paint. */
+  max-width: var(--available-width, calc(100% - 150px));
+  min-width: 280px;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   pointer-events: none;
+  transition: width 0.3s ease, max-width 0.3s ease, top 0.3s ease, left 0.3s ease, transform 0.3s ease;
 }
 
 /* ── Main row: search | filter | about-me ── */
@@ -26,15 +30,16 @@
 
 /* ── Shared glass button base ── */
 .about-me-btn,
-.filter-toggle-btn {
+.filter-toggle-btn,
+.radial-toggle-btn-bar {
   background: rgba(10, 10, 12, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   color: rgba(255, 255, 255, 0.6);
-  padding: 10px 20px;
+  padding: 10px 16px;
   font-family: 'Share Tech Mono', 'Consolas', monospace;
   font-size: 11px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   cursor: pointer;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -42,19 +47,30 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   white-space: nowrap;
   flex-shrink: 0;
+  min-width: 110px; /* Base button width */
 }
 
 .about-me-btn:hover,
-.filter-toggle-btn:hover {
+.filter-toggle-btn:hover,
+.radial-toggle-btn-bar:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.filter-toggle-btn.active {
+.filter-toggle-btn.active,
+.radial-toggle-btn-bar.active {
   background: rgba(0, 229, 255, 0.15);
   border-color: rgba(0, 229, 255, 0.4);
   color: #00e5ff;
+}
+
+/* ── Radial toggle is an icon-only square at every size ── */
+.radial-toggle-btn-bar {
+  min-width: 36px;
+  padding: 10px 10px; /* Match the shared button vertical padding (10px) */
+  font-size: 11px;    /* Just slightly larger than the 10px text labels so the glyph is readable */
+  letter-spacing: 0;
 }
 
 /* ── Search: grows to fill available space ── */
@@ -71,7 +87,7 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   /* fills middle space */
   flex: 1;
-  min-width: 0;
+  min-width: 110px; /* Minimum width equal to neighbouring buttons */
   transition: all 0.2s ease;
 }
 
@@ -91,7 +107,7 @@
   border: none;
   color: #fff;
   font-family: 'Share Tech Mono', 'Consolas', monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 1px;
   width: 100%;
   outline: none;
@@ -129,7 +145,7 @@
   color: rgba(255, 255, 255, 0.5);
   padding: 6px 14px;
   font-family: 'Share Tech Mono', 'Consolas', monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -146,4 +162,39 @@
   border-color: rgba(0, 229, 255, 0.3);
   color: #00e5ff;
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+/* ── Mobile Overrides ─────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .filter-bar-container {
+    width: calc(100% - 140px); /* Leave room for the index toggle */
+    left: calc(50% + 24px); /* Shift slightly to the right to account for toggle */
+    top: 16px;
+  }
+  .search-container {
+    min-width: 90px;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 770px) {
+  .about-me-btn {
+    display: none !important; /* totally disappear under 770px */
+  }
+  .filter-toggle-btn {
+    min-width: 36px;
+    padding: 8px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-bar-container {
+    top: 12px;
+    width: calc(100% - 100px);
+    left: calc(50% + 20px);
+  }
+  .search-container {
+    min-width: 60px;
+  }
 }

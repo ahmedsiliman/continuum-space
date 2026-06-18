@@ -22,14 +22,18 @@ export function useSimulation({
   boundaryPathRef,
   boundaryHltRef,
   isRadialMode,
-  radialLayoutMap
+  radialLayoutMap,
+  scale = 1 // 1. Accept the live viewport scale prop
 }) {
   const isPausedRef = useRef(isPaused);
   useEffect(() => { isPausedRef.current = isPaused; }, [isPaused]);
 
-  // Track radial mode in a ref for the render loop
   const isRadialModeRef = useRef(isRadialMode);
   useEffect(() => { isRadialModeRef.current = isRadialMode; }, [isRadialMode]);
+
+  // 2. Maintain a ref for scale so the single-instanced animation loop avoids stale closures
+  const scaleRef = useRef(scale);
+  useEffect(() => { scaleRef.current = scale; }, [scale]);
 
   // 1. Initialize simulation once with ORIGINAL force values
   useEffect(() => {
@@ -46,7 +50,11 @@ export function useSimulation({
         .strength(.18)
       )
       .force('orbit', createOrbitForce(ringRadiusRef))
-      .force('center', d3.forceCenter(0, 0).strength(0.07))
+      // .force('center', d3.forceCenter(0, 0).strength(0.07))
+      // ADD: Gentle gravity that doesn't calculate center-of-mass shifting
+      .force('gravityX', d3.forceX(0).strength(0.015))
+      .force('gravityY', d3.forceY(0).strength(0.015))
+
       .force('radialX', d3.forceX().x(d => d.radialX || 0).strength(0))
       .force('radialY', d3.forceY().y(d => d.radialY || 0).strength(0));
 
@@ -59,7 +67,7 @@ export function useSimulation({
       const currentNodes = nodesRef.current || [];
       const nodeById = new Map(currentNodes.map((node) => [node.id, node]));
 
-      // Eased snap-back logic - SOFTENED
+      // Eased snap-back logic
       snapBackRef.current.forEach((snap, nodeId) => {
         const node = nodeById.get(nodeId);
         if (!node) {
@@ -67,13 +75,11 @@ export function useSimulation({
           return;
         }
         
-        // Don't snap back while dragging
         if (draggingNodeRef.current === node) return;
 
         const dx = snap.targetX - (node.fx ?? node.x);
         const dy = snap.targetY - (node.fy ?? node.y);
         
-        // Initialize fx/fy if not already set to start controlled movement
         if (node.fx == null) node.fx = node.x;
         if (node.fy == null) node.fy = node.y;
 
@@ -84,7 +90,6 @@ export function useSimulation({
         node.x = node.fx;
         node.y = node.fy;
 
-        // Release node once it reaches target
         if (Math.hypot(dx, dy) < 0.5 && Math.hypot(snap.vx, snap.vy) < 0.15) {
           node.fx = null;
           node.fy = null;
@@ -97,14 +102,21 @@ export function useSimulation({
         if (!node) return;
         if (draggingNodeRef.current !== node) {
           const distance = Math.sqrt(node.x ** 2 + node.y ** 2);
-          const safeZone = (boundaryRadiusRef.current || 520) - 100;
+          
+          // 3. Make the boundary safe-zone padding proportional to the scale factor
+          const safeZone = (boundaryRadiusRef.current || 520) - (100 * scaleRef.current);
           if (distance > safeZone) {
             const pullStrength = (distance - safeZone) * 0.04;
             node.vx -= (node.x / distance) * pullStrength;
             node.vy -= (node.y / distance) * pullStrength;
           }
         }
-
+        
+        // ADD THIS SPEED LIMIT: Clamp velocity to max 12px per frame
+        const MAX_SPEED = 12;
+        node.vx = Math.max(-MAX_SPEED, Math.min(MAX_SPEED, node.vx));
+        node.vy = Math.max(-MAX_SPEED, Math.min(MAX_SPEED, node.vy));
+        
         const el = nodeElementsRef.current[node.id];
         if (el) {
           const screenX = window.innerWidth / 2 + node.x;
@@ -116,7 +128,6 @@ export function useSimulation({
             el.style.transform = `translate(${screenX}px, ${screenY}px) translate(-50%, -50%)`;
             const dot = nodeDotRef.current[node.id];
             if (dot) {
-              // Smoked glass brightens toward the hue as drag progresses
               dot.style.backgroundColor = `hsla(${node.hue}, ${(12 + prog * 30).toFixed(0)}%, ${(7 + prog * 18).toFixed(0)}%, ${(0.60 + prog * 0.25).toFixed(2)})`;
               dot.style.boxShadow = `0 0 ${(10 + prog * 36).toFixed(0)}px hsla(${node.hue}, 100%, 65%, ${(0.45 + prog * 0.5).toFixed(2)}), 0 0 ${(prog * 70).toFixed(0)}px hsla(${node.hue}, 100%, 50%, ${(prog * 0.3).toFixed(2)}), inset 0 0 ${(10 + prog * 20).toFixed(0)}px hsla(${node.hue}, 100%, 55%, ${(0.06 + prog * 0.2).toFixed(2)})`;
               dot.style.border = `1.5px solid hsla(${node.hue}, 100%, 65%, ${(0.7 + prog * 0.3).toFixed(2)})`;
@@ -131,9 +142,7 @@ export function useSimulation({
             el.style.transform = `translate(${screenX}px, ${screenY}px) translate(-50%, -50%)`;
             const dot = nodeDotRef.current[node.id];
             if (dot) {
-              // Smoked glass background: dark hue-tinted fill matching SceneNode initial render
               const isExpanded = expandedSetRef.current ? expandedSetRef.current.has(node.id) : false;
-              // Expanded: vivid hue bloom through glass. Resting: near-black smoked glass.
               dot.style.backgroundColor = isExpanded
                 ? `hsla(${node.hue}, 55%, 28%, 0.55)`
                 : `hsla(${node.hue}, 12%, 7%, 0.60)`;
@@ -216,13 +225,12 @@ export function useSimulation({
       simulationRef.current?.stop();
       cancelAnimationFrame(animationFrameId);
     };
-  }, []); // Only run once on mount
+  }, []);
 
-  // 2. Update simulation data when nodes/links change
+  // 2. Update simulation data when nodes/links/scale change
   useEffect(() => {
     if (!simulationRef.current) return;
     
-    // Sync refs for the render loop and MagneticField
     const prevById = new Map(nodesRef.current.map((n) => [n.id, n]));
     nodes.forEach((node) => {
       const prev = prevById.get(node.id);
@@ -234,7 +242,6 @@ export function useSimulation({
         if (prev.fx != null) node.fx = prev.fx;
         if (prev.fy != null) node.fy = prev.fy;
       } else if (node.parent_id) {
-        // Spawn logic: Start near parent
         const liveParent = prevById.get(node.parent_id);
         if (liveParent && liveParent.x != null) {
           const parentAngle = Math.atan2(liveParent.y, liveParent.x);
@@ -256,6 +263,24 @@ export function useSimulation({
       childType: link.childType
     }));
 
+    // 4. Adapt simulation physics parameters dynamically based on radial mode and scale factor
+    simulationRef.current.force('charge')
+      // If radial mode is on, kill repulsion entirely. If off, apply scaled repulsion.
+      .strength(isRadialMode ? 0 : -200 * scale);
+
+    simulationRef.current.force('links')
+      .distance((link) => {
+        const baseDist = link.childType === 'Project' ? 90 : 110;
+        return baseDist * scale; // Shrink links proportionally on mobile
+      });
+
+    simulationRef.current.force('collide')
+      .radius((node) => (node.nodeRadius || 20) * scale + 20 * scale); // Scale structural bounding boxes down
+
+    // Slightly damp standard charge on smaller viewports to give rings more radial dominance
+    simulationRef.current.force('charge')
+      .strength(isRadialMode ? -120 : -200);
+
     simulationRef.current.nodes(nodes);
     simulationRef.current.force('links').links(d3Links);
 
@@ -275,17 +300,12 @@ export function useSimulation({
 
     simulationRef.current.force('radialX').strength(isRadialMode ? 0.7 : 0);
     simulationRef.current.force('radialY').strength(isRadialMode ? 0.7 : 0);
-    // Keep orbit force but maybe slightly weaker in radial mode if needed
-    // simulationRef.current.force('orbit').strength(isRadialMode ? 0.2 : 1.0);
 
-    // Clear snap-backs for removed nodes
     const liveIds = new Set(nodes.map((n) => n.id));
     for (const id of snapBackRef.current.keys()) {
       if (!liveIds.has(id)) snapBackRef.current.delete(id);
     }
 
-    // We only use snapBackRef for the TRANSITION when isRadialMode is toggled ON
-    // or when a node is released. The resting state is handled by forceX/forceY.
     const prevIsRadialMode = simulationRef.current.__isRadialMode || false;
     if (isRadialMode && !prevIsRadialMode && radialLayoutMap) {
       nodes.forEach(node => {
@@ -303,5 +323,7 @@ export function useSimulation({
     simulationRef.current.__isRadialMode = isRadialMode;
     
     simulationRef.current.alpha(0.5).restart();
-  }, [nodes, links, simulationRef, nodesRef, ringRadiusRef, snapBackRef, isRadialMode, radialLayoutMap]);
+    
+    // 5. Appended scale parameter to the dependencies so layout dynamically recalibrates on viewport changes
+  }, [nodes, links, simulationRef, nodesRef, ringRadiusRef, snapBackRef, isRadialMode, radialLayoutMap, scale]);
 }

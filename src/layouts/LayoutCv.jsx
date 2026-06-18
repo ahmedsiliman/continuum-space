@@ -57,6 +57,7 @@ course,item,Become a BIM Coordinator,LinkedIn,Mar 2023,,,,,,,,
 course,item,Introduction to ISO Global BIM Standards,LinkedIn,Mar 2023,,,,,,,, 
 course,item,Dynamo for Revit Python Scripting,LinkedIn,Mar 2023,,,,,,,,`;
 
+
 // ─────────────────────────────────────────────────────────────
 //  CSV parser
 // ─────────────────────────────────────────────────────────────
@@ -157,14 +158,14 @@ function TimelineItem({ label, sub, dateStart, dateEnd, bullets, delay = 0, isAc
   const detailBullets = bullets.filter(Boolean);
 
   return (
-    <div ref={ref} style={{
+    <div ref={ref} className="cv-timeline-item" style={{
       display: "flex", gap: 0, marginBottom: 2,
       opacity: vis ? 1 : 0,
       transform: vis ? "translateY(0)" : "translateY(10px)",
       transition: `opacity 0.4s ${delay}s ease, transform 0.4s ${delay}s ease`,
     }}>
       {/* Structural indicator line (HUD-style) */}
-      <div style={{
+      <div className="cv-timeline-line" style={{
         width: 1, flexShrink: 0, alignSelf: "stretch",
         backgroundColor: LINE_SUB,
         marginLeft: 20, marginRight: 0,
@@ -182,7 +183,7 @@ function TimelineItem({ label, sub, dateStart, dateEnd, bullets, delay = 0, isAc
         }}
       >
         {/* Top line: label + dates */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+        <div className="cv-timeline-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
           <span style={{
             ...MONO,
             fontSize: "11px",
@@ -193,7 +194,7 @@ function TimelineItem({ label, sub, dateStart, dateEnd, bullets, delay = 0, isAc
             {isActive ? "■" : "□"}&nbsp;&nbsp;{label}
           </span>
           {(dateStart || dateEnd) && (
-            <span style={{
+            <span className="cv-timeline-date" style={{
               ...MONO,
               fontSize: "9px",
               letterSpacing: "1px",
@@ -207,7 +208,7 @@ function TimelineItem({ label, sub, dateStart, dateEnd, bullets, delay = 0, isAc
 
         {/* Sub-role */}
         {sub && (
-          <div style={{
+          <div className="cv-timeline-sub" style={{
             ...MONO,
             fontSize: "9px",
             letterSpacing: "1.5px",
@@ -221,7 +222,7 @@ function TimelineItem({ label, sub, dateStart, dateEnd, bullets, delay = 0, isAc
 
         {/* Bullets with nested indicator */}
         {detailBullets.length > 0 && (
-          <div style={{ position: "relative", marginTop: 8, paddingLeft: 18 }}>
+          <div className="cv-timeline-bullets" style={{ position: "relative", marginTop: 8, paddingLeft: 18 }}>
             <div style={{
               position: "absolute", left: 6, top: 0, bottom: 0,
               width: 1, backgroundColor: LINE_DEEP,
@@ -286,7 +287,7 @@ function SkillRow({ name, level, delay }) {
 function ProjectRow({ label, sub, date, delay }) {
   const [ref, vis] = useReveal(0.08);
   return (
-    <div ref={ref} className="cv-skill-row" style={{
+    <div ref={ref} className="cv-skill-row cv-project-row" style={{
       display: "flex", alignItems: "baseline", justifyContent: "space-between",
       padding: "6px 20px 6px 36px",
       position: "relative",
@@ -294,7 +295,7 @@ function ProjectRow({ label, sub, date, delay }) {
       transform: vis ? "translateY(0)" : "translateY(6px)",
       transition: `opacity 0.3s ${delay}s, transform 0.3s ${delay}s, background 150ms ease`,
     }}>
-      <div style={{ position: "absolute", left: 24, top: 0, bottom: 0, width: 1, backgroundColor: LINE_DEEP }} />
+      <div className="cv-project-line" style={{ position: "absolute", left: 24, top: 0, bottom: 0, width: 1, backgroundColor: LINE_DEEP }} />
       <div>
         <span style={{ ...MONO, fontSize: "9px", color: TEXT_MUTED, letterSpacing: "1px" }}>○&nbsp;&nbsp;{label}</span>
         <span style={{ ...MONO, fontSize: "8px", color: TEXT_DARK, letterSpacing: "1px", display: "block", paddingLeft: 14, marginTop: 2 }}>{sub}</span>
@@ -327,7 +328,7 @@ export default function AhmedKattayaCV() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "transparent", padding: "32px 24px", position: "relative", overflow: "hidden" }}>
+    <div className="cv-outer-wrapper" style={{ minHeight: "100vh", background: "transparent", padding: "32px 24px", position: "relative", overflow: "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
         * { box-sizing: border-box; }
@@ -347,17 +348,85 @@ export default function AhmedKattayaCV() {
           from { opacity: 0; transform: translateY(-8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* ── MOBILE VIEWPORT OPTIMIZATIONS ───────────────── */
+        @media (max-width: 768px) {
+          .cv-outer-wrapper {
+            padding: 16px 12px !important;
+          }
+          .cv-main-layout {
+            flex-direction: column !important;
+            gap: 12px !important;
+          }
+          .cv-left-panel, .cv-right-panel {
+            width: 100% !important;
+          }
+          /* Make tab container dynamically scrollable on small viewports */
+          .cv-tabs-container {
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+            scrollbar-width: none !important;
+          }
+          .cv-tabs-container::-webkit-scrollbar {
+            display: none !important;
+          }
+          .cv-tab-btn {
+            flex: 1 0 auto !important;
+            padding: 12px 14px !important;
+            letter-spacing: 1px !important;
+            font-size: 9px !important;
+          }
+          /* Densify layouts and scale internal spatial gaps */
+          .cv-panel-header {
+            padding: 12px 16px 10px !important;
+            font-size: 9px !important;
+            letter-spacing: 2px !important;
+          }
+          .cv-card-body {
+            padding: 12px 16px 4px !important;
+          }
+          .cv-profile-text {
+            padding: 10px 16px 16px !important;
+          }
+          .cv-timeline-line {
+            margin-left: 12px !important;
+          }
+          .cv-timeline-row {
+            padding: 10px 14px 10px 10px !important;
+          }
+          /* Vertically stack Title and Date to prevent collision */
+          .cv-timeline-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 2px !important;
+          }
+          .cv-timeline-date {
+            white-space: normal !important;
+          }
+          .cv-timeline-sub, .cv-timeline-bullets {
+            padding-left: 12px !important;
+          }
+          .cv-skill-row {
+            padding: 7px 16px !important;
+          }
+          .cv-project-row {
+            padding: 6px 16px 6px 28px !important;
+          }
+          .cv-project-line {
+            left: 16px !important;
+          }
+        }
       `}</style>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", gap: 16, flexWrap: "wrap", position: "relative", zIndex: 1 }}>
+      <div className="cv-main-layout" style={{ maxWidth: 1100, margin: "0 auto", display: "flex", gap: 16, flexWrap: "wrap", position: "relative", zIndex: 1 }}>
 
         {/* ── LEFT PANEL ────────────────────────────────────── */}
-        <div style={{ width: "min(300px, 100%)", flexShrink: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="cv-left-panel" style={{ width: "min(300px, 100%)", flexShrink: 0, display: "flex", flexDirection: "column", gap: 16 }}>
 
           {/* Identity card */}
           <div style={{ ...glassPanel, animation: "hudFade 0.5s ease both" }}>
             {/* HUD header bar */}
-            <div style={{
+            <div className="cv-panel-header" style={{
               ...MONO,
               color: TEXT_DARK,
               fontSize: "10px",
@@ -370,7 +439,7 @@ export default function AhmedKattayaCV() {
             </div>
 
             {/* Monogram */}
-            <div style={{ padding: "16px 20px 4px" }}>
+            <div className="cv-card-body" style={{ padding: "16px 20px 4px" }}>
               <div style={{
                 width: 52, height: 52, borderRadius: "50%", marginBottom: 14,
                 background: ROW_ACTIVE,
@@ -406,11 +475,11 @@ export default function AhmedKattayaCV() {
 
           {/* Profile */}
           <div style={{ ...glassPanel, animation: "hudFade 0.5s 0.08s ease both" }}>
-            <div style={{
+            <div className="cv-panel-header" style={{
               ...MONO, color: TEXT_DARK, fontSize: "10px", letterSpacing: "3px",
               padding: "16px 20px 12px", borderBottom: `1px solid ${LINE_SUB}`, marginBottom: 6,
             }}>PROFILE</div>
-            <p style={{
+            <p className="cv-profile-text" style={{
               fontFamily: "'Share Tech Mono', monospace", fontSize: 10.5, color: TEXT_MUTED,
               lineHeight: 1.8, margin: 0, padding: "10px 20px 18px", textTransform: "none", letterSpacing: 0.3,
             }}>{meta.profile}</p>
@@ -418,7 +487,7 @@ export default function AhmedKattayaCV() {
 
           {/* Software */}
           <div style={{ ...glassPanel, animation: "hudFade 0.5s 0.12s ease both" }}>
-            <div style={{
+            <div className="cv-panel-header" style={{
               ...MONO, color: TEXT_DARK, fontSize: "10px", letterSpacing: "3px",
               padding: "16px 20px 12px", borderBottom: `1px solid ${LINE_SUB}`, marginBottom: 6,
             }}>SOFTWARE</div>
@@ -430,7 +499,7 @@ export default function AhmedKattayaCV() {
 
           {/* Languages */}
           <div style={{ ...glassPanel, animation: "hudFade 0.5s 0.16s ease both" }}>
-            <div style={{
+            <div className="cv-panel-header" style={{
               ...MONO, color: TEXT_DARK, fontSize: "10px", letterSpacing: "3px",
               padding: "16px 20px 12px", borderBottom: `1px solid ${LINE_SUB}`, marginBottom: 6,
             }}>LANGUAGES</div>
@@ -448,10 +517,10 @@ export default function AhmedKattayaCV() {
         </div>
 
         {/* ── RIGHT PANEL ───────────────────────────────────── */}
-        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="cv-right-panel" style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
 
           {/* Tab bar */}
-          <div style={{ ...glassPanel, display: "flex", paddingBottom: 0, animation: "hudFade 0.5s 0.04s ease both" }}>
+          <div className="cv-tabs-container" style={{ ...glassPanel, display: "flex", paddingBottom: 0, animation: "hudFade 0.5s 0.04s ease both" }}>
             {tabs.map((t, i) => {
               const active = activeTab === t.id;
               return (
@@ -485,7 +554,7 @@ export default function AhmedKattayaCV() {
           <div style={{ ...glassPanel, flex: 1 }} className="cv-panel-scroll">
 
             {/* HUD header for active tab */}
-            <div style={{
+            <div className="cv-panel-header" style={{
               ...MONO, color: TEXT_DARK, fontSize: "10px", letterSpacing: "3px",
               padding: "16px 20px 12px",
               borderBottom: `1px solid ${LINE_SUB}`,
@@ -522,7 +591,7 @@ export default function AhmedKattayaCV() {
             {activeTab === "projects" && (
               <div>
                 <div style={{ position: "relative" }}>
-                  <div style={{ position: "absolute", left: 24, top: 0, bottom: 0, width: 1, backgroundColor: LINE_SUB }} />
+                  <div className="cv-timeline-line" style={{ position: "absolute", left: 24, top: 0, bottom: 0, width: 1, backgroundColor: LINE_SUB }} />
                   {projects.map((p, i) => (
                     <ProjectRow key={i} label={p.label} sub={p.sub} date={p.date_start} delay={i * 0.04} />
                   ))}
