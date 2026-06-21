@@ -26,5 +26,9 @@
   "Riyadh, Saudi Arabia": {
     "lat": 24.638916,
     "lng": 46.7160104
+  },
+  "Berlin, Germany": {
+    "lat": 52.5173885,
+    "lng": 13.3951309
   }
 }

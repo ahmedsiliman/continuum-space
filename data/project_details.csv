@@ -5,13 +5,48 @@ cat_acd,Academic,Academic research and projects in architecture and urban design
 cat_art,Art,Creative expressions through digital and traditional media.,/projects/Art/Blackheart/BLCK HRT-01.jpg,
 cat_cmp,Computation,Computational design and software development for the built environment.,/projects/CMP/Dynamo_lintel/lintel-threshold script.png,
 sub_bim-crd,BIM Coordination,Specialized workflows for clash detection and model coordination.,/projects/BIM_CRD/Aquellum/aquellum-cover.png,
-bim-crd_01,NewGiza Westrige,Comprehensive BIM coordination for high-end residential developments.,/projects/images/NEWGIZA_Cover.jpg,"New Giza, Giza, Egypt"
-bim-crd_02,Sodic Spectrum,MEP coordination and structural alignment for commercial hubs.,,"New Cairo, Cairo Egypt"
+sub_bim-ats,BIM Automation Scripts,Automating repetitive tasks in BIM workflows for efficiency.,
+sub_bim-sfd,BIM Software Development,Developing custom tools and plugins for BIM applications.,
+sub_bim-dta,BIM Data Analysis,Extracting and analyzing data from BIM models for informed decision-making.,/projects/BIM_DTA/LCA/MNMS_OOCover.png,
+sub_acd-arc,Academic Architecture,Research and projects focused on architectural design and theory.,/projects/ACD/Timber/Timber_01.jpg,
+sub_acd-urd,Academic Urban Design,Exploring urban design principles and strategies through academic research.,/projects/ACD/Berlin/Berlin_01.jpg,
+sub_art-ink,Ink,Traditional ink drawings and sketches.,/projects/Art/Blackheart/BLCK HRT03.jpg,
+sub_art-dgt,Digital,Digital art and visualizations exploring contemporary themes.,/projects/Art/Digital/NetworkGraph_01.jpg,
+sub_cmp-sfd,Software Development,Building tools and plugins for architectural workflows.,/projects/CMP/Railing/Artboard 12.png,
+sub_cmp-dsn,Design,Generative and computational design explorations.,/projects/CMP/GenerativeScript02/GenerativeScript02_01.png,
+
+bim-crd_01,NewGiza Westrige,Comprehensive BIM coordination for high-end residential developments.,/projects/BIM_CRD/Newgiza/NEWGIZA_Cover.jpg,"New Giza, Giza, Egypt"
+bim-crd_02,Sodic Spectrum,MEP coordination and structural alignment for commercial hubs.,/projects/BIM_CRD/SodicSpectrum/SodicSpectrum_01.jpg,"New Cairo, Cairo Egypt"
 bim-crd_03,ZED West towers,High-rise residential coordination and technical documentation.,/projects/BIM_CRD/Zedwest/Zedwest_01.jpg,"Sheikh Zayed City, Giza, Egypt"
-bim-crd_04,Belle Vie Villas,Landscape and architectural coordination for luxury villas.,,"New Zayed, Giza, Egypt"
+bim-crd_04,Belle Vie Villas,Landscape and architectural coordination for luxury villas.,/projects/BIM_CRD/Bellevie/Bellevie_Cover.jpg,"New Zayed, Giza, Egypt"
 bim-crd_05,The Dunes,Advanced coordination for coastal developments.,,"Tabuk, Saudi Arabia"
 bim-crd_06,Aquellum,Mixed-use development coordination.,,"Tabuk, Saudi Arabia"
 bim-crd_07,REWE PORZ,Urban scale BIM coordination and planning.,,"Cologne, Germany"
 bim-crd_08,HITTIN,Smart city infrastructure and building coordination.,,"Riyadh, Saudi Arabia"
+
+bim-ats_01,Batch Exporter Script,Automating the export of BIM data for streamlined workflows.,,
+
+bim-sfd_01,Revit C# Plugin Live Model Dashboard,Real-time model monitoring and data visualization for Revit projects.,,
+
+bim-dta_01,Micro to macro_LCA,Extracting lifecycle data for environmental impact analysis With BIM integration,/projects/BIM_DTA/LCA/MNMS_OCover.png,"Berlin, Germany"
+
+acd-arc_01,Micro to Macro Timber,Exploring timber construction from small-scale details to large-scale architectural applications.,/projects/ACD/Timber/Timber_01.jpg,
+acd-arc_02,Factory Adaptive Reuse,Adaptive reuse strategies for transforming industrial buildings into vibrant spaces.,/projects/ACD/AdaptiveReuse/AdaptiveReuse_01.jpg,
+acd-arc_03,Architecture Concept 03,Innovative architectural concepts and design explorations.,/projects/ACD/Concept03/Concept03_01.jpg,
+acd-urd_01,Berlin Masterplan,Urban design strategies for sustainable and resilient cities.,/projects/ACD/Berlin/Berlin_01.jpg,
+acd-urd_02,Urban Design Concept 02,Conceptual urban design projects exploring new typologies and public spaces.,/projects/ACD/UrbanDesign02/UrbanDesign02_01.jpg,
+acd-urd_03,Urban Design Concept 03,Experimental urban design proposals addressing contemporary challenges.,/projects/ACD/UrbanDesign03/UrbanDesign03_01.jpg,
+art-ink_01,The Void Canvas,Traditional ink drawings exploring themes of emptiness and space.,/projects/Art/Ink/TheVoidCanvas_01.jpg,
+art-ink_02,Ink Study 02,Detailed ink studies focusing on architectural forms and landscapes.,/projects/Art/Ink/InkStudy02_01.jpg,
+art-ink_03,Ink Study 03,Expressive ink compositions blending abstraction and representation.,/projects/Art/Ink/InkStudy03_01.jpg,
+art-dgt_01,Network Graph Viz,Digital visualizations of complex networks and relationships.,/projects/Art/Digital/NetworkGraph_01.jpg,
+art-dgt_02,Black Heart,Digital art exploring themes of darkness and emotion.,/projects/Art/Digital/BlackHeart_01.jpg,
+art-dgt_03,Digital Canvas 03,Experimental digital compositions blending algorithmic and hand-drawn techniques.,/projects/Art/Digital/DigitalCanvas03_01.jpg,
+cmp-sfd_01,Data Parser Core,Core software module for parsing and processing architectural data.,/projects/CMP/DataParser/DataParser_01.png,
+cmp-sfd_02,Software Module 02,Advanced software tools for computational design workflows.,/projects/CMP/SoftwareModule02/SoftwareModule02_01.png,
+cmp-sfd_03,Software Module 03,Innovative software solutions for architectural and urban design challenges.,/projects/CMP/SoftwareModule03/SoftwareModule03_01.png,
+cmp-dsn_01,Computational Logic,Exploring computational logic and algorithms in design processes.,/projects/CMP/ComputationalLogic/ComputationalLogic_01.png,
+cmp-dsn_02,Generative Script 02,Generative design scripts for creating complex architectural forms and patterns.,/projects/CMP/GenerativeScript02/GenerativeScript02_01.png,
+cmp-dsn_03,Generative Script 03,Advanced generative algorithms for innovative design solutions.,/projects/CMP/GenerativeScript03/GenerativeScript03_01.png,
 sub_art-ink,Ink,Traditional ink drawings and sketches.,/projects/Art/Blackheart/BLCK HRT03.jpg,
 sub_cmp-sfd,Software Development,Building tools and plugins for architectural workflows.,/projects/CMP/Railing/Artboard 12.png,

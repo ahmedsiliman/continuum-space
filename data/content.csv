@@ -1,63 +1,117 @@
-project_id,block_order,position,type,data
-bim-crd_01,1,hero,BIM_Viewer,/projects/models/NewGiza_H04-RB11.ifc
-bim-crd_01,2,left,Text,Detailed clash detection workflow for cross-laminated timber structural joints.
-bim-crd_01,3,right,Image,/projects/images/NEWGIZA_Cover.jpg
-bim-crd_01,4,center,Image,/projects/images/NEWGIZA_Cover.jpg
-bim-crd_02,1,hero,BIM_Viewer,/projects/models/Sodic_BLK25_C.ifc
-bim-crd_02,2,details,Text,MEP system coordination within modular floor assemblies.
-bim-crd_03,1,hero,BIM_Viewer,/projects/models/ZEDWest_E01.ifc
-bim-crd_03,2,details,Text,Placeholder details for Coordination Model 03.
-bim-crd_04,1,hero,BIM_Viewer,/projects/models/Bellevie-V03A.ifc
-bim-crd_04,2,details,Text,Placeholder details for Coordination Model 04.
-bim-crd_05,1,hero,BIM_Viewer,/projects/models/Dunes_R04-A07D.ifc
-bim-crd_05,2,details,Text,Placeholder details for Coordination Model 05.
-bim-crd_06,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
-bim-crd_06,2,details,Text,Placeholder details for Coordination Model 06.
-bim-crd_07,1,hero,BIM_Viewer,/projects/models/REWE-IT-PORZ.ifc
-bim-crd_07,2,details,Text,Placeholder details for Coordination Model 07.
-bim-crd_08,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
-bim-crd_08,2,details,Text,Placeholder details for Coordination Model 08.
-bim-ats_01,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
-bim-ats_01,2,details,Text,Documentation for the Batch Exporter Script automation.
-bim-sfd_01,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
-bim-sfd_01,2,details,Text,Core framework architecture for custom Revit C# Add-ins.
-bim-dta_01,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
-bim-dta_01,2,details,Text,Data extraction methodologies for Lifecycle LCA analysis.
-acd-arc_01,1,left,Text,The Micro to Macro seminar project focusing on sustainable timber construction.
-acd-arc_01,2,right,Image,/images/micro_to_macro_render.jpg
-acd-arc_02,1,left,Text,Adaptive reuse strategy for the Legré-Mante industrial site in Marseille.
-acd-arc_02,2,right,Image,/images/factory_reuse_plan.jpg
-acd-arc_03,1,left,Text,Placeholder narrative for Architecture Concept 03.
-acd-arc_03,2,right,Image,/images/placeholder_right.jpg
-acd-urd_01,1,left,Text,Berlin Masterplan exploring urban flow and infrastructural integration.
-acd-urd_01,2,right,Image,/images/berlin_masterplan.jpg
-acd-urd_02,1,left,Text,Placeholder narrative for Urban Design Concept 02.
-acd-urd_02,2,right,Image,/images/placeholder_right.jpg
-acd-urd_03,1,left,Text,Placeholder narrative for Urban Design Concept 03.
-acd-urd_03,2,right,Image,/images/placeholder_right.jpg
-art-ink_01,1,center,Image,/images/void_canvas.jpg
-art-ink_01,2,center,Text,Black ink on 40x40 canvas. Expanding on the concept of negative space.
-art-ink_02,1,center,Image,/images/placeholder_center.jpg
-art-ink_02,2,center,Text,Explorations in high-contrast ink techniques.
-art-ink_03,1,center,Image,/images/placeholder_center.jpg
-art-ink_03,2,center,Text,Abstract structural linework on raw paper.
-art-dgt_01,1,center,Image,/images/network_viz.jpg
-art-dgt_01,2,center,Text,Interactive D3.js force-graph representing multidisciplinary knowledge.
-art-dgt_02,1,center,Image,projects/Art/Blackheart/BLCK HRT04.jpg
-art-dgt_02,2,center,Text,Exerimental digital art exploring orname
-art-dgt_02,3,center,Image,projects/Art/Blackheart/BLCK HRT02.jpg
-art-dgt_02,4,center,Image,projects/Art/Blackheart/BLCK HRT03.jpg
-art-dgt_03,1,center,Image,/images/placeholder_center.jpg
-art-dgt_03,2,center,Text,Algorithmic pattern generation using pixel shaders.
-cmp-sfd_01,1,left,Text,Custom C# framework for automating Revit data extraction.
-cmp-sfd_01,2,right,Image,/images/csharp_snippet.jpg
-cmp-sfd_02,1,left,Text,Placeholder documentation for Software Module 02.
-cmp-sfd_02,2,right,Image,/images/placeholder_right.jpg
-cmp-sfd_03,1,left,Text,Placeholder documentation for Software Module 03.
-cmp-sfd_03,2,right,Image,/images/placeholder_right.jpg
-cmp-dsn_01,1,left,Text,Computational logic diagrams and node-based visual scripting.
-cmp-dsn_01,2,right,Image,/images/grasshopper_script.jpg
-cmp-dsn_02,1,left,Text,Placeholder narrative for Generative Script 02.
-cmp-dsn_02,2,right,Image,/images/placeholder_right.jpg
-cmp-dsn_03,1,left,Text,Placeholder narrative for Generative Script 03.
-cmp-dsn_03,2,right,Image,/images/placeholder_right.jpg
+project_id, block_order, position, type      , data
+bim-crd_01,           1, hero    , BIM_Viewer, /projects/models/NewGiza_H04-RB11.ifc
+bim-crd_01,           2, overview, Text      , "The New Giza project, is a large-scale urban development in Sheikh Zayed City, Egypt.\n •This coordination model focuses on the integration of architectural, structural, and MEP systems within the residential Prototypes of Neighbourhood 04 Westridge, RB011 Prototypes (The Rock Residence)."
+bim-crd_01,           3, overview, Text      , "Roles:\n• Model Upgrading, and coordination up to LOD 400, shop-drawing,nd documentation, quantity take-offs, Clash detection and resolution.\n• Coordinating with as-built conditions and apply it  to the model complying with all desciplines Architecture, Structure, and MEP with site changes.\n• Managing Client Modifications and create Model prototypes that comply with every Building units and its modified finishing materials and architectural layout.\n• developing automation workflows for data management, reporting, and modelling using Dynamo and grasshopper scripting."
+bim-crd_01,           4, overview, Text      , "Tools: `Revit` `Navisworks` `Dynamo` `Grasshopper`"
+bim-crd_01,           5, cover   , Image     , /projects/BIM_CRD/Newgiza/NEWGIZA_01.png
+bim-crd_01,           6, gallery , Image     , /projects/BIM_CRD/Newgiza/NEWGIZA_06.png
+bim-crd_01,           6, gallery , Image     , /projects/BIM_CRD/Newgiza/NEWGIZA_07.png
+bim-crd_01,           2, cover   , Image     , /projects/BIM_CRD/Newgiza/NEWGIZA_01.png
+bim-crd_01,           3, gallery , Image     , /projects/BIM_CRD/Newgiza/NEWGIZA_08.png
+bim-crd_01,           4, gallery , Image     , /projects/BIM_CRD/Newgiza/NEWGIZA_09.png
+
+bim-crd_02,           1, hero    , BIM_Viewer, /projects/models/Sodic_BLK25_C.ifc
+bim-crd_02,           2, overview, Text      , " Sodic Spectrum Block 25 in Sodic East town project, the scope included 11 residential building Prototypes part of Block 25 residential and commercial Hub in New Cairo, Egypt. \nThis model is one prototype for the integration of architectural, structural, and MEP systems within the models within the scope of the project."
+bim-crd_02,           2, overview, Text      , "Roles:\n• BIM Modelling, Upgrading, and coordination up to LOD 500, shop-drawing,nd documentation, quantity take-offs, Clash detection and resolution.\n• Coordinating with as-built conditions and apply it  to the model complying with all desciplines Architecture, Structure, and MEP with site changes.\n• finishing materials and architectural layout.\n• Usually every BIM engineer is responsible for one or more model prototypes"
+bim-crd_02,           2, overview, Text      , "Tools: `Revit` `Navisworks` `Dynamo` `BIM 360` `Rhinoceros`"
+bim-crd_02,           2, cover   , Image     , /projects/BIM_CRD/SodicSpectrum/SodicSpectrum_01.jpg
+
+bim-crd_03,           1, hero    , BIM_Viewer, /projects/models/ZEDWest_E01.ifc
+bim-crd_03,           2, cover   , Image     , /projects/BIM_CRD/Zedwest/Zedwest_01.jpg
+bim-crd_03,           2, gallery , Image     , /projects/BIM_CRD/Zedwest/Zedwest_02.png
+
+bim-crd_03,           2, overview, Text      , "The New Giza project, is a large-scale urban development in Sheikh Zayed City, Egypt.\n •This coordination model focuses on the integration of architectural, structural, and MEP systems within the residential Prototypes of Neighbourhood 04 Westridge, RB011 Prototypes (The Rock Residence)."
+bim-crd_03,           3, overview, Text      , "Roles:\n• Model Upgrading, and coordination up to LOD 400, shop-drawing,nd documentation, quantity take-offs, Clash detection and resolution.\n• Coordinating with as-built conditions and apply it  to the model complying with all desciplines Architecture, Structure, and MEP with site changes.\n• Managing Client Modifications and create Model prototypes that comply with every Building units and its modified finishing materials and architectural layout.\n• developing automation workflows for data management, reporting, and modelling using Dynamo and grasshopper scripting."
+bim-crd_03,           4, overview, Text      , "Tools: `Revit` `Navisworks` `Dynamo` `Grasshopper`"
+bim-crd_03,           5, gallery , Image     , /projects/BIM_CRD/Zedwest/Zedwest_03.png
+bim-crd_03,           6, gallery , Image     , /projects/BIM_CRD/Zedwest/Zedwest_04.png
+
+bim-crd_04,           1, hero    , BIM_Viewer, /projects/models/Bellevie-V03A.ifc
+bim-crd_04,           2, cover   , Image     , /projects/BIM_CRD/Bellevie/Bellevie_01.png
+
+bim-crd_04,           2, overview, Text      , "The New Giza project, is a large-scale urban development in Sheikh Zayed City, Egypt.\n •This coordination model focuses on the integration of architectural, structural, and MEP systems within the residential Prototypes of Neighbourhood 04 Westridge, RB011 Prototypes (The Rock Residence)."
+bim-crd_04,           3, overview, Text      , "Roles:\n• Model Upgrading, and coordination up to LOD 400, shop-drawing,nd documentation, quantity take-offs, Clash detection and resolution.\n• Coordinating with as-built conditions and apply it  to the model complying with all desciplines Architecture, Structure, and MEP with site changes.\n• Managing Client Modifications and create Model prototypes that comply with every Building units and its modified finishing materials and architectural layout.\n• developing automation workflows for data management, reporting, and modelling using Dynamo and grasshopper scripting."
+bim-crd_04,           4, overview, Text      , "Tools: `Revit` `Navisworks` `Dynamo` `Grasshopper`"
+
+bim-crd_05,           1, hero    , BIM_Viewer, /projects/models/Dunes_R04-A07D.ifc
+bim-crd_05,           2, details , Text      , Placeholder details for Coordination Model 05.
+
+bim-crd_06,           1, hero    , BIM_Viewer, /projects/models/placeholder.ifc
+bim-crd_06,           2, details , Text      , Placeholder details for Coordination Model 06.
+
+bim-crd_07,           1, hero    , BIM_Viewer, /projects/models/REWE-IT-PORZ.ifc
+bim-crd_07,           2, details , Text      , Placeholder details for Coordination Model 07.
+
+bim-crd_08,           1, hero    , BIM_Viewer, /projects/models/placeholder.ifc
+bim-crd_08,           2, details , Text      , Placeholder details for Coordination Model 08.
+
+bim-ats_01,           1, hero    , BIM_Viewer, /projects/models/placeholder.ifc
+bim-ats_01,           2, details , Text      , Documentation for the Batch Exporter Script automation.
+
+bim-sfd_01,           1, hero    , BIM_Viewer, /projects/models/ZEDWest_E01.ifc
+bim-sfd_01,           2, cover   , Image     , /projects/BIM_SFD/BIM-Live-dashboard1_01.png
+bim-sfd_01,           3, overview, Text      , "Description:\n• Revit Add-in | Live Model Dashboard.\n• the Idea was to make a data-visualization add-in for Revit—exporting model data to JSON/Excel and maybe visualizing it in Power BI.\n• What about a web-based dashboard living inside Revit?\n• functions in WIP prototype:\n• Filter elements by Category, Level, Worksets, and parameters with (AND / OR rules) ,it's simple but very useful filter.\n• Feed selected parameter data into a Tree Map as ( Group / Stack / Value numeric value parameter ).\n• Visualize percentages, select elements, and color the model based on the dashboard."
+bim-sfd_01,           3, overview, Text      , "Tools: `Revit API` `C#` `JS/HTML/CSS`"
+bim-sfd_01,           4, video   , video     , https://vimeo.com/1203053767?share=copy&fl=sv&fe=ci
+
+bim-dta_01,           1, hero    , powerbi   , https://app.powerbi.com/view?r=eyJrIjoiN2YzNjNmMmEtZDVhZi00ODg1LWFlNTMtN2RkZjZkZWVjNmUwIiwidCI6IjExMTliYjkwLTg4YmEtNDg5NC1iN2YxLWRlMjZlMTI5ZDk3NyIsImMiOjR9
+bim-dta_01,           2, cover   , Image     , /projects/BIM_DTA/LCA/MNMS_01.png
+bim-dta_01,           3, overview, Text      , "Description:\n• Micro To Macro Seminar project at TU Berlin.\n• Our team explored the integration of BIM and data analysis and its impact on building design, modeling, construction, and the supply chain.\n• Our team designed and modeled a timber residential building, combining mass timber and modular components.\n• Using the Carbo Life Calculator, 3DBI and Power BI, we created an interactive dashboard that seamlessly connects building geometry with various types of information.\n• This allowed us to gain insights into key performance indicators such as embodied carbon, global warming potential, and cost.\n• The live, iterative process helped us make informed decisions about each component design and material selection."
+bim-dta_01,           3, overview, Text      , "Tools: `Revit` `power BI` `3DBI` `CarboLife` `Dynamo` `Excel` `ÖKOBAUDAT Database`"
+bim-dta_01,           4, video   , video     , https://vimeo.com/1203065130?share=copy&fl=sv&fe=ci
+
+acd-arc_01,           1, left    , Text      , The Micro to Macro seminar project focusing on sustainable timber construction.
+acd-arc_01,           2, right   , Image     , /images/micro_to_macro_render.jpg
+
+acd-arc_02,           1, left    , Text      , Adaptive reuse strategy for the Legré-Mante industrial site in Marseille.
+acd-arc_02,           2, right   , Image     , /images/factory_reuse_plan.jpg
+
+acd-arc_03,           1, left    , Text      , Placeholder narrative for Architecture Concept 03.
+acd-arc_03,           2, right   , Image     , /images/placeholder_right.jpg
+
+acd-urd_01,           1, left    , Text      , Berlin Masterplan exploring urban flow and infrastructural integration.
+acd-urd_01,           2, right   , Image     , /images/berlin_masterplan.jpg
+
+acd-urd_02,           1, left    , Text      , Placeholder narrative for Urban Design Concept 02.
+acd-urd_02,           2, right   , Image     , /images/placeholder_right.jpg
+
+acd-urd_03,           1, left    , Text      , Placeholder narrative for Urban Design Concept 03.
+acd-urd_03,           2, right   , Image     , /images/placeholder_right.jpg
+
+art-ink_01,           1, center  , Image     , /images/void_canvas.jpg
+art-ink_01,           2, center  , Text      , Black ink on 40x40 canvas. Expanding on the concept of negative space.
+
+art-ink_02,           1, center  , Image     , /images/placeholder_center.jpg
+art-ink_02,           2, center  , Text      , Explorations in high-contrast ink techniques.
+
+art-ink_03,           1, center  , Image     , /images/placeholder_center.jpg
+art-ink_03,           2, center  , Text      , Abstract structural linework on raw paper.
+
+art-dgt_01,           1, center  , Image     , /images/network_viz.jpg
+art-dgt_01,           2, center  , Text      , Interactive D3.js force-graph representing multidisciplinary knowledge.
+
+art-dgt_02,           1, center  , Image     , projects/Art/Blackheart/BLCK HRT04.jpg
+art-dgt_02,           2, center  , Text      , Exerimental digital art exploring orname
+art-dgt_02,           3, center  , Image     , projects/Art/Blackheart/BLCK HRT02.jpg
+art-dgt_02,           4, center  , Image     , projects/Art/Blackheart/BLCK HRT03.jpg
+
+art-dgt_03,           1, center  , Image     , /images/placeholder_center.jpg
+art-dgt_03,           2, center  , Text      , Algorithmic pattern generation using pixel shaders.
+
+cmp-sfd_01,           1, left    , Text      , Custom C# framework for automating Revit data extraction.
+cmp-sfd_01,           2, right   , Image     , /images/csharp_snippet.jpg
+
+cmp-sfd_02,           1, left    , Text      , Placeholder documentation for Software Module 02.
+cmp-sfd_02,           2, right   , Image     , /images/placeholder_right.jpg
+
+cmp-sfd_03,           1, left    , Text      , Placeholder documentation for Software Module 03.
+cmp-sfd_03,           2, right   , Image     , /images/placeholder_right.jpg
+
+cmp-dsn_01,           1, left    , Text      , Computational logic diagrams and node-based visual scripting.
+cmp-dsn_01,           2, right   , Image     , /images/grasshopper_script.jpg
+
+cmp-dsn_02,           1, left    , Text      , Placeholder narrative for Generative Script 02.
+cmp-dsn_02,           2, right   , Image     , /images/placeholder_right.jpg
+
+cmp-dsn_03,           1, left    , Text      , Placeholder narrative for Generative Script 03.
+cmp-dsn_03,           2, right   , Image     , /images/placeholder_right.jpg
