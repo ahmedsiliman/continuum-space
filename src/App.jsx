@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import MainScene from './universe/MainScene/MainScene';
 import IfcLayover from './universe/IfcLayover';
 import ModuleTransition from './components/ModuleTransition';
@@ -48,12 +48,15 @@ export default function App() {
   
   const [focusedNodeDetails, setFocusedNodeDetails] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isHUDCollapsed, setIsHUDCollapsed] = useState(window.innerWidth < 1024);
 
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [isRadialMode, setIsRadialMode] = useState(true);
 
-  const handleAboutMe = (x, y) => {
+  const filterBarRef = useRef(null);
+
+  const handleAboutMe = useCallback((x, y) => {
     if (!database?.aboutMeContent) return;
 
     const aboutMeProject = {
@@ -63,9 +66,74 @@ export default function App() {
       content: database.aboutMeContent
     };
 
-    setDropCoords({ x, y });
+    setDropCoords({ x: x ?? window.innerWidth / 2, y: y ?? window.innerHeight / 2 });
     setActiveProject(aboutMeProject);
-  };
+  }, [database]);
+
+  const expandAll = useCallback(() => {
+    if (!database?.nodes) return;
+    const expandable = database.nodes
+      .filter(n => ['Category', 'SubCategory'].includes(n.type))
+      .map(n => n.id);
+    setExpandedNodes(expandable);
+  }, [database]);
+
+  const collapseAll = useCallback(() => {
+    setExpandedNodes([]);
+  }, []);
+
+  // Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Don't trigger if user is typing in an input
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        if (e.key === 'Escape') document.activeElement.blur();
+        return;
+      }
+
+      switch (e.key.toLowerCase()) {
+        case 'escape':
+          setActiveProject(null);
+          break;
+        case 'e':
+          expandAll();
+          break;
+        case 'c':
+          collapseAll();
+          break;
+        case 'r':
+        case 'm':
+          setIsRadialMode(prev => !prev);
+          break;
+        case 'p':
+          setIsPanelOpen(prev => !prev);
+          break;
+        case 'h':
+        case 'i':
+          setIsHUDCollapsed(prev => !prev);
+          break;
+        case 'a':
+          handleAboutMe();
+          break;
+        case '/':
+        case 'f':
+          e.preventDefault();
+          filterBarRef.current?.focusSearch?.();
+          break;
+        default:
+          // Numeric filters 1-7
+          if (e.key >= '1' && e.key <= '7') {
+            const filters = ['All', 'Featured', 'BIM', 'Computational', 'Architecture', 'Urban', 'Art'];
+            const filter = filters[parseInt(e.key) - 1];
+            if (filter) setActiveFilter(filter);
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [expandAll, collapseAll, handleAboutMe]);
 
   // Auto-expand tree to show filtered projects
   useEffect(() => {
@@ -120,8 +188,6 @@ export default function App() {
     
     if (expandedNodes.length === 0) {
       // If everything is collapsed, we close the panel 
-      // UNLESS we are in the middle of a project transition or something? 
-      // For now, follow the rule: all collapsed = panel closed.
       setIsPanelOpen(false);
     } else {
       // If something is expanded, we ensure the panel is open
@@ -218,11 +284,13 @@ export default function App() {
       {!activeProject && (
         <>
           <FilterBar 
+            ref={filterBarRef}
             onFilterChange={setActiveFilter}
             onSearchChange={setSearchQuery}
             onAboutMe={handleAboutMe}
             isRadialMode={isRadialMode}
             onRadialModeToggle={() => setIsRadialMode(!isRadialMode)}
+            activeFilter={activeFilter}
           />
 
           <TelemetryHUD
@@ -231,6 +299,8 @@ export default function App() {
             onNodeInteract={handleNodeInteract}
             onNodeFocus={handleNodeFocus}
             onAboutMe={handleAboutMe}
+            isCollapsed={isHUDCollapsed}
+            onToggle={() => setIsHUDCollapsed(!isHUDCollapsed)}
           />
 
           <ProjectDetailsPanel 

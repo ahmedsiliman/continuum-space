@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-export default function ImageBlock({ data }) {
+export default function ImageBlock({ data, loading = 'lazy' }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => setIsOpen(!isOpen);
@@ -41,6 +41,8 @@ export default function ImageBlock({ data }) {
         <img
           src={data}
           alt="Project Graphic"
+          loading={loading}
+          decoding="async"
           style={{ width: '100%', height: 'auto', display: 'block' }}
         />
       </div>

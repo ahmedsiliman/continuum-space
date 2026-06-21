@@ -20,11 +20,11 @@ bim-crd_03,sub_bim-crd,ZED West towers,Project,bim_dashboard,http://127.0.0.1:55
 bim-crd_04,sub_bim-crd,Belle Vie Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Bellevie-V03A.ifc,BIM
 bim-crd_05,sub_bim-crd,Southern Dunes Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Dunes_R04-A07D.ifc,BIM
 bim-crd_06,sub_bim-crd,Aquellum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
-bim-crd_07,sub_bim-crd,REWE Portz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc,BIM
+bim-crd_07,sub_bim-crd,REWE Portz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc,"BIM, featured"
 bim-crd_08,sub_bim-crd,Hittin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
 bim-ats_01,sub_bim-ats,Batch Exporter Script,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,Computational
-bim-sfd_01,sub_bim-sfd,Revit C# Plugin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,Computational
-bim-dta_01,sub_bim-dta,Lifecycle LCA Extraction,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
+bim-sfd_01,sub_bim-sfd,Revit C# Plugin Live Model Dashboard,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,Computational,BIM"
+bim-dta_01,sub_bim-dta,Lifecycle LCA Extraction,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,BIM"
 acd-arc_01,sub_acd-arc,Micro to Macro Timber,Project,split,,,Architecture
 acd-arc_02,sub_acd-arc,Factory Adaptive Reuse,Project,split,,,Architecture
 acd-arc_03,sub_acd-arc,Architecture Concept 03,Project,split,,,Architecture

@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import './FilterBar.css';
 
-const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe, isRadialMode, onRadialModeToggle }) => {
+const FilterBar = forwardRef(({ onFilterChange, onSearchChange, onAboutMe, isRadialMode, onRadialModeToggle, activeFilter: externalActiveFilter }, ref) => {
   const [isFilterExpanded, setIsFilterExpanded] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeFilter, setActiveFilter] = useState(externalActiveFilter || 'All');
   const [searchQuery, setSearchQuery] = useState('');
   const [vw, setVw] = useState(typeof window !== 'undefined' ? window.innerWidth : 1280);
+  const searchInputRef = useRef(null);
+
+  // Sync internal activeFilter with external prop if it changes
+  useEffect(() => {
+    if (externalActiveFilter) setActiveFilter(externalActiveFilter);
+  }, [externalActiveFilter]);
+
+  useImperativeHandle(ref, () => ({
+    focusSearch: () => {
+      searchInputRef.current?.focus();
+    }
+  }));
 
   // Track viewport width so the bar can reserve space for the HUD + details panel
   useEffect(() => {
@@ -41,6 +53,7 @@ const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe, isRadialMode, on
         <div className="search-container">
           <span className="search-icon">🔍</span>
           <input
+            ref={searchInputRef}
             type="text"
             placeholder="SEARCH PROJECTS..."
             value={searchQuery}
@@ -93,6 +106,6 @@ const FilterBar = ({ onFilterChange, onSearchChange, onAboutMe, isRadialMode, on
       )}
     </div>
   );
-};
+});
 
 export default FilterBar;

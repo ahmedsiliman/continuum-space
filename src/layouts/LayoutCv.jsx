@@ -18,7 +18,7 @@ experience,job,Redcon Construction Co S.A.E.,BIM Coordinator | Full-time · Giza
 experience,job,Badmind Group Studio,Junior Design Architect · Gizah Egypt,Aug 2016,May 2018,Design model and visualize residential layout plans and exteriors,,,, 
 experience,job,Engineering Authority of the Armed Forces,Military Service,JAN 2017,MAR 2018,Team Leader at the operations office at the military Brigade,,,, 
 experience,job,Gozour Studio,Computational Designer | Full-time · Egypt,Sep 2015,Oct 2016,Design and modelling of residential exteriors landscape and softscape elements,Develop modelling design methods and Grasshopper scripts for generative design,,,, 
-education,degree,M.Sc Architecture Typology,Technische Universität Berlin (TUB) · Berlin Germany,2023,Present,Faculty VI — Planning Building Environment,,,,, 
+education,degree,M.Sc Architecture Typology,Technische Universität Berlin (TUB) · Berlin Germany,2023,2026,Faculty VI — Planning Building Environment,,,,, 
 education,degree,BSc. in Architectural Engineering,Misr Higher Institute for Engineering and Technology (MET) · Mansoura Egypt,2011,2016,Architecture Department,,,,, 
 skill,software,Autodesk Revit,,,,,,,,,Expert
 skill,software,Dynamo Studio,,,,,,,,,Expert
@@ -38,7 +38,7 @@ language,lang,English,Advanced,,,,,,,,
 language,lang,German,Beginner,,,,,,,,
 language,lang,Arabic,Native,,,,,,,,
 project,item,AFWA HITTIN,Hospitality LP1 · Riyadh KSA,2026,,,,,,, 
-project,item,REWE Digital NEUPORTZ IT Hub,Mixed Use LP2 · Köln Deutschland,2025,,,,,,, 
+project,item,REWE Digital NEUPORZ IT Hub,Mixed Use LP3 · Köln Deutschland,2025,,,,,,, 
 project,item,NEOM TROJENA THE VAULT,Hospitality LP1 · Tabuk KSA,2025,,,,,,, 
 project,item,NEOM AQUELLUM,Hospitality LP2 · Tabuk KSA,2024,,,,,,, 
 project,item,RED-SEA Six Senses Southern Dunes,Hospitality LP5 · Tabuk KSA,2023,,,,,,, 

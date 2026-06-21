@@ -33,7 +33,140 @@ function PanelLabel({ children }) {
 }
 
 function regionMatch(region, accepted) {
-  return accepted.includes(region);
+  // Defensive trim: CSV columns are sometimes space-padded (a recurring
+  // issue in this project's content.csv), so 'video ' or ' video' should
+  // still match 'video'.
+  return accepted.includes(String(region || '').trim());
+}
+
+// ImageBlock is built for standalone, full-width document flow: its outer
+// div carries `margin: 40px 0` and its <img> uses `height: auto` (intrinsic
+// ratio). When we tile several images into a grid, we need that same
+// component to instead fill + crop a fixed-aspect cell. Rather than fork
+// ImageBlock (other layouts rely on its current standalone behavior), we
+// scope an override to just our grid tiles via a wrapper class.
+//
+// Note: ImageBlock's hover transition (transform/box-shadow) is left
+// intact here intentionally, matching Cover's behavior. With source
+// images now resized to a sane max dimension (see resize_gallery_images.py),
+// per-tile compositing layers from the transition are a smaller cost than
+// they were when assets were 90+ megapixel originals — if scroll
+// performance regresses with many gallery tiles, this is the first place
+// to revisit (re-add `transition/transform/box-shadow: none !important`
+// to .bim-grid-image-tile > div).
+const GRID_TILE_IMAGE_OVERRIDE_CSS = `
+  .bim-grid-image-tile { width: 100%; height: 100%; }
+  .bim-grid-image-tile > div {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+  }
+  .bim-grid-image-tile img { width: 100% !important; height: 100% !important; object-fit: cover !important; display: block; }
+
+  /* VideoBlock defaults to a standalone-document-flow margin (40px 0),
+     meant for use outside a panel. The Video row already gets consistent
+     16px/20px panel padding like every other section, so we zero out
+     VideoBlock's own margin here to avoid doubling up the whitespace. */
+  .bim-video-panel > div { margin: 0 !important; }
+`;
+
+function GridImageTileStyles() {
+  return <style>{GRID_TILE_IMAGE_OVERRIDE_CSS}</style>;
+}
+
+// Groups a flat block list into runs of consecutive same-type blocks.
+// E.g. [Text, Text, Image, Image, Image, Text] ->
+//   [{type:'Text', blocks:[…2]}, {type:'Image', blocks:[…3]}, {type:'Text', blocks:[…1]}]
+// This lets us render prose as a normal stack but tile back-to-back images
+// into a responsive grid, without reordering anything relative to the source data.
+function groupConsecutiveByType(blocks) {
+  const groups = [];
+  for (const block of blocks) {
+    const last = groups[groups.length - 1];
+    if (last && last.type === block?.type) {
+      last.blocks.push(block);
+    } else {
+      groups.push({ type: block?.type, blocks: [block] });
+    }
+  }
+  return groups;
+}
+
+// Renders a region's blocks: prose stacks normally, runs of 2+ images
+// tile into a responsive grid; a single isolated image stays full width.
+function RegionContent({ blocks, blockRenderer, keyOffset }) {
+  const groups = groupConsecutiveByType(blocks);
+  let runningIndex = 0;
+
+  return groups.map((group, groupIdx) => {
+    const startIndex = runningIndex;
+    runningIndex += group.blocks.length;
+
+    if (group.type === 'Image' && group.blocks.length > 1) {
+      return (
+        <div
+          key={`grp-${groupIdx}`}
+          style={{
+            display: 'grid',
+            gap: '10px',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+            margin: '12px 0',
+          }}
+        >
+          {group.blocks.map((block, i) => (
+            <div
+              key={`img-${startIndex + i}`}
+              className="bim-grid-image-tile"
+              style={{
+                position: 'relative',
+                borderRadius: '6px',
+                overflow: 'hidden',
+                border: GLASS_BDR,
+                aspectRatio: '4 / 3',
+              }}
+            >
+              {blockRenderer(block, keyOffset + startIndex + i)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Text runs (or a single standalone image) render in normal document flow.
+    return group.blocks.map((block, i) =>
+      blockRenderer(block, keyOffset + startIndex + i)
+    );
+  });
+}
+
+// Gallery region: every block here is explicitly meant to tile, regardless
+// of type — unlike Overview/Details, no grouping heuristic is needed.
+function GalleryGrid({ blocks, blockRenderer, keyOffset }) {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gap: '10px',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(560px, 1fr))',
+      }}
+    >
+      {blocks.map((block, i) => (
+        <div
+          key={`gallery-${i}`}
+          className={block?.type === 'Image' ? 'bim-grid-image-tile' : undefined}
+          style={{
+            position: 'relative',
+            borderRadius: '6px',
+            overflow: 'hidden',
+            border: GLASS_BDR,
+            aspectRatio: '4 / 3',
+          }}
+        >
+          {blockRenderer(block, keyOffset + i)}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function BIMDashboard({ project, blockRenderer }) {
@@ -45,14 +178,24 @@ export default function BIMDashboard({ project, blockRenderer }) {
     content.find((block) => regionMatch(slotOf(block), ['hero', 'right_viewer']));
 
   const sidebarBlocks = content.filter((block) => regionMatch(slotOf(block), ['left_sidebar']));
-  const detailBlocks = content.filter((block) => regionMatch(slotOf(block), ['details', 'left', 'right', 'center']));
 
-  const detailLeftBlocks = detailBlocks.filter((block) => regionMatch(slotOf(block), ['left']));
-  const detailRightBlocks = detailBlocks.filter((block) => regionMatch(slotOf(block), ['right']));
-  const detailCenterBlocks = detailBlocks.filter((block) => regionMatch(slotOf(block), ['center', 'details']));
+  const overviewBlocks = content.filter((block) => regionMatch(slotOf(block), ['overview']));
+
+  // Cover: first block in the `cover` region only. Anything else tagged
+  // `cover` is ignored — move it to `gallery` in the CSV if it should render.
+  const coverBlocks = content.filter((block) => regionMatch(slotOf(block), ['cover'])).slice(0, 1);
+
+  const galleryBlocks = content.filter((block) => regionMatch(slotOf(block), ['gallery']));
+
+  const videoBlocks = content.filter((block) => regionMatch(slotOf(block), ['video']));
+
+  const powerbiBlocks = content.filter((block) => regionMatch(slotOf(block), ['powerbi']));
+
+  const detailsBlocks = content.filter((block) => regionMatch(slotOf(block), ['details']));
 
   return (
     <div style={{ width: '100%', height: '100%', overflowY: 'auto', background: 'transparent' }}>
+      <GridImageTileStyles />
 
       {/* Hero viewer */}
       <div style={{
@@ -97,45 +240,101 @@ export default function BIMDashboard({ project, blockRenderer }) {
           </aside>
         )}
 
-        {/* Main section — unified grid context */}
-        <section style={{ 
-          display: 'grid', 
-          gap: '16px', 
-          width: '100%',
-          gridTemplateColumns: '3fr 7fr' // Controls horizontal splits globally
-        }}>
+        {/* Main section — stacked rows, each with its own layout rules */}
+        <section style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
 
-          {/* Details Block */}
-          {detailLeftBlocks.length > 0 && (
-            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column', gridColumn: 'span 1' }}>
-              <PanelLabel>Overview</PanelLabel>
-              <div style={{ padding: '16px 20px', flex: 1 }}>
-                {detailLeftBlocks.map((block, i) => blockRenderer(block, i + 1000))}
-              </div>
-            </div>
-          )}
-
-          {/* Properties Block */}
-          {detailRightBlocks.length > 0 && (
-            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column', gridColumn: 'span 1' }}>
-              <PanelLabel>Cover</PanelLabel>
-              <div style={{ padding: '16px 20px', flex: 1 }}>
-                {detailRightBlocks.map((block, i) => blockRenderer(block, i + 2000))}
-              </div>
-            </div>
-          )}
-
-          {/* Center/Data Block — Explicitly spans both columns perfectly */}
-          {detailCenterBlocks.length > 0 && (
-            <div style={{ 
-              ...glassPanel, 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gridColumn: '1 / -1' // Forces it to span from grid track 1 to the final edge track perfectly
+          {/* Row 1: Overview (text) + Cover (single image) — only this row uses the narrow/wide split */}
+          {(overviewBlocks.length > 0 || coverBlocks.length > 0) && (
+            <div style={{
+              display: 'grid',
+              gap: '16px',
+              gridTemplateColumns: overviewBlocks.length > 0 && coverBlocks.length > 0
+                ? 'minmax(280px, 5fr) 7fr' // text column gets a sane minimum before it gets squeezed
+                : '1fr',
             }}>
+              {/* Overview Block */}
+              {overviewBlocks.length > 0 && (
+                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                  <PanelLabel>Overview</PanelLabel>
+                  <div style={{ padding: '16px 20px', flex: 1 }}>
+                    <RegionContent blocks={overviewBlocks} blockRenderer={blockRenderer} keyOffset={1000} />
+                  </div>
+                </div>
+              )}
+
+              {/* Cover Block — single image only */}
+              {coverBlocks.length > 0 && (
+                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                  <PanelLabel>Cover</PanelLabel>
+                  <div style={{ padding: '16px 20px', flex: 1 }}>
+                    <RegionContent blocks={coverBlocks} blockRenderer={blockRenderer} keyOffset={2000} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Row 2: Gallery — full width, every block tiles regardless of type */}
+          {galleryBlocks.length > 0 && (
+            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+              <PanelLabel>Gallery</PanelLabel>
+              <div style={{ padding: '16px 20px', flex: 1 }}>
+                <GalleryGrid blocks={galleryBlocks} blockRenderer={blockRenderer} keyOffset={3000} />
+              </div>
+            </div>
+          )}
+
+          {/* Row 3: Video — single wide, centered block (not tiled, not full-bleed) */}
+          {videoBlocks.length > 0 && (
+            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+              <PanelLabel>Video</PanelLabel>
+              <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                <div className="bim-video-panel" style={{ width: '100%', maxWidth: '960px' }}>
+                  {videoBlocks.map((block, i) => blockRenderer(block, i + 3500))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Row 3.5: Power BI — full-width, fixed-height like the hero. Unlike
+              Video, report canvases need real width to render visuals legibly
+              and don't crop/scale gracefully, so this isn't capped to 960px
+              or wrapped in an aspect-ratio tile the way Gallery images are. */}
+          {powerbiBlocks.length > 0 && (
+            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+              <PanelLabel>Dashboard</PanelLabel>
+              <div style={{
+                padding: '16px 20px',
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}>
+                {powerbiBlocks.map((block, i) => (
+                  <div
+                    key={`powerbi-${i}`}
+                    style={{
+                      width: '100%',
+                      height: 'clamp(420px, 60vh, 720px)',
+                      borderRadius: '6px',
+                      overflow: 'hidden',
+                      border: GLASS_BDR,
+                      position: 'relative',
+                    }}
+                  >
+                    {blockRenderer(block, i + 3800)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Row 4: Details — full-width text/specs, sits at the bottom when present */}
+          {detailsBlocks.length > 0 && (
+            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
               <PanelLabel>Details</PanelLabel>
               <div style={{ padding: '16px 20px', flex: 1 }}>
-                {detailCenterBlocks.map((block, i) => blockRenderer(block, i + 3000))}
+                <RegionContent blocks={detailsBlocks} blockRenderer={blockRenderer} keyOffset={4000} />
               </div>
             </div>
           )}

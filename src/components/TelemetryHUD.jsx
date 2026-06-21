@@ -14,22 +14,7 @@ const TEXT_MUTED  = 'rgba(255, 255, 255, 0.5)';
 const TEXT_DARK   = 'rgba(255, 255, 255, 0.25)';
 const ROW_ACTIVE  = 'rgba(255, 255, 255, 0.06)';
 
-export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, onNodeFocus, onAboutMe }) {
-  const [isCollapsed, setIsCollapsed] = useState(window.innerWidth < 1024);
-  
-  // Handle auto-collapse on resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        setIsCollapsed(true);
-      } else {
-        setIsCollapsed(false);
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, onNodeFocus, onAboutMe, isCollapsed, onToggle }) {
   const expandedSet = useMemo(() => new Set(expandedNodes || []), [expandedNodes]);
 
   const categories = useMemo(() => {
@@ -61,7 +46,7 @@ export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, 
     <>
       <button 
         className="hud-toggle-btn"
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={onToggle}
         title="Toggle Index"
       >
         {isCollapsed ? '☰' : '✕'}
