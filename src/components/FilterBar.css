@@ -59,6 +59,7 @@
 }
 
 .filter-toggle-btn.active,
+.filter-toggle-btn.filter-on,
 .radial-toggle-btn-bar.active {
   background: rgba(0, 229, 255, 0.15);
   border-color: rgba(0, 229, 255, 0.4);

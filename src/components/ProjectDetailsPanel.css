@@ -206,15 +206,15 @@
     right: 24px;
     width: calc(100% - 48px);
     max-width: 500px;
-    max-height: 70vh; /* Allow growth; content scrolls */
+    height: 25vh; /* Allow growth; content scrolls */
     flex-direction: column;
   }
 
   .panel-content {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 16px;
+    gap:0px;
+    padding: 12px;
     overflow-y: auto;
   }
 
@@ -222,8 +222,8 @@
   .panel-media-row {
     display: flex;
     flex-direction: row;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 0px;
+    margin-bottom: 0px;
   }
   .panel-image-container,
   .globe-map-container {
@@ -235,17 +235,20 @@
   }
   .panel-image-container {
     width: auto;
+    height: 160px;
   }
 
   .panel-title {
     font-size: 14px;
-    margin-bottom: 6px;
-    padding-bottom: 6px;
+    margin-bottom: 3px;
+    margin-top: -3px;
+    padding-bottom: 3px;
   }
 
   .panel-description {
-    font-size: 13px;
+    font-size: 0px;
     line-height: 1.5;
+    margin-top: 0px;
   }
 
   .panel-address {

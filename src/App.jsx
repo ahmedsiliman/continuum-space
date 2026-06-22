@@ -7,6 +7,30 @@ import ProjectDetailsPanel from './components/ProjectDetailsPanel';
 import FilterBar from './components/FilterBar';
 import { fetchDatabase } from './utils/DataLoader';
 
+// ── URL ↔ state sync helpers ────────────────────────────────────────────────
+const VALID_FILTERS = ['All', 'Featured', 'BIM', 'Computational', 'Architecture', 'Urban', 'Art'];
+
+function readURLParams() {
+  const params = new URLSearchParams(window.location.search);
+  const rawFilter = params.get('filter') ?? 'All';
+  const filter = VALID_FILTERS.find(
+    (f) => f.toLowerCase() === rawFilter.toLowerCase()
+  ) ?? 'All';
+  const q = params.get('q') ?? '';
+  return { filter, q };
+}
+
+function writeURLParams(filter, q) {
+  const params = new URLSearchParams();
+  if (filter && filter !== 'All') params.set('filter', filter);
+  if (q) params.set('q', q);
+  const search = params.toString();
+  const next = search ? `?${search}` : window.location.pathname;
+  // replaceState to avoid cluttering history on every keystroke;
+  // pushState is reserved for explicit navigation (see below).
+  window.history.replaceState({ filter, q }, '', next);
+}
+
 function buildChildrenMap(nodes = []) {
   return nodes.reduce((map, node) => {
     const parentId = node.parent_id;
@@ -50,8 +74,9 @@ export default function App() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isHUDCollapsed, setIsHUDCollapsed] = useState(window.innerWidth < 1024);
 
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
+  // Seed from URL so a shared link restores the exact view
+  const [activeFilter, setActiveFilter] = useState(() => readURLParams().filter);
+  const [searchQuery, setSearchQuery] = useState(() => readURLParams().q);
   const [isRadialMode, setIsRadialMode] = useState(true);
 
   const filterBarRef = useRef(null);
@@ -135,7 +160,24 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [expandAll, collapseAll, handleAboutMe]);
 
-  // Auto-expand tree to show filtered projects
+  // ── Write URL whenever filter or search changes ──────────────────────────
+  useEffect(() => {
+    writeURLParams(activeFilter, searchQuery);
+  }, [activeFilter, searchQuery]);
+
+  // ── Sync state when user hits Back / Forward ─────────────────────────────
+  useEffect(() => {
+    const onPopState = (e) => {
+      // e.state is populated by pushState/replaceState; fall back to parsing
+      const { filter, q } = e.state ?? readURLParams();
+      setActiveFilter(VALID_FILTERS.includes(filter) ? filter : 'All');
+      setSearchQuery(q ?? '');
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+
   useEffect(() => {
     if (!database || (activeFilter === 'All' && searchQuery === '')) return;
 
@@ -291,6 +333,7 @@ export default function App() {
             isRadialMode={isRadialMode}
             onRadialModeToggle={() => setIsRadialMode(!isRadialMode)}
             activeFilter={activeFilter}
+            searchQuery={searchQuery}
           />
 
           <TelemetryHUD
@@ -301,6 +344,8 @@ export default function App() {
             onAboutMe={handleAboutMe}
             isCollapsed={isHUDCollapsed}
             onToggle={() => setIsHUDCollapsed(!isHUDCollapsed)}
+            activeFilter={activeFilter}
+            searchQuery={searchQuery}
           />
 
           <ProjectDetailsPanel 

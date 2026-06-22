@@ -1,2 +1,22 @@
 /* This file was used for the radial toggle button which has been moved to FilterBar.css */
 /* MainScene.jsx specific non-inline styles can go here if needed in the future. */
+
+.space-background {
+  width: 100vw;
+  height: 100vh;
+  background-color: #02040a;
+  background-size: cover;
+  background-position: center; /* Default for desktop */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Mobile view shift */
+@media (max-width: 768px) {
+  .space-background {
+        /* Adjust '30%' lower or higher until your circle aligns perfectly */
+        width: 100vw;
+        height: 100vh;
+        background-position: center; 
+    }
+}

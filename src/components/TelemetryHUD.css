@@ -96,12 +96,34 @@
   color: #00e5ff;
 }
 
+/* ── Filter highlight: project rows ── */
+.hud-proj-match {
+  color: #00e5ff !important;
+  background: rgba(0, 229, 255, 0.1) !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+.hud-proj-match:hover {
+  background: rgba(0, 229, 255, 0.15) !important;
+  color: #00e5ff !important;
+}
+
+.hud-proj-dim {
+  color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.hud-proj-dim:hover {
+  color: rgba(255, 255, 255, 0.35) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
 /* ── Mobile Threshold ─────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .telemetry-hud-container {
     width: 240px;
     left: 16px;
     top: 72px; /* Start below the FilterBar on mobile */
+    height: calc(90vh - 72px - 160px);
   }
 
   .hud-toggle-btn {

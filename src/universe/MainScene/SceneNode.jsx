@@ -1,5 +1,13 @@
 import React from 'react';
 import { getNodeColor, getGlowColor } from './MainSceneUtils';
+
+// ── DEBUG TOGGLES ─────────────────────────────────────────────────────────
+// drop-shadow vs box-shadow question is settled (drop-shadow wins). These
+// two remain useful if intensity still looks off on dimmed/filtered nodes.
+const DEBUG_DISABLE_WRAPPER_FILTER = false; // kills grayscale/blur on dimmed wrapper
+const DEBUG_FORCE_HIGHLIGHTED = false;      // forces isHighlighted=true regardless of filter/search
+// ─────────────────────────────────────────────────────────────────────────
+
 const SceneNode = React.memo(({ 
   node, 
   isExpanded, 
@@ -21,7 +29,8 @@ const SceneNode = React.memo(({
   const matchesFilter = activeFilter === 'All' || nodeFilters.includes(activeFilterLower);
   const matchesSearch = searchQuery === '' || node.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-  const isHighlighted = matchesFilter && matchesSearch;
+  let isHighlighted = matchesFilter && matchesSearch;
+  if (DEBUG_FORCE_HIGHLIGHTED) isHighlighted = false; // For debugging purposes, force all nodes to be highlighted
   const isDimmed = !isHighlighted;
 
   return (
@@ -45,7 +54,9 @@ const SceneNode = React.memo(({
         touchAction: 'none',
         transition: 'filter 400ms ease, opacity 400ms ease',
         opacity: isDimmed ? 0.25 : 1,
-        filter: isDimmed ? 'grayscale(1) blur(1px)' : 'none',
+        // theory #4: this wrapper-level filter desaturates/blurs EVERYTHING inside,
+        // including any glow you add below, whenever the node is dimmed.
+        filter: (isDimmed && !DEBUG_DISABLE_WRAPPER_FILTER) ? 'grayscale(1) blur(1px)' : 'none',
         pointerEvents: isDimmed ? 'none' : 'auto',
         zIndex: isHighlighted ? 10 : 1
       }}
@@ -63,23 +74,39 @@ const SceneNode = React.memo(({
           width: `${node.nodeRadius * 2}px`,
           height: `${node.nodeRadius * 2}px`,
 
-          // Smoked glass: resting = near-black with faint hue tint.
-          // Expanded = vivid hue at low-mid opacity so colour blooms through the glass.
+          // RESTING FILL: saturation bumped 12% -> 38% (theory #3) so the glow
+          // isn't fighting a near-grey disc for chroma. Expanded branch untouched.
           backgroundColor: isExpanded
             ? `hsla(${node.hue}, 55%, 28%, 0.55)`
-            : `hsla(${node.hue}, 12%, 70%, 0.60)`,
+            : `hsla(${node.hue}, 38%, 62%, 0.65)`,
 
           borderRadius: '50%',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
 
-          // Expanded: stronger outer glow + rich inset colour wash through the glass
+          // RESTING GLOW — confirmed via testing that box-shadow gets dulled when
+          // combined with backdropFilter on this element, so the glow now lives
+          // on `filter: drop-shadow()` instead, which composites after backdrop
+          // sampling and renders with full intensity.
+          // inset shadow is kept on box-shadow since drop-shadow can't do insets.
           boxShadow: isExpanded
             ? `0 0 22px hsla(${node.hue}, 100%, 65%, 0.60), 0 0 48px hsla(${node.hue}, 100%, 55%, 0.25), inset 0 0 22px hsla(${node.hue}, 100%, 60%, 0.22), inset 0 1px 2px rgba(255,255,255,0.18)`
-            : `0 0 16px hsla(${node.hue}, 100%, 65%, 0.45), 0 0 32px hsla(${node.hue}, 100%, 65%, 0.22), inset 0 0 12px hsla(${node.hue}, 100%, 55%, 0.15), inset 0 1px 1px rgba(255,255,255,0.18)`,
+            : `inset 0 0 16px hsla(${node.hue}, 100%, 55%, 0.25), inset 0 1px 1px rgba(255,255,255,0.18)`,
 
-          // Border brightens and thickens when expanded
-          border: `${isExpanded ? '1.5px' : '1px'} solid hsla(${node.hue}, 100%, 70%, ${isExpanded ? 0.95 : 0.80})`,
+          // Two stacked drop-shadows: a tight hot core + a wider soft halo.
+          // This is what actually renders with punch (per your test).
+          filter: isExpanded
+            ? 'none'
+            : `drop-shadow(0 0 3px hsla(${node.hue}, 100%, 10%, 0.5)) drop-shadow(0 0 10px hsla(${node.hue}, 100%, 50%, 0.4))`,
+
+          // RESTING BORDER — this is a SEPARATE property from both box-shadow and
+          // filter, so neither glow change above touches it. It was the flat/washed
+          // part you noticed. Intensified directly: alpha near-opaque, width thickened
+          // slightly (still less than expanded's 1.5px so the two states stay distinct).
+          // Added a thin outline as a cheap second ring for extra presence.
+          border: `1.25px solid hsla(${node.hue}, 100%, 72%, 0.98)`,
+            outline: isExpanded ? 'none' : `1px solid hsla(${node.hue}, 100%, 60%, 0.55)`,
+
 
           transform: isExpanded ? 'scale(1.06)' : 'scale(1)',
           transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',

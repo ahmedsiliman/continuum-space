@@ -14,8 +14,25 @@ const TEXT_MUTED  = 'rgba(255, 255, 255, 0.5)';
 const TEXT_DARK   = 'rgba(255, 255, 255, 0.25)';
 const ROW_ACTIVE  = 'rgba(255, 255, 255, 0.06)';
 
-export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, onNodeFocus, onAboutMe, isCollapsed, onToggle }) {
+export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, onNodeFocus, onAboutMe, isCollapsed, onToggle, activeFilter, searchQuery }) {
   const expandedSet = useMemo(() => new Set(expandedNodes || []), [expandedNodes]);
+
+  // null = no filter active; Set = IDs of matching projects
+  const matchingIds = useMemo(() => {
+    const filterOn = (activeFilter && activeFilter !== 'All') || !!searchQuery?.trim();
+    if (!filterOn || !database?.nodes?.length) return null;
+    return new Set(
+      database.nodes
+        .filter((n) => {
+          if (n.type !== 'Project') return false;
+          const tags = n.filter ? n.filter.split(',').map((f) => f.trim().toLowerCase()) : [];
+          const filterOk = !activeFilter || activeFilter === 'All' || tags.includes(activeFilter.toLowerCase());
+          const searchOk = !searchQuery?.trim() || n.title.toLowerCase().includes(searchQuery.trim().toLowerCase());
+          return filterOk && searchOk;
+        })
+        .map((n) => n.id)
+    );
+  }, [database, activeFilter, searchQuery]);
 
   const categories = useMemo(() => {
     if (!database?.nodes?.length) return [];
@@ -172,7 +189,10 @@ export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, 
 
                         {/* Project rows */}
                         {subExpanded &&
-                          projects.map((proj) => (
+                          projects.map((proj) => {
+                            const isMatch  = matchingIds !== null && matchingIds.has(proj.id);
+                            const isDimmed = matchingIds !== null && !isMatch;
+                            return (
                             <div key={proj.id} style={{ position: 'relative' }}>
                               {/* Nested structural indicator line */}
                               <div style={{
@@ -185,7 +205,7 @@ export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, 
                               }}/>
 
                               <button
-                                className="hud-row"
+                                className={`hud-row${isMatch ? ' hud-proj-match' : ''}${isDimmed ? ' hud-proj-dim' : ''}`}
                                 onClick={() => onNodeInteract?.(proj)}
                                 onMouseEnter={() => onNodeFocus?.(proj)}
                                 onMouseLeave={() => onNodeFocus?.(null)}
@@ -206,7 +226,8 @@ export default function TelemetryHUD({ database, expandedNodes, onNodeInteract, 
                                 {proj.title}
                               </button>
                             </div>
-                          ))}
+                            );
+                          })}
                       </div>
                     );
                   })}

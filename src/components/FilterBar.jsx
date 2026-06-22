@@ -63,10 +63,15 @@ const FilterBar = forwardRef(({ onFilterChange, onSearchChange, onAboutMe, isRad
         </div>
 
         <button
-          className={`filter-toggle-btn ${isFilterExpanded ? 'active' : ''}`}
+          className={`filter-toggle-btn ${isFilterExpanded ? 'active' : ''} ${!isFilterExpanded && activeFilter !== 'All' ? 'filter-on' : ''}`}
           onClick={() => setIsFilterExpanded(!isFilterExpanded)}
         >
-          FILTER {isFilterExpanded ? '−' : '+'}
+          {isFilterExpanded
+            ? `FILTER −`
+            : activeFilter !== 'All'
+              ? `· ${activeFilter.toUpperCase()} ·`
+              : 'FILTER +'
+          }
         </button>
 
         <button

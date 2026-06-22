@@ -68,6 +68,21 @@ const GRID_TILE_IMAGE_OVERRIDE_CSS = `
      16px/20px panel padding like every other section, so we zero out
      VideoBlock's own margin here to avoid doubling up the whitespace. */
   .bim-video-panel > div { margin: 0 !important; }
+
+  /* Mobile: collapse the Overview/Cover side-by-side split into a vertical
+     stack. minmax(280px, 5fr) / 7fr cannot fit on a narrow viewport and
+     causes horizontal overflow, making the layout feel like a draggable canvas. */
+  @media (max-width: 640px) {
+    .bim-overview-cover-row {
+      grid-template-columns: 1fr !important;
+    }
+    .bim-detail-grid {
+      padding: 12px 12px 40px !important;
+    }
+    .bim-sidebar {
+      display: none !important;
+    }
+  }
 `;
 
 function GridImageTileStyles() {
@@ -147,7 +162,7 @@ function GalleryGrid({ blocks, blockRenderer, keyOffset }) {
       style={{
         display: 'grid',
         gap: '10px',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(560px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
       }}
     >
       {blocks.map((block, i) => (
@@ -189,12 +204,10 @@ export default function BIMDashboard({ project, blockRenderer }) {
 
   const videoBlocks = content.filter((block) => regionMatch(slotOf(block), ['video']));
 
-  const powerbiBlocks = content.filter((block) => regionMatch(slotOf(block), ['powerbi']));
-
   const detailsBlocks = content.filter((block) => regionMatch(slotOf(block), ['details']));
 
   return (
-    <div style={{ width: '100%', height: '100%', overflowY: 'auto', background: 'transparent' }}>
+    <div style={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden', background: 'transparent' }}>
       <GridImageTileStyles />
 
       {/* Hero viewer */}
@@ -219,7 +232,7 @@ export default function BIMDashboard({ project, blockRenderer }) {
       </div>
 
       {/* Detail grid */}
-      <div style={{
+      <div className="bim-detail-grid" style={{
         width: '100%',
         maxWidth: '100%',
         margin: '0',
@@ -232,7 +245,7 @@ export default function BIMDashboard({ project, blockRenderer }) {
 
         {/* Sidebar */}
         {sidebarBlocks.length > 0 && (
-          <aside style={{ ...glassPanel, alignSelf: 'start' }}>
+          <aside className="bim-sidebar" style={{ ...glassPanel, alignSelf: 'start' }}>
             <PanelLabel>Index</PanelLabel>
             <div style={{ padding: '16px 20px' }}>
               {sidebarBlocks.map((block, i) => blockRenderer(block, i + 1))}
@@ -245,11 +258,11 @@ export default function BIMDashboard({ project, blockRenderer }) {
 
           {/* Row 1: Overview (text) + Cover (single image) — only this row uses the narrow/wide split */}
           {(overviewBlocks.length > 0 || coverBlocks.length > 0) && (
-            <div style={{
+            <div className="bim-overview-cover-row" style={{
               display: 'grid',
               gap: '16px',
               gridTemplateColumns: overviewBlocks.length > 0 && coverBlocks.length > 0
-                ? 'minmax(280px, 5fr) 7fr' // text column gets a sane minimum before it gets squeezed
+                ? 'minmax(280px, 5fr) 7fr'
                 : '1fr',
             }}>
               {/* Overview Block */}
@@ -292,39 +305,6 @@ export default function BIMDashboard({ project, blockRenderer }) {
                 <div className="bim-video-panel" style={{ width: '100%', maxWidth: '960px' }}>
                   {videoBlocks.map((block, i) => blockRenderer(block, i + 3500))}
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* Row 3.5: Power BI — full-width, fixed-height like the hero. Unlike
-              Video, report canvases need real width to render visuals legibly
-              and don't crop/scale gracefully, so this isn't capped to 960px
-              or wrapped in an aspect-ratio tile the way Gallery images are. */}
-          {powerbiBlocks.length > 0 && (
-            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
-              <PanelLabel>Dashboard</PanelLabel>
-              <div style={{
-                padding: '16px 20px',
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-              }}>
-                {powerbiBlocks.map((block, i) => (
-                  <div
-                    key={`powerbi-${i}`}
-                    style={{
-                      width: '100%',
-                      height: 'clamp(420px, 60vh, 720px)',
-                      borderRadius: '6px',
-                      overflow: 'hidden',
-                      border: GLASS_BDR,
-                      position: 'relative',
-                    }}
-                  >
-                    {blockRenderer(block, i + 3800)}
-                  </div>
-                ))}
               </div>
             </div>
           )}

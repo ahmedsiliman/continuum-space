@@ -180,8 +180,8 @@ const GlobeMap = ({ location }) => {
           fontFamily: 'monospace',
         }}
       >
-        LAT: {location?.lat?.toFixed(4) || '---'} / LNG:{' '}
-        {location?.lng?.toFixed(4) || '---'}
+        {/* LAT: {location?.lat?.toFixed(4) || '---'} / LNG:{' '}
+        {location?.lng?.toFixed(4) || '---'} */}
       </div>
     </div>
   );

@@ -217,7 +217,9 @@ return (
     backgroundPosition: 'center',
     position: 'relative', 
     overflow: 'hidden' 
+    
   }}>
+    
     <div style={{
       opacity: isPaused ? 0.15 : 1,
       transition: 'opacity 0.8s ease',
