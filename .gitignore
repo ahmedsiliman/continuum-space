@@ -20,7 +20,6 @@ public/projects/models/
 .env
 .env.local
 scripts/.preview-token-registry.json
-supabase\.temp
 
 # Editor directories and files
 .vscode/*

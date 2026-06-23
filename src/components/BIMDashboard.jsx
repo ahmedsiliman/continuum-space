@@ -162,7 +162,7 @@ function GalleryGrid({ blocks, blockRenderer, keyOffset }) {
       style={{
         display: 'grid',
         gap: '10px',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(560px, 1fr))',
       }}
     >
       {blocks.map((block, i) => (

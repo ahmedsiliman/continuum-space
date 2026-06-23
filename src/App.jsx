@@ -21,13 +21,21 @@ function readURLParams() {
 }
 
 function writeURLParams(filter, q) {
-  const params = new URLSearchParams();
-  if (filter && filter !== 'All') params.set('filter', filter);
-  if (q) params.set('q', q);
+  // Start from the current URL so we never drop params we don't own
+  // (previewToken, modelUrl, admin, etc.)
+  const params = new URLSearchParams(window.location.search);
+  if (filter && filter !== 'All') {
+    params.set('filter', filter);
+  } else {
+    params.delete('filter');
+  }
+  if (q) {
+    params.set('q', q);
+  } else {
+    params.delete('q');
+  }
   const search = params.toString();
   const next = search ? `?${search}` : window.location.pathname;
-  // replaceState to avoid cluttering history on every keystroke;
-  // pushState is reserved for explicit navigation (see below).
   window.history.replaceState({ filter, q }, '', next);
 }
 
