@@ -1,13 +1,13 @@
 id,parent_id,title,type,layout,externalApp,modelData,filter
 root,,CONTINUUM SPACE,Root,,,,
-cat_bim,root,BIM,Category,,,,BIM
+cat_bim,root,BIM,Category,,,,"BIM,Computational"
 cat_acd,root,Academic,Category,,,,Architecture
 cat_art,root,Art,Category,,,,Art
 cat_cmp,root,Computation,Category,,,,Computational
 sub_bim-crd,cat_bim,BIM Coordination,SubCategory,,,,BIM
-sub_bim-ats,cat_bim,BIM Automation Scripts,SubCategory,,,,BIM
-sub_bim-sfd,cat_bim,BIM Software Development,SubCategory,,,,BIM
-sub_bim-dta,cat_bim,BIM Data Analysis,SubCategory,,,,BIM
+sub_bim-ats,cat_bim,BIM Automation Scripts,SubCategory,,,,"BIM,Computational"
+sub_bim-sfd,cat_bim,BIM Software Development,SubCategory,,,,"BIM,Computational"
+sub_bim-dta,cat_bim,BIM Data Analysis,SubCategory,,,,"BIM,Computational"
 sub_acd-arc,cat_acd,Academic Architecture,SubCategory,,,,Architecture
 sub_acd-urd,cat_acd,Academic Urban Design,SubCategory,,,,Urban
 sub_art-ink,cat_art,Ink,SubCategory,,,,Art
@@ -20,12 +20,13 @@ bim-crd_03,sub_bim-crd,ZED West towers,Project,bim_dashboard,http://127.0.0.1:55
 bim-crd_04,sub_bim-crd,Belle Vie Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Bellevie-V03A.ifc,BIM
 bim-crd_05,sub_bim-crd,Southern Dunes Villas,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Dunes_R04-A07D.ifc,BIM
 bim-crd_06,sub_bim-crd,Aquellum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
-bim-crd_07,sub_bim-crd,REWE Portz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc,"BIM, featured"
+bim-crd_07,sub_bim-crd,REWE Campus Porz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc,"BIM, featured"
 bim-crd_08,sub_bim-crd,Hittin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
-bim-ats_01,sub_bim-ats,Batch Exporter Script,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,Computational
-bim-sfd_01,sub_bim-sfd,Revit C# Plugin Live Model Dashboard,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,Computational,BIM"
-bim-dta_01,sub_bim-dta,Lifecycle LCA Extraction,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,BIM"
-acd-arc_01,sub_acd-arc,Micro to Macro Timber,Project,split,,,Architecture
+bim-ats_01,sub_bim-ats,Automated cullout_Dynamo,Project,split,,,"Computational,BIM"
+bim-sfd_01,sub_bim-sfd,Revit C# Addin_Live Model Dashboard,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,Computational,BIM"
+bim-sfd_02,sub_bim-sfd,Revit C# Addin_Slope Analysis Revit Addin,Project,split,,,"Computational,BIM"
+bim-dta_01,sub_bim-dta,Micro to Macro LCA / BIM,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,BIM, Computational"
+acd-arc_01,sub_acd-arc,Placeholder 01,Project,split,,,Architecture
 acd-arc_02,sub_acd-arc,Factory Adaptive Reuse,Project,split,,,Architecture
 acd-arc_03,sub_acd-arc,Architecture Concept 03,Project,split,,,Architecture
 acd-urd_01,sub_acd-urd,Berlin Masterplan,Project,split,,,Urban

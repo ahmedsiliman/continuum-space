@@ -1,13 +1,13 @@
 node_id,title,description,image_url,address
 root,CONTINUUM SPACE,The central hub of the Continuum Space universe. Explore various domains from BIM to Art.,,,
-cat_bim,BIM,Building Information Modeling and Coordination. Exploring the intersection of architecture and data.,/projects/BIM_CRD/Newgiza/NEWGIZA_Cover.jpg,
+cat_bim,BIM,Building Information Modeling and Coordination. Exploring the intersection of architecture and data.,/projects/BIM_CRD/Newgiza/NEWGIZA_OCover.jpg,
 cat_acd,Academic,Academic research and projects in architecture and urban design.,,
 cat_art,Art,Creative expressions through digital and traditional media.,/projects/Art/Blackheart/BLCK HRT-01.jpg,
 cat_cmp,Computation,Computational design and software development for the built environment.,/projects/CMP/Dynamo_lintel/lintel-threshold script.png,
 sub_bim-crd,BIM Coordination,Specialized workflows for clash detection and model coordination.,/projects/BIM_CRD/Zedwest/Zedwest_01.jpg,
 sub_bim-ats,BIM Automation Scripts,Automating repetitive tasks in BIM workflows for efficiency.,
 sub_bim-sfd,BIM Software Development,Developing custom tools and plugins for BIM applications.,
-sub_bim-dta,BIM Data Analysis,Extracting and analyzing data from BIM models for informed decision-making.,/projects/BIM_DTA/LCA/MNMS_OOCover.png,
+sub_bim-dta,BIM Data Analysis,Extracting and analyzing data from BIM models for informed decision-making.,/projects/BIM_DTA/LCA/MNMS_OOCover.jpg,
 sub_acd-arc,Academic Architecture,Research and projects focused on architectural design and theory.,/projects/ACD/Timber/Timber_01.jpg,
 sub_acd-urd,Academic Urban Design,Exploring urban design principles and strategies through academic research.,/projects/ACD/Berlin/Berlin_01.jpg,
 sub_art-ink,Ink,Traditional ink drawings and sketches.,/projects/Art/Blackheart/BLCK HRT03.jpg,
@@ -15,18 +15,20 @@ sub_art-dgt,Digital,Digital art and visualizations exploring contemporary themes
 sub_cmp-sfd,Software Development,Building tools and plugins for architectural workflows.,/projects/CMP/Railing/Artboard 12.png,
 sub_cmp-dsn,Design,Generative and computational design explorations.,/projects/CMP/GenerativeScript02/GenerativeScript02_01.png,
 
-bim-crd_01,NewGiza Westrige,BIM coordination for high-end residential Units.,/projects/BIM_CRD/Newgiza/NEWGIZA_Cover.jpg,"New Giza, Giza, Egypt"
-bim-crd_02,Sodic Spectrum,MEP coordination and structural alignment for commercial hubs.,/projects/BIM_CRD/SodicSpectrum/SodicSpectrum_01.jpg,"New Cairo, Cairo Egypt"
-bim-crd_03,ZED West towers,High-rise residential coordination and technical documentation.,/projects/BIM_CRD/Zedwest/Zedwest_01.jpg,"Sheikh Zayed City, Giza, Egypt"
-bim-crd_04,Belle Vie Villas,Landscape and architectural coordination for luxury villas.,/projects/BIM_CRD/Bellevie/Bellevie_Cover.jpg,"New Zayed, Giza, Egypt"
+bim-crd_01,NewGiza Westrige,BIM coordination for high-end residential Units.,/projects/BIM_CRD/Newgiza/NEWGIZA_OCover.jpg,"New Giza, Giza, Egypt"
+bim-crd_02,Sodic Spectrum,MEP coordination and structural alignment for commercial hubs.,/projects/BIM_CRD/SodicSpectrum/SodicSpectrum_OCover.jpg,"New Cairo, Cairo Egypt"
+bim-crd_03,ZED West towers,High-rise residential coordination and technical documentation.,/projects/BIM_CRD/Zedwest/Zedwest_OCover.jpg,"Sheikh Zayed City, Giza, Egypt"
+bim-crd_04,Belle Vie Villas,Landscape and architectural coordination for luxury villas.,/projects/BIM_CRD/Bellevie/Bellevie_OCover.jpg,"New Zayed, Giza, Egypt"
 bim-crd_05,Southern Dunes,Roofing systems for coastal hospitality developments.,/projects/BIM_CRD/SDunes/SDunes_OCover.jpg,"Tabuk, Saudi Arabia"
-bim-crd_06,Aquellum,Mixed-use development coordination.,/projects/BIM_CRD/Aquellum/Aquellum-cover.png,"Tabuk, Saudi Arabia"
+bim-crd_06,Aquellum,Mixed-use development coordination.,/projects/BIM_CRD/Aquellum/Aquellum-OCover.jpg,"Tabuk, Saudi Arabia"
 bim-crd_07,REWE PORZ,Urban scale BIM coordination and planning.,/projects/BIM_CRD/Rewe/REWE_OCover.jpg,"Cologne, Germany"
 bim-crd_08,HITTIN,Smart city infrastructure and building coordination.,/projects/BIM_CRD/Hittin/HITTIN_OCover.jpg,"Riyadh, Saudi Arabia"
 
 bim-ats_01,Batch Exporter Script,Automating the export of BIM data for streamlined workflows.,,
 
 bim-sfd_01,Revit C# Plugin Live Model Dashboard,Real-time model monitoring and data visualization for Revit projects.,,
+bim-sfd_02,Revit C# SLope Analysis, Analyse Slopes based on defined values and coloers the faces,,
+
 
 bim-dta_01,Micro to macro_LCA,Extracting lifecycle data for environmental impact analysis With BIM integration,/projects/BIM_DTA/LCA/MNMS_OCover.png,"Berlin, Germany"
 

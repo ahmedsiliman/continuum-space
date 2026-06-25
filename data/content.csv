@@ -55,6 +55,8 @@ bim-crd_07,2,overview,Text," REWE IT Campus Porz is the central technology and s
 bim-crd_07,2,overview,Text,"Roles:\n• As-built buildings coordination and modeling, including using preliminary laser scan point cloud data.\n•  Setting up and defining project coordinates.\n• BIM Modeling - Architectural drawings production.\n• Maintenance of project's BIM models , coordinates, geometry, spaces and data changes between design, technical, and existing or to be demolished buildings.\n• Architectural Drawings production."
 bim-crd_07,2,overview,Text,"Tools: `Revit` `Dynamo` `Rhino Inside Revit``Grasshopper` `Rhinoceros`"
 bim-crd_07,2,overview,Text,"Rendered Images and Model credits: LAVA Berlin Studio, REWE Group"
+bim-crd_07,2,gallery,Image,/projects/BIM_CRD/Rewe/REWE_01.png
+bim-crd_07,2,gallery,Image,/projects/BIM_CRD/Rewe/REWE_02.jpg
 
 bim-crd_08,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
 bim-crd_08,2,cover,Image,/projects/BIM_CRD/Hittin/HITTIN_Cover.jpg
@@ -63,14 +65,20 @@ bim-crd_08,2,overview,Text,"Roles:\n• Setting up project topography and coordi
 bim-crd_08,2,overview,Text,"Tools: `Revit` `Dynamo` `Rhino Inside Revit` `Grasshopper` `Rhinoceros`"
 bim-crd_08,2,overview,Text,"Rendered Images and Model credits: LAVA Berlin Studio, AWFA"
 
-bim-ats_01,1,hero,BIM_Viewer,/projects/models/placeholder.ifc
-bim-ats_01,2,overview,Text,Documentation for the Batch Exporter Script automation.
+bim-ats_01,2,cover,video,https://vimeo.com/1204298647?fl=ip&fe=ec
+bim-ats_01,3,overview,Text,"Description:\n• Dynamo Script for automated cullout of Revit model elements based on Room styles parameter values.\n• Create callout views based on selected Rooms by a certain room parameter.\n• Set the callout view boundaries to match rooms boundaries.\n• Assign certain view template to the generated callout views, that helped also with project browser views organizing.\n• In this case i have an assigned room parameter called room style (that defines room material finish types).\n• Combine multiple rooms with no separation walls to create a single callout view.\n• Give the generated callout views a unique custom naming."
+
+bim-ats_01,3,overview,Text,"Tools: `Revit` `Dynamo Studio`"
 
 bim-sfd_01,1,hero,BIM_Viewer,/projects/models/ZEDWest_E01.ifc
 bim-sfd_01,2,cover,Image,/projects/BIM_SFD/BIM-Live-dashboard1_01.png
 bim-sfd_01,3,overview,Text,"Description:\n• Revit Add-in | Live Model Dashboard.\n• the Idea was to make a data-visualization add-in for Revit—exporting model data to JSON/Excel and maybe visualizing it in Power BI.\n• What about a web-based dashboard living inside Revit?\n• functions in WIP prototype:\n• Filter elements by Category, Level, Worksets, and parameters with (AND / OR rules) ,it's simple but very useful filter.\n• Feed selected parameter data into a Tree Map as ( Group / Stack / Value numeric value parameter ).\n• Visualize percentages, select elements, and color the model based on the dashboard."
 bim-sfd_01,3,overview,Text,"Tools: `Revit API` `C#` `JS/HTML/CSS`"
 bim-sfd_01,4,video,video,https://vimeo.com/1203053767?share=copy&fl=sv&fe=ci
+
+bim-sfd_02,2,cover,video,https://vimeo.com/1204298647?fl=ip&fe=ec
+bim-sfd_02,3,overview,Text,"Description:\n• Analyzes and visualizes floor slopes by painting floor element faces\n• Allows user input to select floors and define minimum and maximum slope values (%)\n• Displays selected floor count and visualized slope results according to the displayed legend.\n• Includes Analyze and Reset Paint actions.\n• Features a WPF-based UI for a clean and responsive user experience.\n• The Addin should be compatible with Revit versions from 2020 to 2025\n• A single Setup File is created to target Revit versions 2020-2025 using inno setup."
+bim-sfd_02,3,overview,Text,"Tools: `Revit API` `C#` `VS` `WPF` `Inno Setup`"
 
 bim-dta_01,1,hero,powerbi,https://app.powerbi.com/view?r=eyJrIjoiN2YzNjNmMmEtZDVhZi00ODg1LWFlNTMtN2RkZjZkZWVjNmUwIiwidCI6IjExMTliYjkwLTg4YmEtNDg5NC1iN2YxLWRlMjZlMTI5ZDk3NyIsImMiOjR9
 bim-dta_01,2,cover,Image,/projects/BIM_DTA/LCA/MNMS_01.png
