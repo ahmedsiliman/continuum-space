@@ -139,7 +139,7 @@ export default function MagneticField({ nodesRef, isPaused, dragStateRef, draggi
           ? ring.radius + g * ring.sigmaOut
           : ring.radius + g * ring.sigmaIn);
 
-        const speed = (0.28 + Math.random() * 0.14) / r;
+        const speed = (0.28*scale + Math.random() * 0.14*scale) / r;
         const isBright = Math.random() < ring.brightRatio;
         const angle = Math.random() * Math.PI * 2;
         return {
@@ -222,11 +222,11 @@ export default function MagneticField({ nodesRef, isPaused, dragStateRef, draggi
           const dy    = p.y - ny;
 
           const isBeingDragged = dragProgress > 0 && node === draggedNode;
-          const radius  = isBeingDragged ? NODE_RADIUS + dragProgress * 160 : NODE_RADIUS;
-          const force   = isBeingDragged ? NODE_STRENGTH + dragProgress * 18 : NODE_STRENGTH;
+          const radius  = isBeingDragged ? NODE_RADIUS + dragProgress * 160 * scale : NODE_RADIUS * scale;
+          const force   = isBeingDragged ? NODE_STRENGTH + dragProgress * 18 * scale : NODE_STRENGTH * scale;
 
           const dist2 = dx * dx + dy * dy;
-          if (dist2 < radius * radius && dist2 > 1) {
+          if (dist2 < radius * radius*scale && dist2 > 1) {
             const dist = Math.sqrt(dist2);
             p.vx += (dx / dist) * force;
             p.vy += (dy / dist) * force;
