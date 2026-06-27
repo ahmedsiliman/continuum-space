@@ -76,6 +76,12 @@ const GRID_TILE_IMAGE_OVERRIDE_CSS = `
     .bim-overview-cover-row {
       grid-template-columns: 1fr !important;
     }
+    .bim-image-desc-row {
+      grid-template-columns: 1fr !important;
+    }
+    .bim-video-desc-row {
+      grid-template-columns: 1fr !important;
+    }
     .bim-detail-grid {
       padding: 12px 12px 40px !important;
     }
@@ -196,13 +202,16 @@ export default function BIMDashboard({ project, blockRenderer }) {
 
   const overviewBlocks = content.filter((block) => regionMatch(slotOf(block), ['overview']));
 
-  // Cover: first block in the `cover` region only. Anything else tagged
-  // `cover` is ignored — move it to `gallery` in the CSV if it should render.
-  const coverBlocks = content.filter((block) => regionMatch(slotOf(block), ['cover'])).slice(0, 1);
+  // Cover: all blocks in the `cover` region — accepts images and video blocks.
+  const coverBlocks = content.filter((block) => regionMatch(slotOf(block), ['cover']));
+
+  const imageBlocks       = content.filter((block) => regionMatch(slotOf(block), ['image']));
+  const imageDescBlocks   = content.filter((block) => regionMatch(slotOf(block), ['image_description']));
+
+  const videoBlocks       = content.filter((block) => regionMatch(slotOf(block), ['video']));
+  const videoDescBlocks   = content.filter((block) => regionMatch(slotOf(block), ['video_description']));
 
   const galleryBlocks = content.filter((block) => regionMatch(slotOf(block), ['gallery']));
-
-  const videoBlocks = content.filter((block) => regionMatch(slotOf(block), ['video']));
 
   const detailsBlocks = content.filter((block) => regionMatch(slotOf(block), ['details']));
 
@@ -275,11 +284,11 @@ export default function BIMDashboard({ project, blockRenderer }) {
                 </div>
               )}
 
-              {/* Cover Block — single image only */}
+              {/* Cover Block */}
               {coverBlocks.length > 0 && (
                 <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
                   <PanelLabel>Cover</PanelLabel>
-                  <div style={{ padding: '16px 20px', flex: 1 }}>
+                  <div className="bim-video-panel" style={{ padding: '16px 20px', flex: 1 }}>
                     <RegionContent blocks={coverBlocks} blockRenderer={blockRenderer} keyOffset={2000} />
                   </div>
                 </div>
@@ -287,7 +296,74 @@ export default function BIMDashboard({ project, blockRenderer }) {
             </div>
           )}
 
-          {/* Row 2: Gallery — full width, every block tiles regardless of type */}
+          {/* Row 2: Image + optional Image Description side panel */}
+          {imageBlocks.length > 0 && (
+            <div
+              className="bim-image-desc-row"
+              style={{
+                display: 'grid',
+                gap: '16px',
+                gridTemplateColumns: imageDescBlocks.length > 0 ? '7fr 4fr' : '1fr',
+                alignItems: 'stretch',
+              }}
+            >
+              {/* Image panel */}
+              <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                <PanelLabel>Image</PanelLabel>
+                <div
+                  className="bim-grid-image-tile"
+                  style={{ padding: '16px 20px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  {imageBlocks.map((block, i) => blockRenderer(block, i + 3200))}
+                </div>
+              </div>
+
+              {/* Image description panel */}
+              {imageDescBlocks.length > 0 && (
+                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                  <PanelLabel>Description</PanelLabel>
+                  <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
+                    <RegionContent blocks={imageDescBlocks} blockRenderer={blockRenderer} keyOffset={3300} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Row 3: Video + optional Video Description side panel */}
+          {videoBlocks.length > 0 && (
+            <div
+              className="bim-video-desc-row"
+              style={{
+                display: 'grid',
+                gap: '16px',
+                gridTemplateColumns: videoDescBlocks.length > 0 ? '7fr 4fr' : '1fr',
+                alignItems: 'stretch',
+              }}
+            >
+              {/* Video player panel */}
+              <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                <PanelLabel>Video</PanelLabel>
+                <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <div className="bim-video-panel" style={{ width: '90%' }}>
+                    {videoBlocks.map((block, i) => blockRenderer(block, i + 3500))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Video description panel */}
+              {videoDescBlocks.length > 0 && (
+                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                  <PanelLabel>Description</PanelLabel>
+                  <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
+                    <RegionContent blocks={videoDescBlocks} blockRenderer={blockRenderer} keyOffset={3600} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Row 4: Gallery — full width, every block tiles regardless of type */}
           {galleryBlocks.length > 0 && (
             <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
               <PanelLabel>Gallery</PanelLabel>
@@ -297,19 +373,7 @@ export default function BIMDashboard({ project, blockRenderer }) {
             </div>
           )}
 
-          {/* Row 3: Video — single wide, centered block (not tiled, not full-bleed) */}
-          {videoBlocks.length > 0 && (
-            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
-              <PanelLabel>Video</PanelLabel>
-              <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                <div className="bim-video-panel" style={{ width: '100%', maxWidth: '960px' }}>
-                  {videoBlocks.map((block, i) => blockRenderer(block, i + 3500))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Row 4: Details — full-width text/specs, sits at the bottom when present */}
+          {/* Row 5: Details — full-width text/specs, sits at the bottom when present */}
           {detailsBlocks.length > 0 && (
             <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
               <PanelLabel>Details</PanelLabel>

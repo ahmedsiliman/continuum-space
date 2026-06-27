@@ -59,6 +59,12 @@ const LAYOUT_SPLIT_CSS = `
     .bim-overview-cover-row {
       grid-template-columns: 1fr !important;
     }
+    .bim-image-desc-row {
+      grid-template-columns: 1fr !important;
+    }
+    .bim-video-desc-row {
+      grid-template-columns: 1fr !important;
+    }
     .bim-detail-grid {
       padding: 12px 12px 40px !important;
     }
@@ -172,8 +178,11 @@ export default function LayoutSplit({ project, blockRenderer }) {
   // Cover: all blocks in the `cover` region — accepts images and video blocks.
   const coverBlocks   = content.filter((b) => regionMatch(slotOf(b), ['cover']));
   const galleryBlocks = content.filter((b) => regionMatch(slotOf(b), ['gallery']));
-  const videoBlocks   = content.filter((b) => regionMatch(slotOf(b), ['video']));
-  const detailsBlocks = content.filter((b) => regionMatch(slotOf(b), ['details', 'right', 'right_viewer']));
+  const imageBlocks       = content.filter((b) => regionMatch(slotOf(b), ['image']));
+  const imageDescBlocks   = content.filter((b) => regionMatch(slotOf(b), ['image_description']));
+  const videoBlocks       = content.filter((b) => regionMatch(slotOf(b), ['video']));
+  const videoDescBlocks   = content.filter((b) => regionMatch(slotOf(b), ['video_description']));
+  const detailsBlocks     = content.filter((b) => regionMatch(slotOf(b), ['details', 'right', 'right_viewer']));
 
   return (
     <div style={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden', background: 'transparent' }}>
@@ -245,6 +254,74 @@ export default function LayoutSplit({ project, blockRenderer }) {
             </div>
           )}
 
+
+          {/* Row 3: Image + optional Image Description side panel */}
+          {imageBlocks.length > 0 && (
+            <div
+              className="bim-image-desc-row"
+              style={{
+                display: 'grid',
+                gap: '16px',
+                gridTemplateColumns: imageDescBlocks.length > 0 ? '7fr 4fr' : '1fr',
+                alignItems: 'stretch',
+              }}
+            >
+              {/* Image panel */}
+              <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                <PanelLabel>Image</PanelLabel>
+                <div
+                  className="bim-grid-image-tile"
+                  style={{ padding: '16px 20px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  {imageBlocks.map((block, i) => blockRenderer(block, i + 3200))}
+                </div>
+              </div>
+
+              {/* Image description panel — text blocks get inner padding via RegionContent */}
+              {imageDescBlocks.length > 0 && (
+                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                  <PanelLabel>Description</PanelLabel>
+                  <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
+                    <RegionContent blocks={imageDescBlocks} blockRenderer={blockRenderer} keyOffset={3300} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Row 4: Video + optional Video Description side panel */}
+          {videoBlocks.length > 0 && (
+            <div
+              className="bim-video-desc-row"
+              style={{
+                display: 'grid',
+                gap: '16px',
+                gridTemplateColumns: videoDescBlocks.length > 0 ? '7fr 4fr' : '1fr',
+                alignItems: 'stretch',
+              }}
+            >
+              {/* Video player panel */}
+              <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                <PanelLabel>Video</PanelLabel>
+                <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <div className="bim-video-panel" style={{ width: '94%' }}>
+                    {videoBlocks.map((block, i) => blockRenderer(block, i + 3500))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Video description panel — text blocks get inner padding via RegionContent */}
+              {videoDescBlocks.length > 0 && (
+                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                  <PanelLabel>Description</PanelLabel>
+                  <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
+                    <RegionContent blocks={videoDescBlocks} blockRenderer={blockRenderer} keyOffset={3600} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Row 2: Gallery */}
           {galleryBlocks.length > 0 && (
             <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
@@ -254,20 +331,8 @@ export default function LayoutSplit({ project, blockRenderer }) {
               </div>
             </div>
           )}
-
-          {/* Row 3: Video */}
-          {videoBlocks.length > 0 && (
-            <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
-              <PanelLabel>Video</PanelLabel>
-              <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                <div className="bim-video-panel" style={{ width: '100%', maxWidth: '960px' }}>
-                  {videoBlocks.map((block, i) => blockRenderer(block, i + 3500))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Row 4: Details — also catches `right` / `right_viewer` slots
+          
+          {/* Row 5: Details — also catches `right` / `right_viewer` slots
               that the original LayoutSplit used as its main content pane. */}
           {detailsBlocks.length > 0 && (
             <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>

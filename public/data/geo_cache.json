@@ -30,5 +30,25 @@
   "Berlin, Germany": {
     "lat": 52.5173885,
     "lng": 13.3951309
+  },
+  "Brandenburg, Germany": {
+    "lat": 52.8455492,
+    "lng": 13.2461296
+  },
+  "Marseille, France": {
+    "lat": 43.2963986,
+    "lng": 5.3777888
+  },
+  "Poznan, Poland": {
+    "lat": 52.4006632,
+    "lng": 16.9197326
+  },
+  "Aswan, Egypt": {
+    "lat": 24.091071,
+    "lng": 32.897306
+  },
+  "Rio de Janeiro, Brazil": {
+    "lat": -22.9110137,
+    "lng": -43.2093727
   }
 }

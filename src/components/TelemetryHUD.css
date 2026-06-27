@@ -124,7 +124,7 @@
     width: 240px;
     left: 16px;
     top: 72px; /* Start below the FilterBar on mobile */
-    height: calc(90vh - 72px - 180px);
+    height: calc(90vh - 72px - 220px);
   }
 
   .hud-toggle-btn {
