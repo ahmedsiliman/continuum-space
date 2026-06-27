@@ -14,6 +14,7 @@ sub_art-ink,cat_art,Ink,SubCategory,,,,Art
 sub_art-dgt,cat_art,Digital,SubCategory,,,,Art
 sub_cmp-sfd,cat_cmp,Software Development,SubCategory,,,,Computational
 sub_cmp-dsn,cat_cmp,Design,SubCategory,,,,Computational
+
 bim-crd_01,sub_bim-crd,NewGiza Westrige,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/NewGiza_H04-RB11.ifc,"featured, BIM"
 bim-crd_02,sub_bim-crd,Sodic Spectrum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Sodic_BLK25_C.ifc,BIM
 bim-crd_03,sub_bim-crd,ZED West towers,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/ZEDWest_E01.ifc,"featured, BIM"
@@ -22,25 +23,36 @@ bim-crd_05,sub_bim-crd,Southern Dunes Villas,Project,bim_dashboard,http://127.0.
 bim-crd_06,sub_bim-crd,Aquellum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
 bim-crd_07,sub_bim-crd,REWE Campus Porz,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/REWE-IT-PORZ.ifc,"BIM, featured"
 bim-crd_08,sub_bim-crd,Hittin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
-bim-ats_01,sub_bim-ats,Automated cullout_Dynamo,Project,split,,,"Computational,BIM"
+
+bim-ats_01,sub_bim-ats,Automated cullout Views,Project,split,,,"Computational,BIM"
+bim-ats_02,sub_bim-ats,prefab Railing System,Project,split,,,"Computational,BIM"
+bim-ats_03,sub_bim-ats,Customizable Lintel/Threshold,Project,split,,,"Computational,BIM"
+
 bim-sfd_01,sub_bim-sfd,Revit C# Addin_Live Model Dashboard,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,Computational,BIM"
 bim-sfd_02,sub_bim-sfd,Revit C# Addin_Slope Analysis Revit Addin,Project,split,,,"Computational,BIM"
+
 bim-dta_01,sub_bim-dta,Micro to Macro LCA / BIM,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,BIM, Computational"
-acd-arc_01,sub_acd-arc,Placeholder 01,Project,split,,,Architecture
+
+acd-arc_01,sub_acd-arc,Regeneration of forests,Project,split,,,Architecture
 acd-arc_02,sub_acd-arc,Factory Adaptive Reuse,Project,split,,,Architecture
-acd-arc_03,sub_acd-arc,Architecture Concept 03,Project,split,,,Architecture
-acd-urd_01,sub_acd-urd,Berlin Masterplan,Project,split,,,Urban
-acd-urd_02,sub_acd-urd,Urban Design Concept 02,Project,split,,,Urban
-acd-urd_03,sub_acd-urd,Urban Design Concept 03,Project,split,,,Urban
-art-ink_01,sub_art-ink,The Void Canvas,Project,center,,,Art
-art-ink_02,sub_art-ink,Ink Study 02,Project,center,,,Art
-art-ink_03,sub_art-ink,Ink Study 03,Project,center,,,Art
-art-dgt_01,sub_art-dgt,Network Graph Viz,Project,center,,,Art
+acd-arc_03,sub_acd-arc,Pavilion/ waste paper,Project,split,,,Architecture
+acd-arc_04,sub_acd-arc,Pavilion / recycled wood,Project,split,,,Architecture
+acd-arc_05,sub_acd-arc,Cats shelters/ Wood,Project,split,,,Architecture
+
+acd-urd_01,sub_acd-urd,UD Berlin Workshop,Project,split,,,Urban
+acd-urd_02,sub_acd-urd,UD Aswan Workshop,Project,split,,,Urban
+acd-urd_03,sub_acd-urd,UD Rio Workshop,Project,split,,,Urban
+
+art-ink_01,sub_art-ink,Ink Ornamental Canvas 01,Project,center,,,Art
+art-ink_02,sub_art-ink,Ink Ornamental Canvas 02,Project,center,,,Art
+
+art-dgt_01,sub_art-dgt,Ornamented Jellyfish,Project,center,,,Art
 art-dgt_02,sub_art-dgt,Black Heart,Project,center,,,Art
-art-dgt_03,sub_art-dgt,Digital Canvas 03,Project,center,,,Art
-cmp-sfd_01,sub_cmp-sfd,Data Parser Core,Project,split,,,Computational
-cmp-sfd_02,sub_cmp-sfd,Software Module 02,Project,split,,,Computational
-cmp-sfd_03,sub_cmp-sfd,Software Module 03,Project,split,,,Computational
-cmp-dsn_01,sub_cmp-dsn,Computational Logic,Project,split,,,Computational
+
+cmp-sfd_01,sub_cmp-sfd,Workflow 01,Project,split,,,Computational
+cmp-sfd_02,sub_cmp-sfd,Workflow 02,Project,split,,,Computational
+cmp-sfd_03,sub_cmp-sfd,Workflow 03,Project,split,,,Computational
+
+cmp-dsn_01,sub_cmp-dsn,Hinged Park,Project,split,,,Computational
 cmp-dsn_02,sub_cmp-dsn,Generative Script 02,Project,split,,,Computational
 cmp-dsn_03,sub_cmp-dsn,Generative Script 03,Project,split,,,Computational
