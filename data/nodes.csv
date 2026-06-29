@@ -1,19 +1,19 @@
 id,parent_id,title,type,layout,externalApp,modelData,filter
 root,,CONTINUUM SPACE,Root,,,,
-cat_bim,root,BIM,Category,,,,"BIM,Computational"
+cat_bim,root,BIM,Category,,,,"BIM,Computational,Featured"
 cat_acd,root,Academic,Category,,,,Architecture
 cat_art,root,Art,Category,,,,Art
-cat_cmp,root,Computation,Category,,,,Computational
-sub_bim-crd,cat_bim,BIM Coordination,SubCategory,,,,BIM
-sub_bim-ats,cat_bim,BIM Automation Scripts,SubCategory,,,,"BIM,Computational"
-sub_bim-sfd,cat_bim,BIM Software Development,SubCategory,,,,"BIM,Computational"
-sub_bim-dta,cat_bim,BIM Data Analysis,SubCategory,,,,"BIM,Computational"
+cat_cmp,root,Computation,Category,,,,"Computational,Featured"
+sub_bim-crd,cat_bim,BIM Coordination,SubCategory,,,,"BIM,Featured"
+sub_bim-ats,cat_bim,BIM Automation Scripts,SubCategory,,,,"BIM,Computational,Featured"
+sub_bim-sfd,cat_bim,BIM Software Development,SubCategory,,,,"BIM,Computational,Featured"
+sub_bim-dta,cat_bim,BIM Data Analysis,SubCategory,,,,"BIM,Computational,Featured"
 sub_acd-arc,cat_acd,Academic Architecture,SubCategory,,,,Architecture
 sub_acd-urd,cat_acd,Academic Urban Design,SubCategory,,,,Urban
 sub_art-ink,cat_art,Ink,SubCategory,,,,Art
 sub_art-dgt,cat_art,Digital,SubCategory,,,,Art
 sub_cmp-sfd,cat_cmp,Software Development,SubCategory,,,,Computational
-sub_cmp-dsn,cat_cmp,Design,SubCategory,,,,Computational
+sub_cmp-dsn,cat_cmp,Design,SubCategory,,,,"Computational,Featured"
 
 bim-crd_01,sub_bim-crd,NewGiza Westrige,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/NewGiza_H04-RB11.ifc,"featured, BIM"
 bim-crd_02,sub_bim-crd,Sodic Spectrum,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/Sodic_BLK25_C.ifc,BIM
@@ -25,11 +25,11 @@ bim-crd_07,sub_bim-crd,REWE Campus Porz,Project,bim_dashboard,http://127.0.0.1:5
 bim-crd_08,sub_bim-crd,Hittin,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,BIM
 
 bim-ats_01,sub_bim-ats,Automated cullout Views,Project,split,,,"Computational,BIM"
-bim-ats_02,sub_bim-ats,prefab Railing System,Project,split,,,"Computational,BIM"
-bim-ats_03,sub_bim-ats,Customizable Lintel/Threshold,Project,split,,,"Computational,BIM"
+bim-ats_02,sub_bim-ats,prefab Railing System,Project,split,,,"Computational,BIM,Featured"
+bim-ats_03,sub_bim-ats,Customizable Lintel/Threshold,Project,split,,,"Computational,BIM,Featured"
 
 bim-sfd_01,sub_bim-sfd,Revit C# Addin_Live Model Dashboard,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,Computational,BIM"
-bim-sfd_02,sub_bim-sfd,Revit C# Addin_Slope Analysis Revit Addin,Project,split,,,"Computational,BIM"
+bim-sfd_02,sub_bim-sfd,Revit C# Addin_Slope Analysis Revit Addin,Project,split,,,"Computational,BIM,Featured"
 
 bim-dta_01,sub_bim-dta,Micro to Macro LCA / BIM,Project,bim_dashboard,http://127.0.0.1:5500/ifc-viewer.html,/projects/models/placeholder.ifc,"featured,BIM, Computational"
 
@@ -49,10 +49,10 @@ art-ink_02,sub_art-ink,Ink Ornamental Canvas 02,Project,center,,,Art
 art-dgt_01,sub_art-dgt,Ornamented Jellyfish,Project,center,,,Art
 art-dgt_02,sub_art-dgt,Black Heart,Project,center,,,Art
 
-cmp-sfd_01,sub_cmp-sfd,Workflow 01,Project,split,,,Computational
-cmp-sfd_02,sub_cmp-sfd,Workflow 02,Project,split,,,Computational
-cmp-sfd_03,sub_cmp-sfd,Workflow 03,Project,split,,,Computational
+cmp-sfd_01,sub_cmp-sfd,Placeholder Workflow 01,Project,split,,,Computational
+cmp-sfd_02,sub_cmp-sfd,Placeholder Workflow 02,Project,split,,,Computational
+cmp-sfd_03,sub_cmp-sfd,Placeholder Workflow 03,Project,split,,,Computational
 
-cmp-dsn_01,sub_cmp-dsn,Hinged Park,Project,split,,,Computational
+cmp-dsn_01,sub_cmp-dsn,Hinged Park,Project,split,,,"Computational,Featured"
 cmp-dsn_02,sub_cmp-dsn,Generative Script 02,Project,split,,,Computational
 cmp-dsn_03,sub_cmp-dsn,Generative Script 03,Project,split,,,Computational

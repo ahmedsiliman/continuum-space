@@ -3,7 +3,7 @@ root,CONTINUUM SPACE,The central hub of the Continuum Space universe. Explore va
 cat_bim,BIM,Building Information Modeling and Coordination. Exploring the intersection of architecture and data.,/projects/BIM_CRD/Newgiza/NEWGIZA_OCover.jpg,
 cat_acd,Academic,Academic research and projects in architecture and urban design.,,
 cat_art,Art,Creative expressions through digital and traditional media.,/projects/Art/Digital_01/ART_JellyFish_01.png,
-cat_cmp,Computation,Computational design and software development for the built environment.,/projects/CMP/Dynamo_lintel/lintel-threshold script.png,
+cat_cmp,Computation,Computational design and software development for the built environment.,,
 sub_bim-crd,BIM Coordination,Specialized workflows for clash detection and model coordination.,/projects/BIM_CRD/Zedwest/Zedwest_01.jpg,
 sub_bim-ats,BIM Automation Scripts,Automating repetitive tasks in BIM workflows for efficiency.,
 sub_bim-sfd,BIM Software Development,Developing custom tools and plugins for BIM applications.,
@@ -12,9 +12,8 @@ sub_acd-arc,Academic Architecture,Research and projects focused on architectural
 sub_acd-urd,Academic Urban Design,Exploring urban design principles and strategies through academic research.,/projects/ACD/Berlin/Berlin_01.jpg,
 sub_art-ink,Ink,Traditional ink drawings and sketches.,,
 sub_art-dgt,Digital,Digital art and visualizations exploring contemporary themes.,/projects/Art/Blackheart/BLCKHRT_OCover.jpg,
-sub_cmp-sfd,Software Development,Building tools and plugins for architectural workflows.,/projects/CMP/Railing/Artboard 12.png,
-sub_cmp-dsn,Design,Generative and computational design explorations.,/projects/CMP/GenerativeScript02/GenerativeScript02_01.png,
-sub_cmp-sfd,Software Development,Building tools and plugins for architectural workflows.,/projects/CMP/Railing/Artboard 12.png,
+sub_cmp-dsn,Design,Generative and computational design explorations.,,
+sub_cmp-sfd,Software Development,Building tools and plugins for architectural workflows.,,
 
 bim-crd_01,NewGiza Westrige,BIM coordination for high-end residential Units.,/projects/BIM_CRD/Newgiza/NEWGIZA_OCover.jpg,"New Giza, Giza, Egypt"
 bim-crd_02,Sodic Spectrum,MEP coordination and structural alignment for commercial hubs.,/projects/BIM_CRD/SodicSpectrum/SodicSpectrum_OCover.jpg,"New Cairo, Cairo Egypt"
@@ -34,13 +33,13 @@ bim-sfd_02,Revit C# SLope Analysis, Analyse Slopes based on defined values and c
 
 bim-dta_01,Micro to macro_LCA,Extracting lifecycle data for environmental impact analysis With BIM integration,/projects/BIM_DTA/LCA/MNMS_OCover.png,"Berlin, Germany"
 
-acd-arc_01,Regeneration of forests,Exploring timber construction from small-scale details to large-scale architectural applications.,/projects/ACD/Timber/Timber_01.jpg,"Brandenburg, Germany"
+acd-arc_01,Regeneration of forests,Regeneration and reuse strategies for forest ecosystems.,/projects/ACAD_ARC/FrstRgn/FrstRgn_OCover.jpg,"Brandenburg, Germany"
 acd-arc_02,Factory Adaptive Reuse Strategies,Adaptive reuse strategies for transforming industrial buildings into vibrant spaces.,/projects/ACD/AdaptiveReuse/AdaptiveReuse_01.jpg,"Marseille, France"
 acd-arc_03,Pavilion / waste paper,Innovative architectural concepts and design explorations.,/projects/ACD/Concept03/Concept03_01.jpg,"Berlin, Germany"
 acd-arc_04,Pavilion / recycled wood,Innovative architectural concepts and design explorations.,/projects/ACD/Concept04/Concept04_01.jpg,"Berlin, Germany"
 acd-arc_05,Cats shelters from wood,Innovative architectural concepts and design explorations.,/projects/ACD/Concept05/Concept05_01.jpg,"Poznan, Poland"
 
-acd-urd_01,Participatory Urban Design Berlin,Urban design strategies for sustainable and resilient cities.,/projects/ACD/Berlin/Berlin_01.jpg,"Berlin, Germany"
+acd-urd_01,Participatory Urban Design Berlin,Urban design strategies for sustainable and resilient cities.,/projects/ACD_URD/InsurgentDesign/Marzahn_OCover.jpg,"Berlin, Germany"
 acd-urd_02,Participatory Urban Design Aswan workshop,Conceptual urban design projects exploring new typologies and public spaces.,/projects/ACD/UrbanDesign02/UrbanDesign02_01.jpg,"Aswan, Egypt"
 acd-urd_03,Participatory Urban Design Rio workshop,Experimental urban design proposals addressing contemporary challenges.,/projects/ACD/UrbanDesign03/UrbanDesign03_01.jpg,"Rio de Janeiro, Brazil"
 
