@@ -168,21 +168,92 @@ function GalleryGrid({ blocks, blockRenderer, keyOffset }) {
   );
 }
 
+// ── Multi-instance region helpers ─────────────────────────────────────────────
+//
+// Numbered region convention:
+//   image / image_1 / image_2 …          → landscape image panel (+ optional desc)
+//   image_description / image_description_1 …  → paired description
+//   portrait / portrait_1 / portrait_2 … → 2-up portrait column pair
+//   video / video_1 …                    → video panel (existing, unchanged)
+//   video_description / video_description_1 …  → paired description
+//
+// Un-suffixed names (image, portrait, video, …) are treated as instance 1
+// so existing CSV data needs no changes.
+
+// Returns a sorted, de-duped array of integer instance numbers present in
+// content for a given base region name, e.g. 'image' → [1, 2, 3]
+function collectInstances(content, slotOf, baseName) {
+  const nums = new Set();
+  for (const b of content) {
+    const slot = String(slotOf(b) || '').trim();
+    // bare name  → instance 1
+    if (slot === baseName) { nums.add(1); continue; }
+    // name_N     → instance N
+    const m = slot.match(new RegExp(`^${baseName}_(\\d+)$`));
+    if (m) nums.add(parseInt(m[1], 10));
+  }
+  return [...nums].sort((a, b) => a - b);
+}
+
+// Filters blocks that belong to a specific numbered instance.
+// Instance 1 matches both bare name and name_1.
+function blocksForInstance(content, slotOf, baseName, n) {
+  return content.filter((b) => {
+    const slot = String(slotOf(b) || '').trim();
+    if (n === 1 && slot === baseName) return true;
+    return slot === `${baseName}_${n}`;
+  });
+}
+
+// ── Portrait pair row ─────────────────────────────────────────────────────────
+// Lays two portrait images side-by-side in a fixed 2-col grid (3:4 ratio).
+// Any extra blocks beyond the first two are stacked beneath.
+function PortraitPairRow({ blocks, blockRenderer, keyOffset }) {
+  const pair  = blocks.slice(0, 2);
+  const extra = blocks.slice(2);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div style={{
+        display: 'grid',
+        gap: '10px',
+        gridTemplateColumns: '1fr 1fr',
+      }}>
+        {pair.map((block, i) => (
+          <div
+            key={`portrait-${i}`}
+            className="bim-grid-image-tile"
+            style={{
+              position: 'relative',
+              borderRadius: '6px',
+              overflow: 'hidden',
+              border: GLASS_BDR,
+              aspectRatio: '3 / 4',
+            }}
+          >
+            {blockRenderer(block, keyOffset + i)}
+          </div>
+        ))}
+      </div>
+      {extra.map((block, i) => blockRenderer(block, keyOffset + 2 + i))}
+    </div>
+  );
+}
+
 export default function LayoutSplit({ project, blockRenderer }) {
   const content = Array.isArray(project?.content) ? project.content : [];
   const slotOf  = (block) => block?.position || block?.region;
 
-  // Region buckets — mirrors BIMDashboard exactly, minus the hero/viewer slot.
-  const sidebarBlocks = content.filter((b) => regionMatch(slotOf(b), ['left_sidebar', 'left']));
+  // ── Static region buckets (unchanged) ──────────────────────────────────────
+  const sidebarBlocks  = content.filter((b) => regionMatch(slotOf(b), ['left_sidebar', 'left']));
   const overviewBlocks = content.filter((b) => regionMatch(slotOf(b), ['overview']));
-  // Cover: all blocks in the `cover` region — accepts images and video blocks.
-  const coverBlocks   = content.filter((b) => regionMatch(slotOf(b), ['cover']));
-  const galleryBlocks = content.filter((b) => regionMatch(slotOf(b), ['gallery']));
-  const imageBlocks       = content.filter((b) => regionMatch(slotOf(b), ['image']));
-  const imageDescBlocks   = content.filter((b) => regionMatch(slotOf(b), ['image_description']));
-  const videoBlocks       = content.filter((b) => regionMatch(slotOf(b), ['video']));
-  const videoDescBlocks   = content.filter((b) => regionMatch(slotOf(b), ['video_description']));
-  const detailsBlocks     = content.filter((b) => regionMatch(slotOf(b), ['details', 'right', 'right_viewer']));
+  const coverBlocks    = content.filter((b) => regionMatch(slotOf(b), ['cover']));
+  const galleryBlocks  = content.filter((b) => regionMatch(slotOf(b), ['gallery']));
+  const detailsBlocks  = content.filter((b) => regionMatch(slotOf(b), ['details', 'right', 'right_viewer']));
+
+  // ── Multi-instance instance lists ──────────────────────────────────────────
+  const imageInstances    = collectInstances(content, slotOf, 'image');
+  const videoInstances    = collectInstances(content, slotOf, 'video');
+  const portraitInstances = collectInstances(content, slotOf, 'portrait');
 
   return (
     <div style={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden', background: 'transparent' }}>
@@ -204,7 +275,6 @@ export default function LayoutSplit({ project, blockRenderer }) {
           <aside className="bim-sidebar" style={{ ...glassPanel, alignSelf: 'start' }}>
             <PanelLabel>Index</PanelLabel>
             <div style={{ padding: '16px 20px' }}>
-              {/* Project title header, matching original LayoutSplit behaviour */}
               {project?.title && (
                 <h2 style={{
                   ...MONO,
@@ -226,7 +296,7 @@ export default function LayoutSplit({ project, blockRenderer }) {
         {/* Main section */}
         <section style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
 
-          {/* Row 1: Overview + Cover — same narrow/wide split as BIMDashboard */}
+          {/* Row 1: Overview + Cover */}
           {(overviewBlocks.length > 0 || coverBlocks.length > 0) && (
             <div className="bim-overview-cover-row" style={{
               display: 'grid',
@@ -254,75 +324,106 @@ export default function LayoutSplit({ project, blockRenderer }) {
             </div>
           )}
 
+          {/* ── Image rows — one per instance ──────────────────────────────── */}
+          {/* Regions: image | image_1 | image_2 …                             */}
+          {/*          image_description | image_description_1 | …             */}
+          {imageInstances.map((n) => {
+            const imgBlocks  = blocksForInstance(content, slotOf, 'image', n);
+            const descBlocks = blocksForInstance(content, slotOf, 'image_description', n);
+            if (!imgBlocks.length) return null;
+            const keyBase = 3200 + (n - 1) * 200;
+            return (
+              <div
+                key={`image-row-${n}`}
+                className="bim-image-desc-row"
+                style={{
+                  display: 'grid',
+                  gap: '16px',
+                  gridTemplateColumns: descBlocks.length > 0 ? '7fr 4fr' : '1fr',
+                  alignItems: 'stretch',
+                }}
+              >
+                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                  <PanelLabel>Image{imageInstances.length > 1 ? ` ${n}` : ''}</PanelLabel>
+                  <div
+                    className="bim-grid-image-tile"
+                    style={{ padding: '16px 20px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    {imgBlocks.map((block, i) => blockRenderer(block, keyBase + i))}
+                  </div>
+                </div>
+                {descBlocks.length > 0 && (
+                  <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                    <PanelLabel>Description</PanelLabel>
+                    <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
+                      <RegionContent blocks={descBlocks} blockRenderer={blockRenderer} keyOffset={keyBase + 100} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
-          {/* Row 3: Image + optional Image Description side panel */}
-          {imageBlocks.length > 0 && (
-            <div
-              className="bim-image-desc-row"
-              style={{
-                display: 'grid',
-                gap: '16px',
-                gridTemplateColumns: imageDescBlocks.length > 0 ? '7fr 4fr' : '1fr',
-                alignItems: 'stretch',
-              }}
-            >
-              {/* Image panel */}
-              <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
-                <PanelLabel>Image</PanelLabel>
-                <div
-                  className="bim-grid-image-tile"
-                  style={{ padding: '16px 20px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  {imageBlocks.map((block, i) => blockRenderer(block, i + 3200))}
+          {/* ── Portrait pair rows — one per instance ──────────────────────── */}
+          {/* Regions: portrait | portrait_1 | portrait_2 …                    */}
+          {/* Each instance renders exactly 2 images side-by-side at 3:4 ratio */}
+          {portraitInstances.map((n) => {
+            const pBlocks = blocksForInstance(content, slotOf, 'portrait', n);
+            if (!pBlocks.length) return null;
+            const keyBase = 5000 + (n - 1) * 200;
+            return (
+              <div
+                key={`portrait-row-${n}`}
+                style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}
+              >
+                <PanelLabel>Portrait{portraitInstances.length > 1 ? ` ${n}` : ''}</PanelLabel>
+                <div style={{ padding: '16px 20px', flex: 1 }}>
+                  <PortraitPairRow blocks={pBlocks} blockRenderer={blockRenderer} keyOffset={keyBase} />
                 </div>
               </div>
+            );
+          })}
 
-              {/* Image description panel — text blocks get inner padding via RegionContent */}
-              {imageDescBlocks.length > 0 && (
+          {/* ── Video rows — one per instance ──────────────────────────────── */}
+          {/* Regions: video | video_1 | video_2 …                             */}
+          {/*          video_description | video_description_1 | …             */}
+          {videoInstances.map((n) => {
+            const vidBlocks  = blocksForInstance(content, slotOf, 'video', n);
+            const descBlocks = blocksForInstance(content, slotOf, 'video_description', n);
+            if (!vidBlocks.length) return null;
+            const keyBase = 3500 + (n - 1) * 200;
+            return (
+              <div
+                key={`video-row-${n}`}
+                className="bim-video-desc-row"
+                style={{
+                  display: 'grid',
+                  gap: '16px',
+                  gridTemplateColumns: descBlocks.length > 0 ? '7fr 4fr' : '1fr',
+                  alignItems: 'stretch',
+                }}
+              >
                 <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
-                  <PanelLabel>Description</PanelLabel>
-                  <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
-                    <RegionContent blocks={imageDescBlocks} blockRenderer={blockRenderer} keyOffset={3300} />
+                  <PanelLabel>Video{videoInstances.length > 1 ? ` ${n}` : ''}</PanelLabel>
+                  <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div className="bim-video-panel" style={{ width: '94%' }}>
+                      {vidBlocks.map((block, i) => blockRenderer(block, keyBase + i))}
+                    </div>
                   </div>
                 </div>
-              )}
-            </div>
-          )}
-
-          {/* Row 4: Video + optional Video Description side panel */}
-          {videoBlocks.length > 0 && (
-            <div
-              className="bim-video-desc-row"
-              style={{
-                display: 'grid',
-                gap: '16px',
-                gridTemplateColumns: videoDescBlocks.length > 0 ? '7fr 4fr' : '1fr',
-                alignItems: 'stretch',
-              }}
-            >
-              {/* Video player panel */}
-              <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
-                <PanelLabel>Video</PanelLabel>
-                <div style={{ padding: '16px 20px', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <div className="bim-video-panel" style={{ width: '94%' }}>
-                    {videoBlocks.map((block, i) => blockRenderer(block, i + 3500))}
+                {descBlocks.length > 0 && (
+                  <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
+                    <PanelLabel>Description</PanelLabel>
+                    <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
+                      <RegionContent blocks={descBlocks} blockRenderer={blockRenderer} keyOffset={keyBase + 100} />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
+            );
+          })}
 
-              {/* Video description panel — text blocks get inner padding via RegionContent */}
-              {videoDescBlocks.length > 0 && (
-                <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
-                  <PanelLabel>Description</PanelLabel>
-                  <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
-                    <RegionContent blocks={videoDescBlocks} blockRenderer={blockRenderer} keyOffset={3600} />
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Row 2: Gallery */}
+          {/* Gallery */}
           {galleryBlocks.length > 0 && (
             <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
               <PanelLabel>Gallery</PanelLabel>
@@ -331,9 +432,8 @@ export default function LayoutSplit({ project, blockRenderer }) {
               </div>
             </div>
           )}
-          
-          {/* Row 5: Details — also catches `right` / `right_viewer` slots
-              that the original LayoutSplit used as its main content pane. */}
+
+          {/* Details */}
           {detailsBlocks.length > 0 && (
             <div style={{ ...glassPanel, display: 'flex', flexDirection: 'column' }}>
               <PanelLabel>Details</PanelLabel>

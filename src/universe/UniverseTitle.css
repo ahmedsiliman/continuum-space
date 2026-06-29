@@ -33,11 +33,11 @@
 
 .universe-title-name {
   font-family: 'Stormax', 'Share Tech Mono', 'Consolas', monospace;
-  font-size: clamp(.7rem, 1.5vw, 1.3rem);
-  letter-spacing: 0.5em;
+  font-size: clamp(1rem, 1vw, 1.3rem);
+  letter-spacing: 0.9em;
   text-transform: uppercase;
   color: #d4d4d4;
-  line-height: 1;
+  line-height: 1.5;
   margin: 0;
 }
 

@@ -63,7 +63,6 @@
       text-transform: uppercase;
       letter-spacing: 3px;
       color: var(--text-dark);
-      margin-bottom: 20px;
     }
 
     /* Inner-scrolling content only */
@@ -103,22 +102,7 @@
       background: var(--line-deep);
     }
 
-    /* Panel width slider */
-    .panel-size { display: grid; gap: 6px; }
-    .panel-size-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-dark);
-    }
-    #panel-size-slider {
-      width: 100%;
-      accent-color: rgba(255,255,255,0.35);
-      cursor: pointer;
-      background: transparent;
-    }
+
 
     /* Buttons */
     .actions {
@@ -294,13 +278,6 @@
   <aside id="sidebar">
     <div class="header">
       <h2>// Control Center ;</h2>
-      <div class="panel-size">
-        <div class="panel-size-row">
-          <span>Panel Width</span>
-          <span id="panel-size-value">300px</span>
-        </div>
-        <input id="panel-size-slider" type="range" min="240" max="480" step="10" value="300">
-      </div>
     </div>
 
     <!-- Scrollable body -->

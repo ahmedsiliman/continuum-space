@@ -79,7 +79,7 @@ bim-ats_03,           2, cover            , Image     , /projects/BIM_ATS/Dynamo
 bim-ats_03,           3, overview         , Text      , "Description:\n• Dynamo Script for automated lintel Beams and Floor Treshold placement in Revit.\n• Creates lintels based on filtered predefined rules and parameters.\n• Adjusts lintel dimensions according to hosting wall openings.\n• Ensures proper alignment with walls and Openings and offset values to for support for structural integrity.\n• Integrates with existing Project workflows.\n• Provides customizable options for different project prototypes requirements."
 bim-ats_03,           3, overview         , Text      , "Tools: `Revit` `Dynamo Studio` `Python` "
 bim-ats_03,           2, image            , Image     , /projects/BIM_ATS/Dynamo_lintel/lintelScript_01.png
-bim-ats_03,           2, image_description, text      , "The Logic:\n• Inputs: Openings (eg: Doors / Windows) geometry and parameters values (like: types) for selection. \n• Hosting wall type as it should match the wall thickness\n• Hosting wall position and geometery centroid and perpenducular vector dierction to keep alighnment. \n• determin the mode : beam lintel (Wall Type For QS)/ Threshold ( Floor Type ).\n• For Lintel Beam get the Door height / define offset value to sides and Z dimension ( determined by structutral engineers ). \n• Define Types / materials and assigned parameters values as the elements being generated. \n• ."For Floor threshold: offset should match the clear door width. \n• Join gemoetery : For Lintel Beam join with door's hosting wall. / For Floor Thershold find the intersected Floor finishes and join them. \n• The early calculation of geometery interference makes the script faster to calculate and applicble for large models. \n• Another approach was using Python Scripts to recreate Intersected Floors / Walls with profiles avoiding the new elements clashes while copying parameters values from originals before deleting them on the process ( this approach is only valid if no hosting annotatins for drawings production exist yet."
+bim-ats_03,           2, image_description, text      , "The Logic:\n• Inputs: Openings (eg: Doors / Windows) geometry and parameters values (like: types) for selection. \n• Hosting wall type as it should match the wall thickness\n• Hosting wall position and geometery centroid and perpenducular vector dierction to keep alighnment. \n• determin the mode : beam lintel (Wall Type For QS)/ Threshold ( Floor Type ).\n• For Lintel Beam get the Door height / define offset value to sides and Z dimension ( determined by structutral engineers ). \n• Define Types / materials and assigned parameters values as the elements being generated. \n• For Floor threshold: offset should match the clear door width. \n• Join gemoetery : For Lintel Beam join with door's hosting wall. / For Floor Thershold find the intersected Floor finishes and join them. \n• The early calculation of geometery interference makes the script faster to calculate and applicble for large models. \n• Another approach was using Python Scripts to recreate Intersected Floors / Walls with profiles avoiding the new elements clashes while copying parameters values from originals before deleting them on the process ( this approach is only valid if no hosting annotatins for drawings production exist yet)."
 
 bim-sfd_01,           1, hero             , BIM_Viewer, /projects/models/ZEDWest_E01.ifc
 bim-sfd_01,           2, cover            , Image     , /projects/BIM_SFD/BIM-Live-dashboard1_01.png
@@ -98,31 +98,53 @@ bim-dta_01,           3, overview         , Text      , "Tools: `Revit` `power B
 bim-dta_01,           4, video            , video     , https://vimeo.com/1203065130?share=copy&fl=sv&fe=ci
 bim-dta_01,           2, video_description, Image     , /projects/BIM_DTA/LCA/MNMS_02.png
 
-acd-arc_01,           1, left             , Text      , The Micro to Macro seminar project focusing on sustainable timber construction.
-acd-arc_01,           2, right            , Image     , /images/micro_to_macro_render.jpg
+acd-arc_01,           2, cover            , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_01.png
+acd-arc_01,           1, overview         , Text      , "\n• The site is connected with Berlin city via railway, which gives an opportunity for a lifestyle that is highly connected with urban culture and off-city. Near the site Tesla Gigafactory is located, which contributed a lot to the problem of deforestation and groundwater quality/toxication. To the north from the site there is a Natural Reserve. Therefore, the site could become a bridge between natural and monoculture forest."
+acd-arc_01,           1, overview         , Text      , "\n• The project site was meticulously selected based on a comprehensive regional analysis. It is strategically situated in close proximity to Berlin, offering unparalleled connectivity and accessibility. The site's northern boundary directly abuts the (national park) territories, establishing it as a vital bridge between the pristine natural forests and the existing monoculture forests. This strategic positioning not only enhances the project's ecological integrity but also serves as a testament to our commitment to sustainable development."
+acd-arc_01,           1, overview         , Text      , "\n• At the heart of this project lies the groundbreaking concept of a cybernetic forest habitat. This transformative approach seamlessly integrates human habitation within the natural ecosystem, fostering a harmonious coexistence between the built and the natural world. The cybernetic forest habitat concept is driven by a deep understanding of the delicate balance of the forest ecosystem, ensuring that every aspect of the project complements and enhances the existing natural environment."
+acd-arc_01,           1, overview         , Text      , "\n• The project was part of the Master Program Design studio as part of a team"
+acd-arc_01,           2, image            , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_02.png
+acd-arc_01,           1, image_description, Text      , "\n• This project is not solely the brainchild of designers and architects; it is an integral collaboration involving diverse stakeholders, including scientists, ecologists, community leaders, and residents. This collaborative approach ensures that the project is not only ecologically sound but also socially and culturally sensitive, reflecting the needs and aspirations of the local community."
+acd-arc_01,           1, image_description, Text      , "\n• The development of the project will follow a phased approach, carefully orchestrated to minimize disturbance to the existing ecosystem. The masterplan is divided into four stages: Cybernetic Analysis: a comprehensive assessment of the site's ecological characteristics. Zoning: Based on the cybernetic analysis, the site will be zoned to optimize the integration of human habitation within the natural environment. Framework: This stage will establish the project's infrastructure, including roads, pathways, and utility networks. Dwelling: This final stage will involve the construction of dwellings that embody the cybernetic forest habitat concept."
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_03.png
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_04.png
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_05.png
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_06.png
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_07.png
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_08.png
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_09.png
+acd-arc_01,           2, gallery          , Image     , /projects/ACAD_ARC/FrstRgn/FrstRgn_10.png
 
-acd-arc_02,           1, left             , Text      , Adaptive reuse strategy for the Legré-Mante industrial site in Marseille.
-acd-arc_02,           2, right            , Image     , /images/factory_reuse_plan.jpg
+acd-arc_02,           1, overview         , Text      , "Adaptive reuse strategy for the Legré-Mante industrial site in Marseille."
+acd-arc_02,           2, cover            , Image     , /images/factory_reuse_plan.jpg
 
-acd-arc_03,           1, left             , Text      , Placeholder narrative for Architecture Concept 03.
-acd-arc_03,           2, right            , Image     , /images/placeholder_right.jpg
+acd-arc_03,           1, overview         , Text      , "Placeholder narrative for Architecture Concept 03."
+acd-arc_03,           2, cover            , Image     , /images/placeholder_right.jpg
 
-acd-urd_01,           1, left             , Text      , Berlin Masterplan exploring urban flow and infrastructural integration.
-acd-urd_01,           2, right            , Image     , /images/berlin_masterplan.jpg
+acd-urd_01,           1, overview         , Text      , "The Marzahn project is a comprehensive urban design initiative aimed at revitalizing the Marzahn district in Berlin, Germany. The project focuses on creating a sustainable and inclusive urban environment that addresses the needs of the local community while enhancing the overall quality of life. by integrating participatory planning and community engagement strategies, the Marzahn project seeks to transform the district into a vibrant and resilient urban hub."
+acd-urd_01,           2, cover            , Image     , /projects/ACD_URD/InsurgentDesign/Marzahn_01.png
+acd-urd_01,           2, image          , Image     , /projects/ACD_URD/InsurgentDesign/Marzahn_02.png
+acd-urd_01,           2, image_description          , text     , "Introduction:\n• Our research was focusing on young refugees and their local knowledge of their neighborhood in the context of the Gemeinschaftsunterkunft (GU) Murtzaner Ring. As the goal of the studio was to reflect on our role as architects and urban planners, on one hand we wished to unlearn common top-down planning processes by learning from the perspectives and everyday practices of young people. On the other hand we reflected that what we possibly could give back is a sharing of our researching and designing skills in order to create something collaboratively along the process. Our goal was to foster local youth community build ing and identification and by making youth perspectives visible."
+acd-urd_01,           2, image_description          , text, " With our research question above the work connects to the theoretical approximation done within the beginning of the project by addressing the following challenges mentioned by Sanyal (2012). Very often the “management” of refugees happens top-down and keeps people not only separated from local communities but also within a situation of permanent temporality. Nevertheless refugees are agents capable of creating spaces that 'fit' their political, social and other needs from the bottom up. This needs to be considered within planning and designing processes by acknowledging the heterogeneity of communities in refugee shelters: There does not exist something like a typical refugee experience. "
+acd-urd_01,           2, image_description          , text, " Within our project process we repeatedly adapted our methods to varying conditions at the GU as well as the findings from every workshop. In the end we created a collective map of our findings from the mental mappings and walking interviews that we conducted. A second result is a digital collaborative map on nice spots and offers for young people in Marzahn, that can be used and edited by everybody even beyond the project ending."
+acd-urd_01,           2, portrait          , Image     , /projects/ACD_URD/InsurgentDesign/Marzahn_03.png
+acd-urd_01,           2, portrait          , Image     , /projects/ACD_URD/InsurgentDesign/Marzahn_04.png
+acd-urd_01,           2, portrait_2          , Image     , /projects/ACD_URD/InsurgentDesign/Marzahn_05.png
+acd-urd_01,           2, portrait_2          , Image     , /projects/ACD_URD/InsurgentDesign/Marzahn_06.png
 
-acd-urd_02,           1, left             , Text      , Placeholder narrative for Urban Design Concept 02.
-acd-urd_02,           2, right            , Image     , /images/placeholder_right.jpg
+acd-urd_02,           1, overview         , Text      , "Placeholder narrative for Urban Design Concept 02."
+acd-urd_02,           2, cover            , Image     , /images/placeholder_right.jpg
 
-acd-urd_03,           1, left             , Text      , Placeholder narrative for Urban Design Concept 03.
-acd-urd_03,           2, right            , Image     , /images/placeholder_right.jpg
+acd-urd_03,           1, overview         , Text      , "Placeholder narrative for Urban Design Concept 03."
+acd-urd_03,           2, cover            , Image     , /images/placeholder_right.jpg
 
 art-ink_01,           1, center           , Image     , /projects/Art/INK_01/INK_01.jpeg
 art-ink_01,           2, center           , Text      , Black ink on 15x27 Paper canvas. Expanding on the expense of negative space.
 
-art-ink_02,           1, center           , Image     , /projects/Art/INK_02/INK_021.jpeg
-art-ink_02,           2, center           , Image    ,  /projects/Art/INK_02/INK_022.jpeg
-art-ink_02,           3, center           , Image    ,  /projects/Art/INK_02/INK_023.jpeg
-art-ink_02,           2, center           , Text      , Explorations in high-contrast ink techniques.
+art-ink_02,           1, center           , Image     , /projects/Art/INK_02/INK_021.png
+art-ink_02,           2, center           , Image     , /projects/Art/INK_02/INK_022.png
+art-ink_02,           3, center           , Image     , /projects/Art/INK_02/INK_023.jpeg
+art-ink_02,           2, center           , Text      , "Black Ink on small paper canvas, Ornamental and flowing  lines"
 
 art-ink_03,           1, center           , Image     , /images/placeholder_center.jpg
 art-ink_03,           2, center           , Text      , Abstract structural linework on raw paper.
@@ -152,8 +174,8 @@ cmp-dsn_01,           1, overview         , Text      , Experimental computation
 cmp-dsn_01,           3, overview         , Text      , "Description:\n• Initially the experiment was part of a urban development strategy.\n• My scope within the team was developing a landmark structure that doubles as a connection point \n• That developed more as an individual research and exploration of different methodologies to generate complex forms and surfaces using parametric modeling and computational design.\n• The final form was generated based on the mathematical surface equations of the (GIGLI) pasta from the book ( Pasta by design by: George Legendre)\n• Then applying algorithms to manipulate points, and curves."
 cmp-dsn_01,           2, overview         , Text      , "Tools: `Grasshopper` `Rhinoceros` `Vray` `Photoshop`"
 cmp-dsn_01,           4, image            , Image     , /projects/CMP/Hingedpark/HingedPark_01.png
-cmp-dsn_01,           5, image_description, Text     , "Concept and Formation:\n• The initial Form Generated Based on the mathematical surface equations of the (GIGLI) pasta from the book ( Pasta by design by: George Legendre)\n• Then applying algorithms to manipulate points, and curves."
-cmp-dsn_01,           5, image_description, Text     , "Initial Surface Equation:\n• 0. ( 0.6 + 0.03 * ( (40 - j) / 40) ^ 10 * cos ( 4 * i + 75 / 15 *π)- 0.5 * sin ( j / 80 * π) ^ 0.6 )* cos ( 2 * i / 75 * π) + ( i / 150 ) ^ 10 * ( 0.08 * sin ( j / 40 * π ) + 0.03 * cos ( j / 5 * π ) )\n• ( 0.6 + 0.03 * ( (40 - j) / 40) ^ 10 * sin ( 4 * i + 75 / 15 *π ) - 0.5 * sin ( j / 80 * π ) ^ 0.6 ) * sin ( 2 * i / 75 * π ) + ( i / 150 ) ^ 10 * ( 0.08 * sin ( j / 40 * π ) + 0.03 * sin ( j / 5 * π ))"
+cmp-dsn_01,           5, image_description, Text      , "Concept and Formation:\n• The initial Form Generated Based on the mathematical surface equations of the (GIGLI) pasta from the book ( Pasta by design by: George Legendre)\n• Then applying algorithms to manipulate points, and curves."
+cmp-dsn_01,           5, image_description, Text      , "Initial Surface Equation:\n• 0. ( 0.6 + 0.03 * ( (40 - j) / 40) ^ 10 * cos ( 4 * i + 75 / 15 *π)- 0.5 * sin ( j / 80 * π) ^ 0.6 )* cos ( 2 * i / 75 * π) + ( i / 150 ) ^ 10 * ( 0.08 * sin ( j / 40 * π ) + 0.03 * cos ( j / 5 * π ) )\n• ( 0.6 + 0.03 * ( (40 - j) / 40) ^ 10 * sin ( 4 * i + 75 / 15 *π ) - 0.5 * sin ( j / 80 * π ) ^ 0.6 ) * sin ( 2 * i / 75 * π ) + ( i / 150 ) ^ 10 * ( 0.08 * sin ( j / 40 * π ) + 0.03 * sin ( j / 5 * π ))"
 
 
 

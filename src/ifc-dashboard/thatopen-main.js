@@ -30,8 +30,7 @@ const categoriesArrow = document.getElementById('categories-arrow');
 const btnToggleLevels = document.getElementById('btn-toggle-levels');
 const levelsPanel = document.getElementById('levels-panel');
 const levelsArrow = document.getElementById('levels-arrow');
-const panelSizeSlider = document.getElementById('panel-size-slider');
-const panelSizeValue = document.getElementById('panel-size-value');
+
 
 const btnStyleSolid = document.getElementById('btn-style-solid');
 const btnStyleClay = document.getElementById('btn-style-clay');
@@ -343,8 +342,8 @@ async function resolveSupabaseUrl(previewToken, filename) {
 
 function setLoading(message, isError = false) {
   loadingEl.textContent = message;
-  loadingEl.style.color = isError ? '#b00020' : '#18181b';
-  loadingEl.style.borderColor = isError ? '#b00020' : '#000000';
+  loadingEl.style.color = isError ? '#ff6b6b' : 'rgba(255,255,255,0.90)';
+  loadingEl.style.borderColor = isError ? '#ff6b6b' : 'rgba(255,255,255,0.08)';
 }
 
 function withTimeout(promise, timeoutMs, timeoutMessage) {
@@ -434,7 +433,9 @@ function setAxisButtonState(axis) {
   };
 
   for (const [key, button] of Object.entries(buttons)) {
-    button.style.background = axis === key ? '#ececec' : '#fff';
+    button.style.background = axis === key ? 'rgba(255,255,255,0.06)' : 'transparent';
+    button.style.color = axis === key ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.50)';
+    button.style.borderColor = axis === key ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.08)';
   }
 }
 
@@ -448,11 +449,6 @@ function setDropdown(panel, arrow, open) {
   arrow.textContent = open ? '▲' : '▼';
 }
 
-function setSidebarWidth(px) {
-  document.documentElement.style.setProperty('--sidebar-width', `${px}px`);
-  panelSizeValue.textContent = `${px}px`;
-}
-
 function wireDropdowns() {
   let categoriesOpen = false;
   let levelsOpen = false;
@@ -460,26 +456,12 @@ function wireDropdowns() {
   btnToggleCategories.addEventListener('click', () => {
     categoriesOpen = !categoriesOpen;
     setDropdown(categoriesPanel, categoriesArrow, categoriesOpen);
-    if (categoriesOpen) {
-      const current = Number(panelSizeSlider.value);
-      if (current < 380) {
-        panelSizeSlider.value = '380';
-        setSidebarWidth(380);
-      }
-    }
   });
 
   btnToggleLevels.addEventListener('click', () => {
     levelsOpen = !levelsOpen;
     setDropdown(levelsPanel, levelsArrow, levelsOpen);
   });
-
-  panelSizeSlider.addEventListener('input', () => {
-    const value = Number(panelSizeSlider.value);
-    setSidebarWidth(value);
-  });
-
-  setSidebarWidth(Number(panelSizeSlider.value));
 }
 
 function wireSectionControls(clipper, world, getSectionState) {
