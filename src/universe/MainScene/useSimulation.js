@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import * as d3 from 'd3-force';
-import { createOrbitForce, getNodeColor, getDeterministicSeed } from './MainSceneUtils';
+import { createOrbitForce, getNodeColor, getDeterministicSeed, HOVER_SCALE } from './MainSceneUtils';
 
 export function useSimulation({
   nodes,
@@ -35,15 +35,32 @@ export function useSimulation({
   const scaleRef = useRef(scale);
   useEffect(() => { scaleRef.current = scale; }, [scale]);
 
+  // Tracks the currently hovered node id so the collision force can inflate
+  // its radius on demand. A ref (not state) because d3-force's tick loop
+  // reads it every frame and we don't want this to trigger React re-renders.
+  const hoveredNodeIdRef = useRef(null);
+  // d3-force's forceCollide() precomputes per-node radii inside .radius(fn)
+  // — it does NOT re-call the accessor every tick. We keep a handle to the
+  // exact accessor in use so onNodeHoverChange can re-invoke .radius(fn) to
+  // force a recompute the moment hover state changes.
+  const collideRadiusFnRef = useRef(null);
+
   // 1. Initialize simulation once with ORIGINAL force values
   useEffect(() => {
     if (simulationRef.current) return;
+
+    const initialCollideRadius = (node) => {
+      const base = (node.nodeRadius || 20) * scaleRef.current;
+      const inflated = hoveredNodeIdRef.current === node.id ? base * HOVER_SCALE : base;
+      return inflated + 20 * scaleRef.current;
+    };
+    collideRadiusFnRef.current = initialCollideRadius;
 
     simulationRef.current = d3.forceSimulation([])
       .alphaDecay(0.012)
       .velocityDecay(0.4)
       .force('charge', d3.forceManyBody().strength(-200))
-      .force('collide', d3.forceCollide().radius((node) => node.nodeRadius + 20).strength(0.9))
+      .force('collide', d3.forceCollide().radius(initialCollideRadius).strength(0.9))
       .force('links', d3.forceLink([])
         .id((n) => n.id)
         .distance((link) => link.childType === 'Project' ? 90 : 110)
@@ -274,8 +291,13 @@ export function useSimulation({
         return baseDist * scale; // Shrink links proportionally on mobile
       });
 
-    simulationRef.current.force('collide')
-      .radius((node) => (node.nodeRadius || 20) * scale + 20 * scale); // Scale structural bounding boxes down
+    const collideRadius = (node) => {
+      const base = (node.nodeRadius || 20) * scale;
+      const inflated = hoveredNodeIdRef.current === node.id ? base * HOVER_SCALE : base;
+      return inflated + 20 * scale; // Scale structural bounding boxes down
+    };
+    collideRadiusFnRef.current = collideRadius;
+    simulationRef.current.force('collide').radius(collideRadius);
 
     // Slightly damp standard charge on smaller viewports to give rings more radial dominance
     simulationRef.current.force('charge')
@@ -326,4 +348,19 @@ export function useSimulation({
     
     // 5. Appended scale parameter to the dependencies so layout dynamically recalibrates on viewport changes
   }, [nodes, links, simulationRef, nodesRef, ringRadiusRef, snapBackRef, isRadialMode, radialLayoutMap, scale]);
+
+  // 3. Hover → collision bridge. d3-force caches collision radii on
+  // .radius(fn) (see collideRadiusFnRef comment above), so a hover toggle
+  // needs to explicitly re-set the accessor to force a recompute — simply
+  // mutating hoveredNodeIdRef.current is not enough on its own. We also
+  // nudge alphaTarget so the now-larger node visibly pushes its neighbors
+  // out instead of just snapping the radius with no motion.
+  const onNodeHoverChange = useCallback((nodeId) => {
+    hoveredNodeIdRef.current = nodeId;
+    if (!simulationRef.current || !collideRadiusFnRef.current) return;
+    simulationRef.current.force('collide').radius(collideRadiusFnRef.current);
+    simulationRef.current.alphaTarget(nodeId ? 0.15 : 0).restart();
+  }, [simulationRef]);
+
+  return { onNodeHoverChange };
 }

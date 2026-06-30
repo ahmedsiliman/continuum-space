@@ -1,8 +1,8 @@
 // src/components/ModuleTransition.jsx
 import React, { useEffect, useState } from 'react';
 
-export default function ModuleTransition({ children, originX, originY, onClose, isAboutMe }) {
-  const [phase, setPhase] = useState('entering');
+export default function ModuleTransition({ children, originX, originY, onClose, isAboutMe, instant = false }) {
+  const [phase, setPhase] = useState(instant ? 'idle' : 'entering');
   const [isHovered, setIsHovered] = useState(false);
 
   // Flight target styles (white glass theme)
@@ -34,7 +34,7 @@ export default function ModuleTransition({ children, originX, originY, onClose, 
       : '0 0 30px rgba(255,255,255,1), 0 0 60px rgba(255,255,255,0.2)',
   };
 
-  const [buttonStyle, setButtonStyle] = useState(initialStyle);
+  const [buttonStyle, setButtonStyle] = useState(instant ? idleStyle : initialStyle);
 
   useEffect(() => {
     if (phase === 'idle') {
@@ -43,6 +43,8 @@ export default function ModuleTransition({ children, originX, originY, onClose, 
   }, [isHovered, phase]);
 
   useEffect(() => {
+    if (instant) return; // Deep-linked open — no bubble flight, no delayed button reposition
+
     const buttonTimer = setTimeout(() => {
       setButtonStyle(idleStyle);
     }, isAboutMe ? 10 : 50);
@@ -55,7 +57,7 @@ export default function ModuleTransition({ children, originX, originY, onClose, 
       clearTimeout(buttonTimer);
       clearTimeout(phaseTimer);
     };
-  }, [originX, originY, isAboutMe]);
+  }, [originX, originY, isAboutMe, instant]);
 
   const triggerClose = () => {
     setPhase('closing');
@@ -70,6 +72,7 @@ export default function ModuleTransition({ children, originX, originY, onClose, 
     <>
       <div
         className={
+          instant ? '' :
           phase === 'entering' ? 'bubble-transition-dynamic' :
           phase === 'closing'  ? 'bubble-transition-reverse' : ''
         }

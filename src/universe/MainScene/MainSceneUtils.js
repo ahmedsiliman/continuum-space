@@ -1,3 +1,7 @@
+// Hover scale-up factor applied to a node's visual dot (SceneNode.jsx) and
+// mirrored in the simulation's collision radius (useSimulation.js) so
+// neighboring nodes physically make room instead of being overlapped.
+export const HOVER_SCALE = 1.5;
 
 export const CATEGORY_HUES = {
   cat_bim: 192, // Cyan-blue
